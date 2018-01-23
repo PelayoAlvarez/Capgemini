@@ -23,14 +23,14 @@ public class Cuenta {
 
 	private String numeroCuenta;
 
-	// @OneToMany
-	// private Set<Cliente> clientes = new HashSet<Cliente>();
+	@OneToMany
+	private Set<Cliente> clientes = new HashSet<Cliente>();
 	
 	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<Movimiento>();
 	
-	//@OneToMany
-	//private Set<Transferencia> transferencias = new HashSet<Transferencia>();
+	@OneToMany
+	private Set<Transferencia> transferencias = new HashSet<Transferencia>();
 
 	// Campos de Auditoria
 
@@ -40,7 +40,7 @@ public class Cuenta {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha_Creacion;
 
-	// private Empleado empleado;
+	private Empleado empleado;
 
 	private Boolean MCA_Habilitado;
 	

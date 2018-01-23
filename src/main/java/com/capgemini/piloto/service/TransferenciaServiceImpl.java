@@ -1,11 +1,11 @@
-package service;
+package com.capgemini.piloto.service;
 
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import dao.TransferenciaDAO;
-import model.TransferenciaModel;
+import com.capgemini.piloto.dao.TransferenciaDAO;
+import com.capgemini.piloto.model.Transferencia;
 
 public class TransferenciaServiceImpl implements TransferenciaService {
 
@@ -17,26 +17,26 @@ public class TransferenciaServiceImpl implements TransferenciaService {
 	
 	@Override
 	@Transactional
-	public void addTransferencia(TransferenciaModel t) {
+	public void addTransferencia(Transferencia t) {
 		this.transferDAO.addTransferencia(t);
 		
 	}
 
 	@Override
 	@Transactional
-	public void updateTransferencia(TransferenciaModel t) {
+	public void updateTransferencia(Transferencia t) {
 		this.transferDAO.updateTransferencia(t);
 		
 	}
 
 	@Override
 	@Transactional
-	public List<TransferenciaModel> listTransferencia() {
+	public List<Transferencia> listTransferencia() {
 		return this.transferDAO.listTransferencia();
 	}
 
 	@Override
-	public TransferenciaModel getTransferenciaId(int id) {
+	public Transferencia getTransferenciaId(int id) {
 		return this.transferDAO.getTransferenciaId(id);
 	}
 

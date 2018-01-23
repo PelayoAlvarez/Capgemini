@@ -44,7 +44,7 @@ public class Movimiento {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha_Creacion;
 
-	// private Empleado empleado;
+	private Empleado empleado;
 
 	private Boolean MCA_Habilitado;
 	

@@ -1,4 +1,4 @@
-package model;
+package com.capgemini.piloto.model;
 
 import java.sql.Date;
 
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="transferencia")
-public class TransferenciaModel {
+public class Transferencia {
 
 	@Id
 	@Column(name="id")
@@ -25,7 +25,7 @@ public class TransferenciaModel {
 	private Date fecha_consolidacion;
 	private String canal;
 	private double importe;
-	//private Cuenta cuenta;
+	private Cuenta cuenta;
 	
 	public String getId_destino() {
 		return id_destino;

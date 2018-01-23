@@ -1,16 +1,17 @@
-package dao;
+package com.capgemini.piloto.dao;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+
+import com.capgemini.piloto.model.Transferencia;
+
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import model.TransferenciaModel;
 
 @Repository
 public class TransferenciaDAOImpl implements TransferenciaDAO {
@@ -24,7 +25,7 @@ public class TransferenciaDAOImpl implements TransferenciaDAO {
 	}
 	
 	@Override
-	public void addTransferencia(TransferenciaModel t) {
+	public void addTransferencia(Transferencia t) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.persist(t);
 		logger.info("Transfer saved successfully, Transfer Details="+ t);
@@ -32,7 +33,7 @@ public class TransferenciaDAOImpl implements TransferenciaDAO {
 	}
 
 	@Override
-	public void updateTransferencia(TransferenciaModel t) {
+	public void updateTransferencia(Transferencia t) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.update(t);
 		logger.info("Tranfer updated successfully, transfer Details="+t);
@@ -40,19 +41,19 @@ public class TransferenciaDAOImpl implements TransferenciaDAO {
 	}
 
 	@Override
-	public List<TransferenciaModel> listTransferencia() {
+	public List<Transferencia> listTransferencia() {
 		Session session = this.sessionFactory.getCurrentSession();
-		List<TransferenciaModel> transferList = session.createQuery("from transferencia").list();
-		for(TransferenciaModel t : transferList){
+		List<Transferencia> transferList = session.createQuery("from transferencia").list();
+		for(Transferencia t : transferList){
 			logger.info("Person List::"+t);
 		}
 		return transferList;
 	}
 
 	@Override
-	public TransferenciaModel getTransferenciaId(int id) {
+	public Transferencia getTransferenciaId(int id) {
 		Session session = this.sessionFactory.getCurrentSession();		
-		TransferenciaModel t = (TransferenciaModel) session.load(TransferenciaModel.class, new Integer(id));
+		Transferencia t = (Transferencia) session.load(Transferencia.class, new Integer(id));
 		logger.info("Person loaded successfully, Person details="+t);
 		return t;
 	}
@@ -60,7 +61,7 @@ public class TransferenciaDAOImpl implements TransferenciaDAO {
 	@Override
 	public void removeTransferencia(int id) {
 		Session session = this.sessionFactory.getCurrentSession();
-		TransferenciaModel t = (TransferenciaModel) session.load(TransferenciaModel.class, new Integer(id));
+		Transferencia t = (Transferencia) session.load(Transferencia.class, new Integer(id));
 		if(null != t){
 			session.delete(t);
 		}
