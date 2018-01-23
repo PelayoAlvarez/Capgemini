@@ -61,7 +61,7 @@ public class CuentaController {
 		if (cuenta == null || !cuenta.getMCA_Habilitado()) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		cuentaHRepository.save(new CuentaH(cuenta));
 		cuenta.setNumeroCuenta(cuentaDetails.getNumeroCuenta());
 		cuenta.setFecha_Actua(new Date());
@@ -78,7 +78,7 @@ public class CuentaController {
 
 		}
 		cuentaHRepository.save(new CuentaH(cuenta));
-		
+
 		cuenta.setMCA_Habilitado(false);
 		cuentaRepository.save(cuenta);
 		return ResponseEntity.ok().build();

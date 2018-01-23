@@ -15,8 +15,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="CUENTA")
-public class Cuenta implements Serializable{
+@Table(name = "CUENTA")
+public class Cuenta implements Serializable {
 
 	/**
 	 * 
@@ -31,11 +31,11 @@ public class Cuenta implements Serializable{
 
 	@OneToMany
 	private Set<Cliente> clientes = new HashSet<Cliente>();
-	
+
 	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<Movimiento>();
-	
-	@OneToMany(mappedBy="cuenta")
+
+	@OneToMany(mappedBy = "cuenta")
 	private Set<Transferencia> transferencias = new HashSet<Transferencia>();
 
 	// Campos de Auditoria
@@ -54,12 +54,11 @@ public class Cuenta implements Serializable{
 	private Empleado empleado;
 
 	private Boolean MCA_Habilitado;
-	
-	
-	public Cuenta() {
-		fecha_Creacion=new Date();
+
+	Cuenta() {
+		fecha_Creacion = new Date();
 	}
-	
+
 	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Date fecha_Actua, Date fecha_Creacion,
 			Boolean mCA_Habilitado) {
 		super();
@@ -73,7 +72,7 @@ public class Cuenta implements Serializable{
 	public Long getId() {
 		return id;
 	}
-	
+
 	public String getNumeroCuenta() {
 		return numeroCuenta;
 	}
@@ -81,7 +80,7 @@ public class Cuenta implements Serializable{
 	public void setNumeroCuenta(String numeroCuenta) {
 		this.numeroCuenta = numeroCuenta;
 	}
-	
+
 	public Set<Movimiento> getMovimientos() {
 		return new HashSet<Movimiento>(movimientos);
 	}
@@ -89,7 +88,7 @@ public class Cuenta implements Serializable{
 	protected void setMovimientos(Set<Movimiento> movimientos) {
 		this.movimientos = movimientos;
 	}
-	
+
 	public Empleado getEmpleado() {
 		return empleado;
 	}
@@ -97,8 +96,8 @@ public class Cuenta implements Serializable{
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
-	
-	//Getters y Setters de Auditoria
+
+	// Getters y Setters de Auditoria
 
 	public Date getFecha_Actua() {
 		return fecha_Actua;

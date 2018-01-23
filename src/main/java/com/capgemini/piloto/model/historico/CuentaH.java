@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Empleado;
@@ -22,8 +21,8 @@ import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
 
 @Entity
-@Table(name="CUENTAH")
-public class CuentaH implements Serializable{
+@Table(name = "CUENTAH")
+public class CuentaH implements Serializable {
 
 	/**
 	 * 
@@ -38,11 +37,11 @@ public class CuentaH implements Serializable{
 
 	@OneToMany
 	private Set<Cliente> clientes = new HashSet<Cliente>();
-	
+
 	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<Movimiento>();
-	
-	@OneToMany(mappedBy="cuenta")
+
+	@OneToMany(mappedBy = "cuenta")
 	private Set<Transferencia> transferencias = new HashSet<Transferencia>();
 
 	// Campos de Auditoria
@@ -61,18 +60,18 @@ public class CuentaH implements Serializable{
 	private Empleado empleado;
 
 	private Boolean MCA_Habilitado;
-	
-	
-	public CuentaH() {}
-	
-	public CuentaH(Cuenta c) {
-		numeroCuenta=c.getNumeroCuenta();
-		movimientos=c.getMovimientos();
-		fecha_Actua=c.getFecha_Actua();
-		fecha_Creacion=c.getFecha_Creacion();
-		MCA_Habilitado=c.getMCA_Habilitado();
+
+	public CuentaH() {
 	}
-	
+
+	public CuentaH(Cuenta c) {
+		numeroCuenta = c.getNumeroCuenta();
+		movimientos = c.getMovimientos();
+		fecha_Actua = c.getFecha_Actua();
+		fecha_Creacion = c.getFecha_Creacion();
+		MCA_Habilitado = c.getMCA_Habilitado();
+	}
+
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, Date fecha_Actua, Date fecha_Creacion,
 			Boolean mCA_Habilitado) {
 		super();
@@ -86,7 +85,7 @@ public class CuentaH implements Serializable{
 	public Long getId() {
 		return id;
 	}
-	
+
 	public String getNumeroCuenta() {
 		return numeroCuenta;
 	}
@@ -94,7 +93,7 @@ public class CuentaH implements Serializable{
 	public void setNumeroCuenta(String numeroCuenta) {
 		this.numeroCuenta = numeroCuenta;
 	}
-	
+
 	public Set<Movimiento> getMovimientos() {
 		return new HashSet<Movimiento>(movimientos);
 	}
@@ -102,7 +101,7 @@ public class CuentaH implements Serializable{
 	protected void setMovimientos(Set<Movimiento> movimientos) {
 		this.movimientos = movimientos;
 	}
-	
+
 	public Empleado getEmpleado() {
 		return empleado;
 	}
@@ -110,8 +109,8 @@ public class CuentaH implements Serializable{
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
-	
-	//Getters y Setters de Auditoria
+
+	// Getters y Setters de Auditoria
 
 	public Date getFecha_Actua() {
 		return fecha_Actua;
