@@ -34,6 +34,11 @@ public class Cuenta {
 
 	// Campos de Auditoria
 
+	@Override
+	public String toString() {
+		return "Cuenta [numeroCuenta=" + numeroCuenta;
+	}
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha_Actua;
 
@@ -45,7 +50,7 @@ public class Cuenta {
 	private Boolean MCA_Habilitado;
 	
 	
-	Cuenta() {}
+	public Cuenta() {}
 	
 	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Date fecha_Actua, Date fecha_Creacion,
 			Boolean mCA_Habilitado) {

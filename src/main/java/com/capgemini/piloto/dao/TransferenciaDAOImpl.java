@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.capgemini.piloto.model.Transferencia;
 
-import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
