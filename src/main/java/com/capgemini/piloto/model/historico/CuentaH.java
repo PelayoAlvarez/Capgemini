@@ -36,13 +36,13 @@ public class CuentaH implements Serializable {
 	private String numeroCuenta;
 
 	@OneToMany
-	private Set<Cliente> clientes = new HashSet<Cliente>();
+	private Set<Cliente> clientes = new HashSet<>();
 
 	@OneToMany
-	private Set<Movimiento> movimientos = new HashSet<Movimiento>();
+	private Set<Movimiento> movimientos = new HashSet<>();
 
 	@OneToMany(mappedBy = "cuenta")
-	private Set<Transferencia> transferencias = new HashSet<Transferencia>();
+	private Set<Transferencia> transferencias = new HashSet<>();
 
 	// Campos de Auditoria
 
@@ -95,7 +95,7 @@ public class CuentaH implements Serializable {
 	}
 
 	public Set<Movimiento> getMovimientos() {
-		return new HashSet<Movimiento>(movimientos);
+		return new HashSet<>(movimientos);
 	}
 
 	protected void setMovimientos(Set<Movimiento> movimientos) {

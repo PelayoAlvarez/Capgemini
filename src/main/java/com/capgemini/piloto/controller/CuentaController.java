@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,41 +26,49 @@ import com.capgemini.piloto.repository.historico.CuentaHRepository;
 @RestController
 @RequestMapping(path = "/cuenta")
 public class CuentaController {
-
+	
+	private static final String NOT_FOUND = "The requested account was not found";
+	
+	private static final Logger logger = LoggerFactory.getLogger(CuentaController.class);
 	@Autowired
 	private CuentaRepository cuentaRepository;
 	@Autowired
 	private CuentaHRepository cuentaHRepository;
 
-	// Get All Notes
+	// Get every account
 	@GetMapping("/cuenta")
 	public List<Cuenta> getAllCuentas() {
+		logger.info("Requested every active account");
 		return cuentaRepository.findMCA();
 	}
 
-	// Create a new Note
+	// Create a new account
 	@PostMapping("/cuenta")
 	public Cuenta createCuenta(@Valid @RequestBody Cuenta cuenta) {
 		cuentaHRepository.save(new CuentaH(cuenta));
+		logger.info("Created a new account");
 		return cuentaRepository.save(cuenta);
 	}
 
-	// Get a Single Note
+	// Find an account by its id
 	@GetMapping("/cuenta/{id}")
 	public ResponseEntity<Cuenta> getCuentaById(@PathVariable(value = "id") Long cuentaId) {
 		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
 		if (cuenta == null || !cuenta.getMCA_Habilitado()) {
+			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
+		logger.info("The requested account was found");
 		return ResponseEntity.ok().body(cuenta);
 	}
 
-	// Update a Note
+	// Update an account
 	@PutMapping("/cuenta/{id}")
 	public ResponseEntity<Cuenta> updateCuenta(@PathVariable(value = "id") Long cuentaId,
 			@Valid @RequestBody Cuenta cuentaDetails) {
 		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
 		if (cuenta == null || !cuenta.getMCA_Habilitado()) {
+			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
 
@@ -66,14 +76,16 @@ public class CuentaController {
 		cuenta.setNumeroCuenta(cuentaDetails.getNumeroCuenta());
 		cuenta.setFecha_Actua(new Date());
 		Cuenta updateCuenta = cuentaRepository.save(cuenta);
+		logger.info("The account was successfully updated");
 		return ResponseEntity.ok(updateCuenta);
 	}
 
-	// Delete a Note
+	// Delete an account by its id
 	@DeleteMapping("/cuenta/{id}")
 	public ResponseEntity<Cuenta> deleteCuenta(@PathVariable(value = "id") Long cuentaId) {
 		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
 		if (cuenta == null || !cuenta.getMCA_Habilitado()) {
+			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 
 		}
@@ -81,6 +93,7 @@ public class CuentaController {
 
 		cuenta.setMCA_Habilitado(false);
 		cuentaRepository.save(cuenta);
+		logger.info("The account was successfully deleted");
 		return ResponseEntity.ok().build();
 	}
 }
