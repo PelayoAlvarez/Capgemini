@@ -25,19 +25,19 @@ public class CuentaController {
 	@Autowired
 	private CuentaRepository cuentaRepository;
 	
-	//Get All Notes
+	//Get a list with every account
 		@GetMapping("/cuenta")
 		public List<Cuenta> getAllCuentas() {
 			return cuentaRepository.findAll();
 		}
 		
-		//Create a new Note
+		//Create a new account
 		@PostMapping("/cuenta")
 		public Cuenta createCuenta(@Valid @RequestBody Cuenta cuenta) {
 			return cuentaRepository.save(cuenta);		
 		}
 		
-		//Get a Single Note
+		//Get an account with the specified id
 		@GetMapping("/cuenta/{id}")
 		public ResponseEntity<Cuenta> getCuentaById(@PathVariable(value = "id") Long cuentaId) {
 			Cuenta cuenta = cuentaRepository.findOne(cuentaId);
@@ -47,7 +47,7 @@ public class CuentaController {
 			return ResponseEntity.ok().body(cuenta);
 		}
 		
-		//Update a Note
+		//Update an account
 		@PutMapping("/cuenta/{id}")
 		public ResponseEntity<Cuenta> updateCuenta(@PathVariable(value = "id") Long cuentaId,
 				@Valid @RequestBody Cuenta cuentaDetails) {
@@ -61,7 +61,7 @@ public class CuentaController {
 			return ResponseEntity.ok(updateCuenta);
 		}
 		
-		// Delete a Note
+		// Delete an account
 		@DeleteMapping("/cuenta/{id}")
 		public ResponseEntity<Cuenta> deleteCuenta(@PathVariable(value = "id") Long cuentaId) {
 			Cuenta cuenta = cuentaRepository.findOne(cuentaId);
