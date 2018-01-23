@@ -141,4 +141,56 @@ public class Movimiento implements Serializable{
 	public Date getFecha_Creacion() {
 		return fecha_Creacion;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cuentaAsociada == null) ? 0 : cuentaAsociada.hashCode());
+		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
+		result = prime * result + ((fecha_hora == null) ? 0 : fecha_hora.hashCode());
+		result = prime * result + ((importe == null) ? 0 : importe.hashCode());
+		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Movimiento other = (Movimiento) obj;
+		if (cuentaAsociada == null) {
+			if (other.cuentaAsociada != null)
+				return false;
+		} else if (!cuentaAsociada.equals(other.cuentaAsociada))
+			return false;
+		if (descripcion == null) {
+			if (other.descripcion != null)
+				return false;
+		} else if (!descripcion.equals(other.descripcion))
+			return false;
+		if (fecha_hora == null) {
+			if (other.fecha_hora != null)
+				return false;
+		} else if (!fecha_hora.equals(other.fecha_hora))
+			return false;
+		if (importe == null) {
+			if (other.importe != null)
+				return false;
+		} else if (!importe.equals(other.importe))
+			return false;
+		if (tipo != other.tipo)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Movimiento [id=" + id + ", importe=" + importe + ", tipo=" + tipo + ", fecha_hora=" + fecha_hora
+				+ ", descripcion=" + descripcion + ", cuentaAsociada=" + cuentaAsociada + "]";
+	}
 }

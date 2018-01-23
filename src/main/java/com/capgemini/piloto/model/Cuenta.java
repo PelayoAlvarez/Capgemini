@@ -88,6 +88,14 @@ public class Cuenta implements Serializable{
 		this.movimientos = movimientos;
 	}
 	
+	public Empleado getEmpleado() {
+		return empleado;
+	}
+
+	public void setEmpleado(Empleado empleado) {
+		this.empleado = empleado;
+	}
+	
 	//Getters y Setters de Auditoria
 
 	public Date getFecha_Actua() {
