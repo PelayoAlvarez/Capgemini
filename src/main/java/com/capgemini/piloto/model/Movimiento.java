@@ -52,16 +52,17 @@ public class Movimiento {
 	Movimiento() {}
 
 	public Movimiento(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, 
-			Date fecha_Actua, Date fecha_Creacion, Boolean habilitado) {
+			Cuenta cuentaAsociada, Date fecha_Actua, Date fecha_Creacion, Empleado empleado,
+			Boolean habilitado) {
 		super();
 		this.importe = importe;
 		this.tipo = tipo;
 		this.fecha_hora = fecha;
 		this.descripcion = descripcion;
-		// this.cuentaAsociada = cuentaAsociada;
+		this.cuentaAsociada = cuentaAsociada;
 		this.fecha_Actua = fecha_Actua;
 		this.fecha_Creacion = fecha_Creacion;
-		//this.Empleado = empleado;
+		this.empleado = empleado;
 		this.MCA_Habilitado = habilitado;
 	}
 
@@ -101,6 +102,18 @@ public class Movimiento {
 		return id;
 	}
 	
+	public Date getFecha_hora() {
+		return fecha_hora;
+	}
+
+	public Cuenta getCuentaAsociada() {
+		return cuentaAsociada;
+	}
+
+	public Empleado getEmpleado() {
+		return empleado;
+	}
+
 	//Getters y Setters de Auditoria
 
 	public Date getFecha_Actua() {
@@ -122,5 +135,4 @@ public class Movimiento {
 	public Date getFecha_Creacion() {
 		return fecha_Creacion;
 	}
-	
 }
