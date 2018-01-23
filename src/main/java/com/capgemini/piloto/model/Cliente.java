@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -18,6 +20,8 @@ import javax.persistence.TemporalType;
 public class Cliente {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	public String DNI;
 	public String nombre;
 	public String apellidos;
@@ -46,8 +50,9 @@ public class Cliente {
 		super();
 	}
 
-	public Cliente(String dNI, String nombre, String apellidos, String direccion,
-			String movil, String fijo) {
+	public Cliente(String dNI, String nombre, String apellidos, String direccion, String movil, String fijo,
+			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean mCA_Habilitado, Set<Cuenta> cuentas,
+			Sucursal surcusal) {
 		super();
 		DNI = dNI;
 		this.nombre = nombre;
@@ -55,6 +60,18 @@ public class Cliente {
 		this.direccion = direccion;
 		this.movil = movil;
 		this.fijo = fijo;
+		this.fecha_Actua = fecha_Actua;
+		this.fecha_Creacion = fecha_Creacion;
+		this.empleado = empleado;
+		this.MCA_Habilitado = mCA_Habilitado;
+		this.cuentas = cuentas;
+		this.surcusal = surcusal;
+	}
+	
+	
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getNombre() {
@@ -154,11 +171,6 @@ public class Cliente {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((DNI == null) ? 0 : DNI.hashCode());
-		result = prime * result + ((direccion == null) ? 0 : direccion.hashCode());
-		result = prime * result + ((apellidos == null) ? 0 : apellidos.hashCode());
-		result = prime * result + ((fijo == null) ? 0 : fijo.hashCode());
-		result = prime * result + ((movil == null) ? 0 : movil.hashCode());
-		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		return result;
 	}
 
@@ -176,39 +188,15 @@ public class Cliente {
 				return false;
 		} else if (!DNI.equals(other.DNI))
 			return false;
-		if (direccion == null) {
-			if (other.direccion != null)
-				return false;
-		} else if (!direccion.equals(other.direccion))
-			return false;
-		if (apellidos == null) {
-			if (other.apellidos != null)
-				return false;
-		} else if (!apellidos.equals(other.apellidos))
-			return false;
-		if (fijo == null) {
-			if (other.fijo != null)
-				return false;
-		} else if (!fijo.equals(other.fijo))
-			return false;
-		if (movil == null) {
-			if (other.movil != null)
-				return false;
-		} else if (!movil.equals(other.movil))
-			return false;
-		if (nombre == null) {
-			if (other.nombre != null)
-				return false;
-		} else if (!nombre.equals(other.nombre))
-			return false;
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
-		return "Cliente [DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos + ", Direccion=" + direccion
-				+ ", movil=" + movil + ", fijo=" + fijo + "]";
+		return "Cliente [id=" + id + ", DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
+				+ direccion + ", movil=" + movil + ", fijo=" + fijo + ", cuentas=" + cuentas + ", surcusal=" + surcusal
+				+ "]";
 	}
+
 	
 }
