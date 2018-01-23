@@ -29,7 +29,7 @@ public class Cuenta {
 	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<Movimiento>();
 	
-	@OneToMany
+	@OneToMany(mappedBy="cuenta")
 	private Set<Transferencia> transferencias = new HashSet<Transferencia>();
 
 	// Campos de Auditoria

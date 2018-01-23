@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -25,6 +26,8 @@ public class Transferencia {
 	private Date fecha_consolidacion;
 	private String canal;
 	private double importe;
+	
+	@ManyToOne
 	private Cuenta cuenta;
 	
 	public String getId_destino() {
