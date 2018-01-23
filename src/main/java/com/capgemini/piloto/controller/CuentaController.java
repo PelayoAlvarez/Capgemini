@@ -1,5 +1,6 @@
 package com.capgemini.piloto.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Cuenta;
+import com.capgemini.piloto.model.historico.CuentaH;
 import com.capgemini.piloto.repository.CuentaRepository;
+import com.capgemini.piloto.repository.historico.CuentaHRepository;
 
 @RestController
 @RequestMapping(path = "/cuenta")
@@ -24,16 +27,19 @@ public class CuentaController {
 
 	@Autowired
 	private CuentaRepository cuentaRepository;
+	@Autowired
+	private CuentaHRepository cuentaHRepository;
 
 	// Get All Notes
 	@GetMapping("/cuenta")
 	public List<Cuenta> getAllCuentas() {
-		return cuentaRepository.findAll();
+		return cuentaRepository.findMCA();
 	}
 
 	// Create a new Note
 	@PostMapping("/cuenta")
 	public Cuenta createCuenta(@Valid @RequestBody Cuenta cuenta) {
+		cuentaHRepository.save(new CuentaH(cuenta));
 		return cuentaRepository.save(cuenta);
 	}
 
@@ -55,8 +61,10 @@ public class CuentaController {
 		if (cuenta == null || !cuenta.getMCA_Habilitado()) {
 			return ResponseEntity.notFound().build();
 		}
+		
+		cuentaHRepository.save(new CuentaH(cuenta));
 		cuenta.setNumeroCuenta(cuentaDetails.getNumeroCuenta());
-
+		cuenta.setFecha_Actua(new Date());
 		Cuenta updateCuenta = cuentaRepository.save(cuenta);
 		return ResponseEntity.ok(updateCuenta);
 	}
@@ -69,7 +77,8 @@ public class CuentaController {
 			return ResponseEntity.notFound().build();
 
 		}
-
+		cuentaHRepository.save(new CuentaH(cuenta));
+		
 		cuenta.setMCA_Habilitado(false);
 		cuentaRepository.save(cuenta);
 		return ResponseEntity.ok().build();
