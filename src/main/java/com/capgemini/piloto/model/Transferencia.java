@@ -1,5 +1,6 @@
 package com.capgemini.piloto.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -13,7 +14,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="transferencia")
-public class Transferencia {
+public class Transferencia implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2858106251027444163L;
 
 	@Id
 	@Column(name="id")

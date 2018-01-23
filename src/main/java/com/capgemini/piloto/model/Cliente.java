@@ -1,5 +1,6 @@
 package com.capgemini.piloto.model;
 
+<<<<<<< HEAD
 
 import java.util.Date;
 import java.util.HashSet;
@@ -203,6 +204,16 @@ public class Cliente {
 			return false;
 		return true;
 	}
+=======
+import java.io.Serializable;
+
+public class Cliente implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6790560583600708557L;
+>>>>>>> afb2c17bc1d3cb0b129de2a657dffd635cf37450
 
 	@Override
 	public String toString() {

@@ -1,61 +1,75 @@
 package com.capgemini.piloto.controller;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Cuenta;
-import com.capgemini.piloto.service.CuentaService;
+import com.capgemini.piloto.repository.CuentaRepository;
 
-@Controller
+@RestController
+@RequestMapping(path = "/cuenta")
 public class CuentaController {
+
+	@Autowired
+	private CuentaRepository cuentaRepository;
 	
-private CuentaService cuentaService;
-	
-	@Autowired(required=true)
-	@Qualifier(value="cuentaService")
-	public void setCuentaService(CuentaService cs){
-		this.cuentaService = cs;
-	}
-	
-	@RequestMapping(value = "/cuenta", method = RequestMethod.GET)
-	public String listCuenta(Model model) {
-		model.addAttribute("cuenta", new Cuenta());
-		model.addAttribute("listCuenta", this.cuentaService.listCuenta());
-		return "cuenta";
-	}
-	
-	//For add and update person both
-	@RequestMapping(value= "/cuenta/add", method = RequestMethod.POST)
-	public String addCuenta(@ModelAttribute("cuenta") Cuenta c){
-		
-		if(c.getId() == 0){
-			this.cuentaService.addCuenta(c);
-		}else{
-			this.cuentaService.updateCuenta(c);
+	//Get a list with every account
+		@GetMapping("/cuenta")
+		public List<Cuenta> getAllCuentas() {
+			return cuentaRepository.findAll();
 		}
 		
-		return "redirect:/cuenta";
+		//Create a new account
+		@PostMapping("/cuenta")
+		public Cuenta createCuenta(@Valid @RequestBody Cuenta cuenta) {
+			return cuentaRepository.save(cuenta);		
+		}
 		
-	}
-	
-	@RequestMapping("/remove/{id}")
-    public String removeCuenta(@PathVariable("id") int id){
+		//Get an account with the specified id
+		@GetMapping("/cuenta/{id}")
+		public ResponseEntity<Cuenta> getCuentaById(@PathVariable(value = "id") Long cuentaId) {
+			Cuenta cuenta = cuentaRepository.findOne(cuentaId);
+			if(cuenta == null) {
+				return ResponseEntity.notFound().build();
+			}
+			return ResponseEntity.ok().body(cuenta);
+		}
 		
-        this.cuentaService.removeCuenta(id);
-        return "redirect:/cuenta";
-    }
- 
-    @RequestMapping("/edit/{id}")
-    public String editCuenta(@PathVariable("id") int id, Model model){
-        model.addAttribute("cuenta", this.cuentaService.getCuentaId(id));
-        model.addAttribute("listCuenta", this.cuentaService.listCuenta());
-        return "cuenta";
-    }
-
+		//Update an account
+		@PutMapping("/cuenta/{id}")
+		public ResponseEntity<Cuenta> updateCuenta(@PathVariable(value = "id") Long cuentaId,
+				@Valid @RequestBody Cuenta cuentaDetails) {
+			Cuenta cuenta = cuentaRepository.findOne(cuentaId);
+			if(cuenta == null) {
+				return ResponseEntity.notFound().build();
+			}
+			cuenta.setNumeroCuenta(cuentaDetails.getNumeroCuenta());
+			
+			Cuenta updateCuenta = cuentaRepository.save(cuenta);
+			return ResponseEntity.ok(updateCuenta);
+		}
+		
+		// Delete an account
+		@DeleteMapping("/cuenta/{id}")
+		public ResponseEntity<Cuenta> deleteCuenta(@PathVariable(value = "id") Long cuentaId) {
+			Cuenta cuenta = cuentaRepository.findOne(cuentaId);
+			if(cuenta == null) {
+				return ResponseEntity.notFound().build();
+			}
+			
+			cuentaRepository.delete(cuenta);
+			return ResponseEntity.ok().build();
+		}
 }
