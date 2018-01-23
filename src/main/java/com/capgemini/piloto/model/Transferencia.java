@@ -2,6 +2,7 @@ package com.capgemini.piloto.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
@@ -24,7 +27,7 @@ public class Transferencia implements Serializable{
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	
 	private String id_destino;
 	private String id_origen;
@@ -36,6 +39,41 @@ public class Transferencia implements Serializable{
 	@ManyToOne
 	private Cuenta cuenta;
 	
+	// Campos de Auditoria
+
+
+		@Temporal(TemporalType.TIMESTAMP)
+		private Date fecha_Actua;
+
+		@Temporal(TemporalType.TIMESTAMP)
+		private Date fecha_Creacion;
+
+
+		private Boolean MCA_Habilitado;
+		
+		
+		public Transferencia() {}
+		
+		
+	
+	public Transferencia(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
+				String canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion,
+				Boolean mCA_Habilitado) {
+			super();
+			this.id_destino = id_destino;
+			this.id_origen = id_origen;
+			this.fecha_transferencia = fecha_transferencia;
+			this.fecha_consolidacion = fecha_consolidacion;
+			this.canal = canal;
+			this.importe = importe;
+			this.cuenta = cuenta;
+			this.fecha_Actua = fecha_Actua;
+			this.fecha_Creacion = fecha_Creacion;
+			setMCA_Habilitado(mCA_Habilitado);
+		}
+
+
+
 	public String getId_destino() {
 		return id_destino;
 	}
@@ -72,16 +110,49 @@ public class Transferencia implements Serializable{
 	public void setImporte(double importe) {
 		this.importe = importe;
 	}
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 	
+	public Date getFecha_Actua() {
+		return fecha_Actua;
+	}
+
+	public void setFecha_Actua(Date fecha_Actua) {
+		this.fecha_Actua = fecha_Actua;
+	}
+
+	public Date getFecha_Creacion() {
+		return fecha_Creacion;
+	}
+
+	public void setFecha_Creacion(Date fecha_Creacion) {
+		this.fecha_Creacion = fecha_Creacion;
+	}
+
+	public Boolean getMCA_Habilitado() {
+		return MCA_Habilitado;
+	}
+
+	public void setMCA_Habilitado(Boolean mCA_Habilitado) {
+		MCA_Habilitado = mCA_Habilitado;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return "TransferenciaModel [id=" + id + ", id_destino=" + id_destino + ", id_origen=" + id_origen
+		return "Transferencia [id=" + id + ", id_destino=" + id_destino + ", id_origen=" + id_origen
 				+ ", fecha_transferencia=" + fecha_transferencia + ", fecha_consolidacion=" + fecha_consolidacion
-				+ ", canal=" + canal + ", importe=" + importe + "]";
+				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", fecha_Actua=" + fecha_Actua
+				+ ", fecha_Creacion=" + fecha_Creacion + ", MCA_Habilitado=" + MCA_Habilitado + "]";
 	}
+	
+
+
+
+
+
 	
 	
 	

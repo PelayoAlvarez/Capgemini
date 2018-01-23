@@ -67,6 +67,7 @@ public class CuentaController {
 		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
 		if (cuenta == null || !cuenta.getMCA_Habilitado()) {
 			return ResponseEntity.notFound().build();
+
 		}
 
 		cuenta.setMCA_Habilitado(false);
