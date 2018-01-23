@@ -1,5 +1,6 @@
 package com.capgemini.piloto.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,12 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="CUENTA")
-public class Cuenta {
+public class Cuenta implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7283533209815501984L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +35,7 @@ public class Cuenta {
 	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<Movimiento>();
 	
-	@OneToMany
+	@OneToMany(mappedBy="cuenta")
 	private Set<Transferencia> transferencias = new HashSet<Transferencia>();
 
 	// Campos de Auditoria

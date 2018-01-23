@@ -1,5 +1,6 @@
 package com.capgemini.piloto.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -17,7 +18,12 @@ import com.capgemini.piloto.model.types.TipoMovimiento;
 
 @Entity
 @Table(name="MOVIMIENTO")
-public class Movimiento {
+public class Movimiento implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1129264172419492422L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
