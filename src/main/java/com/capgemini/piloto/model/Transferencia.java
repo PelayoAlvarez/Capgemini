@@ -5,6 +5,8 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 
 @Entity
@@ -28,27 +32,56 @@ public class Transferencia implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
+	@Column(name="Numero_cuenta_destino")
 	private String id_destino;
+	
+	@NotBlank
+	@Column(name="Numero_cuenta_origen")
 	private String id_origen;
+	
+	
+	@NotBlank
+	@Column(name="Fec_transferencia")
 	private Date fecha_transferencia;
+	
+	
+	@NotBlank
+	@Column(name="Fec_consolidacion")
 	private Date fecha_consolidacion;
+	
+	
+	@NotBlank
+	@Enumerated(EnumType.STRING)
+	@Column(name="Canal")
 	private String canal;
+	
+	
+	@NotBlank
+	@Column(name="Importe")
 	private double importe;
 	
 	@ManyToOne
 	private Cuenta cuenta;
 	
+	@ManyToOne
+	private Empleado empleado;
+	
 	// Campos de Auditoria
 
 
-		@Temporal(TemporalType.TIMESTAMP)
-		private Date fecha_Actua;
+	@Column(name="Fec_actu", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fecha_Actua;
 
-		@Temporal(TemporalType.TIMESTAMP)
-		private Date fecha_Creacion;
+	@Column(name="Fec_creacion", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fecha_Creacion;
 
 
-		private Boolean MCA_Habilitado;
+	@NotBlank
+	@Column(name="Mca_habilitado")
+	private Boolean MCA_Habilitado;
 		
 		
 		public Transferencia() {}

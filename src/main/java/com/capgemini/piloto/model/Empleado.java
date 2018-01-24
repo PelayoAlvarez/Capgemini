@@ -1,69 +1,57 @@
 package com.capgemini.piloto.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
-@Table(name="Empleado")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"fecActu", "fecCreacion"}, allowGetters = false)
-public class Empleado {
+public class Empleado implements Serializable {
+
+	private static final long serialVersionUID = -6798286537097547476L;
 
 	@Id
 	@Column(name = "Dni")
 	public String dni;
-	
-	@NotBlank
 	@Column(name = "Nombre")
 	public String nombre;
-	
-	@NotBlank
 	@Column(name = "Apellidos")
 	public String apellidos;
-	
-	@NotBlank
 	@Column(name = "Direccion")
 	public String direccion;
-	
-	@NotBlank
 	@Column(name = "Fijo")
 	public String fijo;
-	
-	@NotBlank
 	@Column(name = "Movil")
 	public String movil;
-	
-	@Column(name = "Fec_actu", nullable = false)
+	@Column(name = "Fec_actu")
 	@Temporal(TemporalType.TIMESTAMP)
-	@LastModifiedDate
 	private Date fecActu;
-	
-	@Column(name = "Fec_creacion", nullable = false, updatable = false)
+	@Column(name = "Fec_creacion")
 	@Temporal(TemporalType.TIMESTAMP)
-	@CreatedDate
 	private Date fecCreacion;
-	
-	@NotBlank
 	@Column(name = "Usuario")
 	private String usuario;
-	
-	@NotBlank
 	@Column(name = "Mca_habilitado")
-	private char mcaHabilitado;
+	private boolean mcaHabilitado;
+
+	public Empleado() { };
+	
+	public Empleado(String dni, String nombre, String apellidos, String direccion, String fijo, String movil, String usuario) {
+		super();
+		this.dni = dni;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.direccion = direccion;
+		this.fijo = fijo;
+		this.movil = movil;
+		this.fecActu = this.fecCreacion = new Date();
+		this.usuario = usuario;
+		this.mcaHabilitado = true;
+	}
 
 	public String getDni() {
 		return dni;
@@ -137,11 +125,11 @@ public class Empleado {
 		this.usuario = usuario;
 	}
 
-	public char getMcaHabilitado() {
+	public boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(char mcaHabilitado) {
+	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
 

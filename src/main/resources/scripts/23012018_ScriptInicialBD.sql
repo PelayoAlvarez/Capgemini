@@ -8,7 +8,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Id));
  
  CREATE TABLE Banco.Sucursal_H
@@ -18,7 +18,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
  PRIMARY KEY (Id, Fec_audit));
@@ -34,7 +34,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Dni));
  
  CREATE TABLE Banco.Cliente_H
@@ -48,7 +48,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
  PRIMARY KEY (Dni, Fec_audit));
@@ -59,7 +59,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Id_sucursal, Dni),
  FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id),
  FOREIGN KEY (Dni) REFERENCES Banco.Cliente (Dni));
@@ -70,7 +70,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
  PRIMARY KEY (Id_sucursal, Dni, Fec_audit),
@@ -88,7 +88,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Dni)); 
  
  CREATE TABLE Banco.Empleado_H
@@ -102,7 +102,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
  PRIMARY KEY (Dni, Fec_audit));
@@ -113,7 +113,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Numero_cuenta),
  FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
  
@@ -123,7 +123,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
  PRIMARY KEY (Numero_cuenta, Fec_audit),
@@ -135,7 +135,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Dni, Numero_cuenta),
  FOREIGN KEY (Dni) REFERENCES Banco.Cliente (Dni),
  FOREIGN KEY (Numero_cuenta) REFERENCES Banco.Cuenta (Numero_cuenta));
@@ -146,7 +146,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
  PRIMARY KEY (Dni, Numero_cuenta, Fec_audit),
@@ -163,7 +163,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Numero_tarjeta),
  FOREIGN KEY (Dni, Numero_cuenta) REFERENCES Banco.Cliente_Cuenta (Dni, Numero_cuenta));
  
@@ -177,7 +177,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
  PRIMARY KEY (Numero_tarjeta, Fec_audit),
@@ -193,7 +193,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Id),
  FOREIGN KEY (Numero_cuenta) REFERENCES Banco.Cuenta (Numero_cuenta));
  
@@ -207,7 +207,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
  PRIMARY KEY (Id, Fec_audit),
@@ -225,7 +225,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Id),
  FOREIGN KEY (Numero_cuenta_origen) REFERENCES Banco.Cuenta (Numero_cuenta),
  FOREIGN KEY (Numero_cuenta_destino) REFERENCES Banco.Cuenta (Numero_cuenta),
@@ -243,7 +243,7 @@ CREATE TABLE Banco.Transferencia_H
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado CHAR NOT NULL,
+ Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
  PRIMARY KEY (Id, Fec_audit),

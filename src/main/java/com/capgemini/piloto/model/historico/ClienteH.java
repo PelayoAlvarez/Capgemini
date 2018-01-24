@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,24 +28,35 @@ public class ClienteH {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	public String dni;
-	public String nombre;
-	public String apellidos;
-	public String direccion;
-	public String movil;
-	public String fijo;
+	@Column(name = "Dni", nullable = false)
+	private String dni;
+	@Column(name = "Nombre", nullable = false)
+	private String nombre;
+	@Column(name = "Apellidos", nullable = false)
+	private String apellidos;
+	@Column(name = "Direccion", nullable = false)
+	private String direccion;
+	@Column(name = "Movil", nullable = false)
+	private String movil;
+	@Column(name = "Fijo", nullable = false)
+	private String fijo;
+	@Column(name = "Email", nullable = false)
+	private String email;
 	
 	// Campos de Auditoria
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "Fec_actu", nullable = false)
 	private Date fecha_Actua;
 
+	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha_Creacion;
 
-	
+	@Column(name = "Usuario", nullable = false)
 	private Empleado empleado;
-
+	
+	@Column(name = "Mca_Habilitado", nullable = false)
 	private Boolean MCA_Habilitado;
 	
 	@OneToMany
@@ -60,7 +72,7 @@ public class ClienteH {
 			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean MCA_Habilitado, Set<Cuenta> cuentas,
 			Sucursal surcusal) {
 		super();
-		dni = dni;
+		this.dni = dni;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.direccion = direccion;
@@ -75,21 +87,29 @@ public class ClienteH {
 	}
 	
 	public ClienteH(Cliente cliente) {
-		dni = dni;
-		this.nombre = cliente.nombre;
-		this.apellidos = cliente.apellidos;
-		this.direccion = cliente.direccion;
-		this.movil = cliente.movil;
-		this.fijo = cliente.fijo;
+		this.dni = cliente.getDNI();
+		this.nombre = cliente.getNombre();
+		this.apellidos = cliente.getApellidos();
+		this.direccion = cliente.getDireccion();
+		this.movil = cliente.getMovil();
+		this.fijo = cliente.getFijo();
 		this.fecha_Actua = cliente.getFecha_Actua();
 		this.fecha_Creacion = cliente.getFecha_Creacion();
 		this.empleado = cliente.getEmpleado();
 		this.MCA_Habilitado = cliente.getMCA_Habilitado();
 		this.cuentas = cliente.getCuentas();
-		this.surcusal = surcusal;
+		this.surcusal = cliente.getSurcusal();
 	}
 	
 	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public Long getId() {
 		return id;
