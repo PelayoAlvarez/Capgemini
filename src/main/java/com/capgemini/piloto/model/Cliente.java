@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,8 +19,6 @@ import javax.persistence.TemporalType;
 public class Cliente {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 	@Column(name = "Dni", nullable = false)
 	private String DNI;
 	@Column(name = "Nombre", nullable = false)
@@ -49,7 +45,7 @@ public class Cliente {
 	private Date fecha_Creacion;
 
 	@Column(name = "Usuario", nullable = false)
-	private Empleado empleado;
+	private String empleado;
 	
 	@Column(name = "Mca_Habilitado", nullable = false)
 	private Boolean MCA_Habilitado;
@@ -75,7 +71,7 @@ public class Cliente {
 		this.fijo = fijo;
 		this.fecha_Actua = fecha_Actua;
 		this.fecha_Creacion = fecha_Creacion;
-		this.empleado = empleado;
+		this.empleado = empleado.getNombre();
 		this.MCA_Habilitado = mCA_Habilitado;
 		this.cuentas = cuentas;
 		this.surcusal = surcusal;
@@ -89,10 +85,6 @@ public class Cliente {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public String getNombre() {
@@ -155,11 +147,11 @@ public class Cliente {
 		this.fecha_Creacion = fecha_Creacion;
 	}
 
-	public Empleado getEmpleado() {
+	public String getEmpleado() {
 		return empleado;
 	}
 
-	public void setEmpleado(Empleado empleado) {
+	public void setEmpleado(String empleado) {
 		this.empleado = empleado;
 	}
 
@@ -173,6 +165,9 @@ public class Cliente {
 
 	public Set<Cuenta> getCuentas() {
 		return new HashSet<Cuenta>(cuentas);
+	}
+	Set<Cuenta> _getCuentas() {
+		return cuentas;
 	}
 
 	protected void setCuentas(Set<Cuenta> cuentas) {
@@ -214,7 +209,7 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
+		return "Cliente [ DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
 				+ direccion + ", movil=" + movil + ", fijo=" + fijo + ", cuentas=" + cuentas + ", surcusal=" + surcusal
 				+ "]";
 	}
