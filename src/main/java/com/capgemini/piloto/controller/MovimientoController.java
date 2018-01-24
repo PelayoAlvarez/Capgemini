@@ -51,7 +51,7 @@ public class MovimientoController {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
-		movimiento.setMCA_Habilitado(false);
+		movimiento.setMCAHabilitado(false);
 		return ResponseEntity.ok().build();
 	}
 	
@@ -59,7 +59,7 @@ public class MovimientoController {
 	public ResponseEntity<Movimiento> updateMovimeinto(@PathVariable(value = "id") Long movimientoId,
 			@Valid @RequestBody Movimiento movimientoDetails) {
 		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
-		if(movimiento == null || !movimiento.getMCA_Habilitado()) {
+		if(movimiento == null || !movimiento.getMCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
@@ -69,7 +69,7 @@ public class MovimientoController {
 		movimiento.setFecha(movimientoDetails.getFecha_hora());
 		movimiento.setImporte(movimientoDetails.getImporte());
 		movimiento.setTipo(movimiento.getTipo());
-		movimiento.setFecha_Actua(new Date());
+		movimiento.setFechaActua(new Date());
 		movimiento = movimientoRepository.save(movimiento);
 		logger.info("The transaction was succesfuly updated");
 		return ResponseEntity.ok(movimiento);
@@ -78,7 +78,7 @@ public class MovimientoController {
 	@GetMapping("/movimiento/{id}")
 	public ResponseEntity<Movimiento> getCuentaById(@PathVariable(value = "id") Long movimientoId) {
 		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
-		if(movimiento == null || !movimiento.getMCA_Habilitado()) {
+		if(movimiento == null || !movimiento.getMCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
