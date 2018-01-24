@@ -42,7 +42,7 @@ public class SucursalController {
 	public ResponseEntity<Sucursal> getSucursal(@PathVariable(value = "id") Long id) {
 		log.info("GET: Se obtiene la Sucursal con el id [{}]", id);
 		Sucursal sucursal = sucursalRep.findById(id);
-		if (sucursal == null || sucursal.isActive()) {
+		if (sucursal == null || sucursal.getMcaHabilitado()) {
 			log.info("GET: No se encuentra la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
@@ -60,7 +60,7 @@ public class SucursalController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Sucursal> updateSucursal(@RequestBody Sucursal sucursal) {
 		Sucursal oldSucursal = sucursalRep.findById(sucursal.getId());
-		if (oldSucursal == null || sucursal.isActive()) {
+		if (oldSucursal == null || sucursal.getMcaHabilitado()) {
 			log.info("UPDATE: No se ha encontrado la Sucursal con el id [{}]", sucursal.getId());
 			return ResponseEntity.notFound().build();
 		}
@@ -74,12 +74,12 @@ public class SucursalController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Sucursal> deleteSucursal(@PathVariable(name = "id") Long id) {
 		Sucursal sucursal = sucursalRep.findById(id);
-		if (sucursal == null || sucursal.isActive()) {
+		if (sucursal == null || sucursal.getMcaHabilitado()) {
 			log.info("DELETE: No se ha encontrado la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
 		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
-		sucursal.setMcaHabilitado('N');
+		sucursal.setMcaHabilitado(false);
 		log.info("DELETE: Se borra la Sucursal con el id [{}]", sucursal.getId());
 		sucursalRep.save(sucursal);
 		return ResponseEntity.ok(sucursal);

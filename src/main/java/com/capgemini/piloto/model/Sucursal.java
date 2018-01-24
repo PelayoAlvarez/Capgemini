@@ -33,7 +33,7 @@ public class Sucursal implements Serializable{
 	@Column(name = "Usuario")
 	private String usuario;
 	@Column(name = "Mca_habilitado")
-	private char mcaHabilitado;
+	private Boolean mcaHabilitado;
 	
 	public Sucursal() {
 		//Just for JPA
@@ -47,7 +47,7 @@ public class Sucursal implements Serializable{
 		this.direccion = direccion;
 		this.usuario = usuario;
 		this.fecActu = this.fecCreacion = new Date();
-		this.mcaHabilitado = 'S';
+		this.mcaHabilitado = true;
 	}
 
 
@@ -100,16 +100,12 @@ public class Sucursal implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public char getMcaHabilitado() {
+	public Boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(char mcaHabilitado) {
+	public void setMcaHabilitado(Boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
-	}
-	
-	public boolean isActive() {
-		return this.mcaHabilitado == 'S'? true: false;
 	}
 
 	@Override
