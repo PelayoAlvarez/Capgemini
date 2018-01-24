@@ -1,4 +1,4 @@
-package com.capgemini.piloto.model;
+package com.capgemini.piloto.model.historico;
 
 
 import java.util.Date;
@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table (name="CLIENTE")
-public class Cliente {
+public class ClienteH {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,22 +37,22 @@ public class Cliente {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha_Creacion;
 
-	private Empleado empleado;
+	private EmpleadoH empleado;
 
 	private Boolean MCA_Habilitado;
 	
 	@OneToMany
-	private Set<Cuenta> cuentas = new HashSet<Cuenta>();
+	private Set<CuentaH> cuentas = new HashSet<CuentaH>();
 	
-	@ManyToOne public Sucursal surcusal;
+	@ManyToOne public SucursalH surcusal;
 	
-	public Cliente() {
+	public ClienteH() {
 		super();
 	}
 
-	public Cliente(String dNI, String nombre, String apellidos, String direccion, String movil, String fijo,
-			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean mCA_Habilitado, Set<Cuenta> cuentas,
-			Sucursal surcusal) {
+	public ClienteH(String dNI, String nombre, String apellidos, String direccion, String movil, String fijo,
+			Date fecha_Actua, Date fecha_Creacion, EmpleadoH empleado, Boolean mCA_Habilitado, Set<CuentaH> cuentas,
+			SucursalH surcusal) {
 		super();
 		DNI = dNI;
 		this.nombre = nombre;
@@ -134,11 +134,11 @@ public class Cliente {
 		this.fecha_Creacion = fecha_Creacion;
 	}
 
-	public Empleado getEmpleado() {
+	public EmpleadoH getEmpleado() {
 		return empleado;
 	}
 
-	public void setEmpleado(Empleado empleado) {
+	public void setEmpleado(EmpleadoH empleado) {
 		this.empleado = empleado;
 	}
 
@@ -150,19 +150,19 @@ public class Cliente {
 		MCA_Habilitado = mCA_Habilitado;
 	}
 
-	public Set<Cuenta> getCuentas() {
-		return new HashSet<Cuenta>(cuentas);
+	public Set<CuentaH> getCuentas() {
+		return new HashSet<CuentaH>(cuentas);
 	}
 
-	protected void setCuentas(Set<Cuenta> cuentas) {
+	protected void setCuentas(Set<CuentaH> cuentas) {
 		this.cuentas = cuentas;
 	}
 
-	public Sucursal getSurcusal() {
+	public SucursalH getSurcusal() {
 		return surcusal;
 	}
 
-	public void setSurcusal(Sucursal surcusal) {
+	public void setSurcusal(SucursalH surcusal) {
 		this.surcusal = surcusal;
 	}
 
@@ -182,7 +182,7 @@ public class Cliente {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cliente other = (Cliente) obj;
+		ClienteH other = (ClienteH) obj;
 		if (DNI == null) {
 			if (other.DNI != null)
 				return false;

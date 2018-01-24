@@ -165,5 +165,4 @@ public class SucursalH implements Serializable {
 	public String toString() {
 		return "SucursalH [id=" + id + ", nombre=" + nombre + ", fecAudit=" + fecAudit + "]";
 	}
-
 }

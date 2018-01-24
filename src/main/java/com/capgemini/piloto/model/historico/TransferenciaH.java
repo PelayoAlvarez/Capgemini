@@ -1,4 +1,4 @@
-package com.capgemini.piloto.model;
+package com.capgemini.piloto.model.historico;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -13,10 +13,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.Transferencia;
+
 
 @Entity
-@Table(name="transferencia")
-public class Transferencia implements Serializable{
+@Table(name="transferenciaH")
+public class TransferenciaH implements Serializable{
 
 	/**
 	 * 
@@ -36,7 +38,7 @@ public class Transferencia implements Serializable{
 	private double importe;
 	
 	@ManyToOne
-	private Cuenta cuenta;
+	private CuentaH cuenta;
 	
 	// Campos de Auditoria
 
@@ -51,9 +53,9 @@ public class Transferencia implements Serializable{
 		private Boolean MCA_Habilitado;
 		
 		
-		public Transferencia() {}
+		public TransferenciaH() {}
 		
-		public Transferencia(Transferencia t) {
+		public TransferenciaH(Transferencia t) {
 			id_destino = t.getId_destino();
 			id_origen = t.getId_origen();
 			fecha_transferencia = t.getFecha_transferencia();
@@ -64,8 +66,8 @@ public class Transferencia implements Serializable{
 		
 		
 	
-	public Transferencia(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
-				String canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion,
+	public TransferenciaH(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
+				String canal, double importe, CuentaH cuenta, Date fecha_Actua, Date fecha_Creacion,
 				Boolean mCA_Habilitado) {
 			super();
 			this.id_destino = id_destino;

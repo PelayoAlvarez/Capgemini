@@ -1,4 +1,4 @@
-package com.capgemini.piloto.model;
+package com.capgemini.piloto.model.historico;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,11 +14,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
 @Entity
 @Table(name="MOVIMIENTO")
-public class Movimiento implements Serializable{
+public class MovimientoH implements Serializable{
 
 	/**
 	 * 
@@ -40,7 +41,7 @@ public class Movimiento implements Serializable{
 	private String descripcion;
 
 	@OneToMany(mappedBy="cuenta")
-	private Cuenta cuentaAsociada;
+	private CuentaH cuentaAsociada;
 
 	// Campos de Auditoria
 	
@@ -50,26 +51,24 @@ public class Movimiento implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha_Creacion;
 
-	private Empleado empleado;
+	private EmpleadoH empleado;
 
 	private Boolean MCA_Habilitado;
 	
 	
-	Movimiento() {}
+	MovimientoH() {}
 
-	public Movimiento(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, 
-			Cuenta cuentaAsociada, Date fecha_Actua, Date fecha_Creacion, Empleado empleado,
-			Boolean habilitado) {
+	public MovimientoH(Movimiento m) {
 		super();
-		this.importe = importe;
-		this.tipo = tipo;
-		this.fecha_hora = fecha;
-		this.descripcion = descripcion;
-		this.cuentaAsociada = cuentaAsociada;
-		this.fecha_Actua = fecha_Actua;
-		this.fecha_Creacion = fecha_Creacion;
-		this.empleado = empleado;
-		this.MCA_Habilitado = habilitado;
+		this.importe = m.getImporte();
+		this.tipo = m.getTipo();
+		this.fecha_hora = m.getFecha_hora();
+		this.descripcion = m.getDescripcion();
+		this.cuentaAsociada = new CuentaH(m.getCuentaAsociada());
+		this.fecha_Actua = m.getFecha_Actua();
+		this.fecha_Creacion = m.getFecha_Creacion();
+		//this.empleado = new Empleado(m.getEmpleado());
+		this.MCA_Habilitado = m.getMCA_Habilitado();
 	}
 
 	public TipoMovimiento getTipo() {
@@ -112,11 +111,11 @@ public class Movimiento implements Serializable{
 		return fecha_hora;
 	}
 
-	public Cuenta getCuentaAsociada() {
+	public CuentaH getCuentaAsociada() {
 		return cuentaAsociada;
 	}
 
-	public Empleado getEmpleado() {
+	public EmpleadoH getEmpleado() {
 		return empleado;
 	}
 
@@ -162,7 +161,7 @@ public class Movimiento implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Movimiento other = (Movimiento) obj;
+		MovimientoH other = (MovimientoH) obj;
 		if (cuentaAsociada == null) {
 			if (other.cuentaAsociada != null)
 				return false;

@@ -1,4 +1,4 @@
-package com.capgemini.piloto.model;
+package com.capgemini.piloto.model.historico;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,9 +14,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.Cliente;
+import com.capgemini.piloto.model.Cuenta;
+import com.capgemini.piloto.model.Empleado;
+import com.capgemini.piloto.model.Movimiento;
+import com.capgemini.piloto.model.Transferencia;
+
 @Entity
-@Table(name = "CUENTA")
-public class Cuenta implements Serializable {
+@Table(name = "CUENTAH")
+public class CuentaH implements Serializable {
 
 	/**
 	 * 
@@ -55,11 +61,18 @@ public class Cuenta implements Serializable {
 
 	private Boolean MCA_Habilitado;
 
-	Cuenta() {
-		fecha_Creacion = new Date();
+	public CuentaH() {
 	}
 
-	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Date fecha_Actua, Date fecha_Creacion,
+	public CuentaH(Cuenta c) {
+		numeroCuenta = c.getNumeroCuenta();
+		movimientos = c.getMovimientos();
+		fecha_Actua = c.getFecha_Actua();
+		fecha_Creacion = c.getFecha_Creacion();
+		MCA_Habilitado = c.getMCA_Habilitado();
+	}
+
+	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, Date fecha_Actua, Date fecha_Creacion,
 			Boolean mCA_Habilitado) {
 		super();
 		this.numeroCuenta = numeroCuenta;

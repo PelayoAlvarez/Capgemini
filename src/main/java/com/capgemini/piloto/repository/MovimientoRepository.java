@@ -1,7 +1,9 @@
 package com.capgemini.piloto.repository;
 
-public interface MovimientoRepository {
-	
-	
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.capgemini.piloto.model.Movimiento;
+
+public interface MovimientoRepository extends JpaRepository<Movimiento, Long>{
 
 }
