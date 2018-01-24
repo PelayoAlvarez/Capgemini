@@ -49,7 +49,7 @@ public class ClienteController {
 	// Create a new client
 	@PostMapping("/clientes")
 	public Cliente createClient(@Valid @RequestBody Cliente cliente) {
-		clienteHRepository.save(new ClienteH(cliente));
+		clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
 		logger.info("Create a new client");
 		return clienteRepository.save(cliente);
 		
@@ -76,7 +76,9 @@ public class ClienteController {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
-		clienteHRepository.save(new ClienteH(cliente));
+		
+		//Cogemos como prueba el usuario de la entidad
+		clienteHRepository.save(new ClienteH(cliente,cliente.getEmpleado()));
 		cliente.setNombre(detailsClient.getNombre());
 		cliente.setApellidos(detailsClient.getApellidos());
 		cliente.setDireccion(detailsClient.getDireccion());
@@ -97,8 +99,10 @@ public class ClienteController {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
-		clienteHRepository.save(new ClienteH(cliente));
-		
+		clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
+		//Parte de Alperi para desvincular las cuentas de los clientes en caso de que no haya mas clientes 
+		//asociados a esas cuentas eliminar la cuenta
+		//unlink(cliente);
 		cliente.setMCA_Habilitado(false);
 		clienteRepository.save(cliente);
 		
