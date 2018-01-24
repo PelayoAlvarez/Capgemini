@@ -41,7 +41,7 @@ public class TransferenciaController {
 		}
 		
 		//Create a new Transfer
-		@PostMapping("/trasnferencia")
+		@PostMapping("/transferencia")
 		public Transferencia createCuenta(@Valid @RequestBody Transferencia transferencia) {
 			transferenciaHRepository.save(new TransferenciaH(transferencia));
 			logger.info("create a new transfer");
