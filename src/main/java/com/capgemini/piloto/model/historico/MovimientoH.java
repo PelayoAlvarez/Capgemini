@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
 @Entity
@@ -57,19 +58,17 @@ public class MovimientoH implements Serializable{
 	
 	MovimientoH() {}
 
-	public MovimientoH(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, 
-			CuentaH cuentaAsociada, Date fecha_Actua, Date fecha_Creacion, EmpleadoH empleado,
-			Boolean habilitado) {
+	public MovimientoH(Movimiento m) {
 		super();
-		this.importe = importe;
-		this.tipo = tipo;
-		this.fecha_hora = fecha;
-		this.descripcion = descripcion;
-		this.cuentaAsociada = cuentaAsociada;
-		this.fecha_Actua = fecha_Actua;
-		this.fecha_Creacion = fecha_Creacion;
-		this.empleado = empleado;
-		this.MCA_Habilitado = habilitado;
+		this.importe = m.getImporte();
+		this.tipo = m.getTipo();
+		this.fecha_hora = m.getFecha_hora();
+		this.descripcion = m.getDescripcion();
+		this.cuentaAsociada = new CuentaH(m.getCuentaAsociada());
+		this.fecha_Actua = m.getFecha_Actua();
+		this.fecha_Creacion = m.getFecha_Creacion();
+		//this.empleado = new Empleado(m.getEmpleado());
+		this.MCA_Habilitado = m.getMCA_Habilitado();
 	}
 
 	public TipoMovimiento getTipo() {
