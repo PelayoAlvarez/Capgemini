@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,24 +28,35 @@ public class ClienteH {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	public String dni;
-	public String nombre;
-	public String apellidos;
-	public String direccion;
-	public String movil;
-	public String fijo;
+	@Column(name = "Dni", nullable = false)
+	private String dni;
+	@Column(name = "Nombre", nullable = false)
+	private String nombre;
+	@Column(name = "Apellidos", nullable = false)
+	private String apellidos;
+	@Column(name = "Direccion", nullable = false)
+	private String direccion;
+	@Column(name = "Movil", nullable = false)
+	private String movil;
+	@Column(name = "Fijo", nullable = false)
+	private String fijo;
+	@Column(name = "Email", nullable = false)
+	private String email;
 	
 	// Campos de Auditoria
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "Fec_actu", nullable = false)
 	private Date fecha_Actua;
 
+	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha_Creacion;
 
-	
+	@Column(name = "Usuario", nullable = false)
 	private Empleado empleado;
-
+	
+	@Column(name = "Mca_Habilitado", nullable = false)
 	private Boolean MCA_Habilitado;
 	
 	@OneToMany
@@ -90,6 +102,14 @@ public class ClienteH {
 	}
 	
 	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public Long getId() {
 		return id;
