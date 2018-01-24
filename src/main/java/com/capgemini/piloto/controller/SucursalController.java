@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Sucursal;
 import com.capgemini.piloto.model.historico.SucursalH;
-import com.capgemini.piloto.repository.SucursalHRepository;
 import com.capgemini.piloto.repository.SucursalRepository;
+import com.capgemini.piloto.repository.historico.SucursalHRepository;
 
 @RestController
 @RequestMapping("/sucursal")
@@ -42,7 +42,7 @@ public class SucursalController {
 	public ResponseEntity<Sucursal> getSucursal(@PathVariable(value = "id") Long id) {
 		log.info("GET: Se obtiene la Sucursal con el id [{}]", id);
 		Sucursal sucursal = sucursalRep.findById(id);
-		if (sucursal == null) {
+		if (sucursal == null || sucursal.isActive()) {
 			log.info("GET: No se encuentra la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
@@ -60,7 +60,7 @@ public class SucursalController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Sucursal> updateSucursal(@RequestBody Sucursal sucursal) {
 		Sucursal oldSucursal = sucursalRep.findById(sucursal.getId());
-		if (oldSucursal == null) {
+		if (oldSucursal == null || sucursal.isActive()) {
 			log.info("UPDATE: No se ha encontrado la Sucursal con el id [{}]", sucursal.getId());
 			return ResponseEntity.notFound().build();
 		}
@@ -74,7 +74,7 @@ public class SucursalController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Sucursal> deleteSucursal(@PathVariable(name = "id") Long id) {
 		Sucursal sucursal = sucursalRep.findById(id);
-		if (sucursal == null) {
+		if (sucursal == null || sucursal.isActive()) {
 			log.info("DELETE: No se ha encontrado la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}

@@ -42,7 +42,6 @@ public class Sucursal implements Serializable{
 	
 
 	public Sucursal(Long id, String nombre, String direccion, String usuario) {
-		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.direccion = direccion;
@@ -107,6 +106,10 @@ public class Sucursal implements Serializable{
 
 	public void setMcaHabilitado(char mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
+	}
+	
+	public boolean isActive() {
+		return this.mcaHabilitado == 'S'? true: false;
 	}
 
 	@Override
