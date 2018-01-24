@@ -26,9 +26,6 @@ public class Cuenta implements Serializable {
 	private static final long serialVersionUID = -7283533209815501984L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
 	@Column(name="Numero_cuenta")
 	private String numeroCuenta;
 	
@@ -61,24 +58,20 @@ public class Cuenta implements Serializable {
 
 	private Empleado empleado;
 
-	private Boolean MCAHabilitado;
+	private Boolean mCAHabilitado;
 
 	Cuenta() {
 		fecCreacion = new Date();
 	}
 
 	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
-			Boolean mCA_Habilitado) {
+			Boolean mCAHabilitado) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.fecActu = fecActu;
 		this.fecCreacion = fecCreacion;
-		this.MCAHabilitado = mCA_Habilitado;
-	}
-
-	public Long getId() {
-		return id;
+		this.mCAHabilitado = mCAHabilitado;
 	}
 
 	public String getNumeroCuenta() {
@@ -113,6 +106,21 @@ public class Cuenta implements Serializable {
 		this.sucursal = sucursal;
 	}
 
+	public Set<Transferencia> getTransferencias() {
+		return transferencias;
+	}
+
+	public void setTransferencias(Set<Transferencia> transferencias) {
+		this.transferencias = transferencias;
+	}
+
+	public Set<Cliente> getClientes() {
+		return clientes;
+	}
+
+	public void setClientes(Set<Cliente> clientes) {
+		this.clientes = clientes;
+	}
 
 	// Getters y Setters de Auditoria
 
@@ -125,11 +133,11 @@ public class Cuenta implements Serializable {
 	}
 
 	public Boolean getMCAHabilitado() {
-		return MCAHabilitado;
+		return mCAHabilitado;
 	}
 
-	public void setMCAHabilitado(Boolean mCA_Habilitado) {
-		MCAHabilitado = mCA_Habilitado;
+	public void setMCAHabilitado(Boolean MCAHabilitado) {
+		this.mCAHabilitado = MCAHabilitado;
 	}
 
 	public Date getFecCreacion() {
