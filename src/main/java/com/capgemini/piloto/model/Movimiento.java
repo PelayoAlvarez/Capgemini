@@ -9,7 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,7 +39,7 @@ public class Movimiento implements Serializable{
 
 	private String descripcion;
 
-	@OneToMany(mappedBy="cuenta")
+	@ManyToOne
 	private Cuenta cuentaAsociada;
 
 	// Campos de Auditoria
@@ -86,10 +86,6 @@ public class Movimiento implements Serializable{
 
 	public void setImporte(Double importe) {
 		this.importe = importe;
-	}
-
-	public Date getFecha() {
-		return fecha_hora;
 	}
 
 	public void setFecha(Date fecha) {

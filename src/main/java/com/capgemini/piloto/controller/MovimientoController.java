@@ -1,5 +1,6 @@
 package com.capgemini.piloto.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.historico.MovimientoH;
 import com.capgemini.piloto.repository.MovimientoRepository;
-import com.capgemini.piloto.repository.historico.MovimientoRepositoryH;
+import com.capgemini.piloto.repository.historico.MovimientoHRepository;
 
 @RestController
 @RequestMapping(path="/movimiento")
@@ -34,7 +35,7 @@ public class MovimientoController {
 	private MovimientoRepository movimientoRepository;
 	
 	@Autowired
-	private MovimientoRepositoryH movimientoRepositoryH;
+	private MovimientoHRepository movimientoRepositoryH;
 	
 	@PostMapping("/movimiento")
 	public Movimiento addMovimiento(@Valid @RequestBody Movimiento movimiento) {
@@ -65,9 +66,10 @@ public class MovimientoController {
 		
 		movimientoRepositoryH.save(new MovimientoH(movimiento));
 		movimiento.setDescripcion(movimientoDetails.getDescripcion());
-		movimiento.setFecha(movimientoDetails.getFecha());
+		movimiento.setFecha(movimientoDetails.getFecha_hora());
 		movimiento.setImporte(movimientoDetails.getImporte());
 		movimiento.setTipo(movimiento.getTipo());
+		movimiento.setFecha_Actua(new Date());
 		movimiento = movimientoRepository.save(movimiento);
 		logger.info("The transaction was succesfuly updated");
 		return ResponseEntity.ok(movimiento);
