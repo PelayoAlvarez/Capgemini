@@ -42,6 +42,9 @@ public class CuentaH implements Serializable {
 	@ManyToOne
 	private Sucursal sucursal;
 	
+	@Column(name="Usuario")
+	private String usuario;
+	
 	@OneToMany
 	private Set<Cliente> clientes = new HashSet<>();
 
@@ -61,7 +64,14 @@ public class CuentaH implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="Fec_actu")
 	private Date fecActu;
-
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="Fec_audit")
+	private Date fecAudit;
+	
+	@Column(name= "Usuario_h")
+	private String usuarioH;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="Fec_creacion")
 	private Date fecCreacion;
@@ -69,7 +79,7 @@ public class CuentaH implements Serializable {
 	private Empleado empleado;
 
 	@Column(name="Mca_habilitado")
-	private Boolean MCAHabilitado;
+	private Boolean mCAHabilitado;
 
 	public CuentaH() {
 	}
@@ -79,17 +89,19 @@ public class CuentaH implements Serializable {
 		movimientos = c.getMovimientos();
 		fecActu = c.getFecActu();
 		fecCreacion = c.getFecCreacion();
-		MCAHabilitado = c.getMCAHabilitado();
+		mCAHabilitado = c.getMCAHabilitado();
+		usuario=c.getUsuario();
 	}
 
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
-			Boolean mCA_Habilitado) {
+			Boolean mCA_Habilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.fecActu = fecActu;
 		this.fecCreacion = fecCreacion;
-		this.MCAHabilitado = mCA_Habilitado;
+		this.mCAHabilitado = mCA_Habilitado;
+		this.usuario=usuario;
 	}
 
 	public Long getId() {
@@ -127,8 +139,18 @@ public class CuentaH implements Serializable {
 	public void setSucursal(Sucursal sucursal) {
 		this.sucursal = sucursal;
 	}
+	
+	
 
 	// Getters y Setters de Auditoria
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
 
 	public Date getFecActu() {
 		return fecActu;
@@ -139,14 +161,64 @@ public class CuentaH implements Serializable {
 	}
 
 	public Boolean getMCAHabilitado() {
-		return MCAHabilitado;
+		return mCAHabilitado;
 	}
 
-	public void setMCAHabilitado(Boolean mCA_Habilitado) {
-		MCAHabilitado = mCA_Habilitado;
+	public void setMCAHabilitado(Boolean mCAHabilitado) {
+		this.mCAHabilitado = mCAHabilitado;
 	}
 
 	public Date getFecCreacion() {
 		return fecCreacion;
 	}
+
+	public Date getFecAudit() {
+		return fecAudit;
+	}
+
+	public void setFecAudit(Date fecAudit) {
+		this.fecAudit = fecAudit;
+	}
+
+	public String getUsuarioH() {
+		return usuarioH;
+	}
+
+	public void setUsuarioH(String usuarioH) {
+		this.usuarioH = usuarioH;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fecActu == null) ? 0 : fecActu.hashCode());
+		result = prime * result + ((numeroCuenta == null) ? 0 : numeroCuenta.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CuentaH other = (CuentaH) obj;
+		if (fecActu == null) {
+			if (other.fecActu != null)
+				return false;
+		} else if (!fecActu.equals(other.fecActu))
+			return false;
+		if (numeroCuenta == null) {
+			if (other.numeroCuenta != null)
+				return false;
+		} else if (!numeroCuenta.equals(other.numeroCuenta))
+			return false;
+		return true;
+	}
+	
+	
+	
 }
