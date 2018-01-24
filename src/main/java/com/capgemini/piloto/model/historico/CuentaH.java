@@ -64,7 +64,14 @@ public class CuentaH implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="Fec_actu")
 	private Date fecActu;
-
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="Fec_audit")
+	private Date fecAudit;
+	
+	@Column(name= "Usuario_h")
+	private String usuarioH;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="Fec_creacion")
 	private Date fecCreacion;
@@ -164,4 +171,54 @@ public class CuentaH implements Serializable {
 	public Date getFecCreacion() {
 		return fecCreacion;
 	}
+
+	public Date getFecAudit() {
+		return fecAudit;
+	}
+
+	public void setFecAudit(Date fecAudit) {
+		this.fecAudit = fecAudit;
+	}
+
+	public String getUsuarioH() {
+		return usuarioH;
+	}
+
+	public void setUsuarioH(String usuarioH) {
+		this.usuarioH = usuarioH;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fecActu == null) ? 0 : fecActu.hashCode());
+		result = prime * result + ((numeroCuenta == null) ? 0 : numeroCuenta.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CuentaH other = (CuentaH) obj;
+		if (fecActu == null) {
+			if (other.fecActu != null)
+				return false;
+		} else if (!fecActu.equals(other.fecActu))
+			return false;
+		if (numeroCuenta == null) {
+			if (other.numeroCuenta != null)
+				return false;
+		} else if (!numeroCuenta.equals(other.numeroCuenta))
+			return false;
+		return true;
+	}
+	
+	
+	
 }
