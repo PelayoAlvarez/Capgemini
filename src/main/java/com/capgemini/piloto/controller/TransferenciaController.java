@@ -52,7 +52,7 @@ public class TransferenciaController {
 		@GetMapping("/transferencia/{id}")
 		public ResponseEntity<Transferencia> getTransferenciaById(@PathVariable(value = "id") Long transferenciaId) {
 			Transferencia transferencia = transferenciaRepository.findOne(transferenciaId);
-			if(transferencia == null || !transferencia.getMCA_Habilitado()) {
+			if(transferencia == null || !transferencia.getMcaHabilitado()) {
 				logger.info(NOT_FOUND);
 				return ResponseEntity.notFound().build();
 			}
@@ -65,16 +65,16 @@ public class TransferenciaController {
 		public ResponseEntity<Transferencia> updateTransferencia(@PathVariable(value = "id") Long transferenciaId,
 				@Valid @RequestBody Transferencia transferenciaDetails) {
 			Transferencia transferencia = transferenciaRepository.findOne(transferenciaId);
-			if(transferencia == null || !transferencia.getMCA_Habilitado()) {
+			if(transferencia == null || !transferencia.getMcaHabilitado()) {
 				logger.info(NOT_FOUND);
 				return ResponseEntity.notFound().build();
 			}
 			transferenciaHRepository.save(new TransferenciaH(transferencia));
 			transferencia.setCanal(transferenciaDetails.getCanal());
-			transferencia.setFecha_consolidacion(transferenciaDetails.getFecha_consolidacion());
-			transferencia.setFecha_transferencia(transferenciaDetails.getFecha_transferencia());
-			transferencia.setId_destino(transferencia.getId_destino());
-			transferencia.setId_origen(transferencia.getId_origen());
+			transferencia.setFechaConsolidacion(transferenciaDetails.getFechaConsolidacion());
+			transferencia.setFechaTransferencia(transferenciaDetails.getFechaTransferencia());
+			transferencia.setIdDestino(transferencia.getIdDestino());
+			transferencia.setIdOrigen(transferencia.getIdOrigen());
 			transferencia.setImporte(transferencia.getImporte());
 			
 			Transferencia updateTransferencia = transferenciaRepository.save(transferencia);
@@ -86,13 +86,13 @@ public class TransferenciaController {
 		@DeleteMapping("/transferencia/{id}")
 		public ResponseEntity<Transferencia> deleteTransferencia(@PathVariable(value = "id") Long transferenciaId) {
 			Transferencia transferencia = transferenciaRepository.findOne(transferenciaId);
-			if(transferencia == null || !transferencia.getMCA_Habilitado()) {
+			if(transferencia == null || !transferencia.getMcaHabilitado()) {
 				logger.info(NOT_FOUND);
 				return ResponseEntity.notFound().build();
 			}
 			transferenciaHRepository.save(new TransferenciaH(transferencia));
 			
-			transferencia.setMCA_Habilitado(false);
+			transferencia.setMcaHabilitado(false);
 			transferenciaRepository.save(transferencia);
 			logger.info("The transfer was succesfully deleted");
 			return ResponseEntity.ok().build();
