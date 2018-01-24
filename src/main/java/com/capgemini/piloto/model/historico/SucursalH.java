@@ -34,7 +34,7 @@ public class SucursalH implements Serializable {
 	@Column(name = "Usuario")
 	private String usuario;
 	@Column(name = "Mca_habilitado")
-	private char mcaHabilitado;
+	private Boolean mcaHabilitado;
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Id
@@ -106,11 +106,11 @@ public class SucursalH implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public char getMcaHabilitado() {
+	public Boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(char mcaHabilitado) {
+	public void setMcaHabilitado(Boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
 

@@ -1,4 +1,4 @@
-package com.capgemini.piloto.repository;
+package com.capgemini.piloto.repository.historico;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
