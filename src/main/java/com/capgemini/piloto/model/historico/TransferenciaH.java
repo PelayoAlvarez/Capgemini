@@ -5,6 +5,8 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,9 +15,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.capgemini.piloto.model.Transferencia;
+
 
 @Entity
-@Table(name="transferencia")
+@Table(name="transferenciaH")
 public class TransferenciaH implements Serializable{
 
 	/**
@@ -28,30 +34,68 @@ public class TransferenciaH implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
+	@Column(name="Numero_cuenta_destino")
 	private String id_destino;
+	
+	@NotBlank
+	@Column(name="Numero_cuenta_origen")
 	private String id_origen;
+	
+	
+	@NotBlank
+	@Column(name="Fec_transferencia")
 	private Date fecha_transferencia;
+	
+	
+	@NotBlank
+	@Column(name="Fec_consolidacion")
 	private Date fecha_consolidacion;
+	
+	
+	@NotBlank
+	@Enumerated(EnumType.STRING)
+	@Column(name="Canal")
 	private String canal;
+	
+	
+	@NotBlank
+	@Column(name="Importe")
 	private double importe;
 	
 	@ManyToOne
 	private CuentaH cuenta;
 	
+	@ManyToOne
+	private EmpleadoH empleado;
+	
 	// Campos de Auditoria
 
 
+		@Column(name="Fec_actu", nullable = false)
 		@Temporal(TemporalType.TIMESTAMP)
 		private Date fecha_Actua;
 
+		@Column(name="Fec_creacion", nullable = false)
 		@Temporal(TemporalType.TIMESTAMP)
 		private Date fecha_Creacion;
 
 
+		@NotBlank
+		@Column(name="Mca_habilitado")
 		private Boolean MCA_Habilitado;
 		
 		
 		public TransferenciaH() {}
+		
+		public TransferenciaH(Transferencia t) {
+			id_destino = t.getId_destino();
+			id_origen = t.getId_origen();
+			fecha_transferencia = t.getFecha_transferencia();
+			fecha_consolidacion = t.getFecha_consolidacion();
+			canal = t.getCanal();
+			importe = t.getImporte();
+		}
 		
 		
 	

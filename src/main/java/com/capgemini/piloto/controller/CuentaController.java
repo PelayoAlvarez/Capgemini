@@ -54,7 +54,7 @@ public class CuentaController {
 	@GetMapping("/cuenta/{id}")
 	public ResponseEntity<Cuenta> getCuentaById(@PathVariable(value = "id") Long cuentaId) {
 		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
-		if (cuenta == null || !cuenta.getMCA_Habilitado()) {
+		if (cuenta == null || !cuenta.getMCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
@@ -67,14 +67,14 @@ public class CuentaController {
 	public ResponseEntity<Cuenta> updateCuenta(@PathVariable(value = "id") Long cuentaId,
 			@Valid @RequestBody Cuenta cuentaDetails) {
 		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
-		if (cuenta == null || !cuenta.getMCA_Habilitado()) {
+		if (cuenta == null || !cuenta.getMCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
 
 		cuentaHRepository.save(new CuentaH(cuenta));
 		cuenta.setNumeroCuenta(cuentaDetails.getNumeroCuenta());
-		cuenta.setFecha_Actua(new Date());
+		cuenta.setFecActu(new Date());
 		Cuenta updateCuenta = cuentaRepository.save(cuenta);
 		logger.info("The account was successfully updated");
 		return ResponseEntity.ok(updateCuenta);
@@ -84,14 +84,14 @@ public class CuentaController {
 	@DeleteMapping("/cuenta/{id}")
 	public ResponseEntity<Cuenta> deleteCuenta(@PathVariable(value = "id") Long cuentaId) {
 		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
-		if (cuenta == null || !cuenta.getMCA_Habilitado()) {
+		if (cuenta == null || !cuenta.getMCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 
 		}
 		cuentaHRepository.save(new CuentaH(cuenta));
 
-		cuenta.setMCA_Habilitado(false);
+		cuenta.setMCAHabilitado(false);
 		cuentaRepository.save(cuenta);
 		logger.info("The account was successfully deleted");
 		return ResponseEntity.ok().build();
