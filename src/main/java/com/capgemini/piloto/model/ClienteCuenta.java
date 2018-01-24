@@ -2,6 +2,8 @@ package com.capgemini.piloto.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -25,11 +27,13 @@ public class ClienteCuenta implements Serializable{
 
 	@Id
 	@Column(name = "Dni")
-	private String dni;
+	@ManyToOne
+	private Cliente cliente;
 	
 	@Id
 	@Column(name = "Numero_cuenta")
-	private String numeroCuenta;
+	@ManyToOne
+	private Cuenta cuenta;
 	
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -47,24 +51,35 @@ public class ClienteCuenta implements Serializable{
 	
 	@NotBlank
 	@Column(name = "Mca_habilitado")
-	private char mcaHabilitado;
+	private boolean mcaHabilitado;	
+	
+	@OneToMany(mappedBy="tarjeta")
+	private Set<Tarjeta> tarjetas = new HashSet<>();
 	
 	
-
-	public String getDni() {
-		return dni;
+	ClienteCuenta() {		
+	}
+	
+	public ClienteCuenta(Cliente cliente, Cuenta cuenta) {
+		super();
+		mcaHabilitado = true;
+		link(cliente,cuenta);
 	}
 
-	public void setDni(String dni) {
-		this.dni = dni;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
-	public String getNumeroCuenta() {
-		return numeroCuenta;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setNumeroCuenta(String numeroCuenta) {
-		this.numeroCuenta = numeroCuenta;
+	public Cuenta getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
 	}
 
 	public Date getFecActu() {
@@ -91,12 +106,32 @@ public class ClienteCuenta implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public char getMcaHabilitado() {
+	public boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(char mcaHabilitado) {
+	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
+	}
+
+	public Set<Tarjeta> getTarjetas() {
+		return tarjetas;
+	}
+
+	public void setTarjetas(Set<Tarjeta> tarjetas) {
+		this.tarjetas = tarjetas;
+	}
+	
+	
+	public void link(Cliente cliente, Cuenta cuenta) {
+		setCliente(cliente);
+		setCuenta(cuenta);
+		getCliente().getCuentas().add(cuenta);
+		getCuenta().getClientes().add(cliente);
+	}
+
+	public void unlink() {
+		mcaHabilitado = false;
 	}
 
 }

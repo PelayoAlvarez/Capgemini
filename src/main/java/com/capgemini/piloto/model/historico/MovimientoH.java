@@ -3,17 +3,23 @@ package com.capgemini.piloto.model.historico;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
@@ -28,31 +34,48 @@ public class MovimientoH implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "Id")
 	private Long id;
-
+	
+	@NotBlank
+	@Column(name = "Importe")
 	private Double importe;
-
+	
+	@NotBlank
 	@Enumerated(EnumType.STRING)
+	@Column(name = "Tipo")
 	private TipoMovimiento tipo;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "Fec_movimiento")
 	private Date fecha_hora;
-
+	
+	@NotBlank
+	@Column(name = "Descripcion")
 	private String descripcion;
 
-	@OneToMany(mappedBy="cuenta")
-	private CuentaH cuentaAsociada;
+	@ManyToOne
+	@Column(name = "Numero_Cuenta", nullable = false)
+	private Cuenta cuentaAsociada;
 
 	// Campos de Auditoria
 	
+	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@LastModifiedDate
 	private Date fecha_Actua;
 	
+	@Column(name = "Fec_creacion", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
 	private Date fecha_Creacion;
-
-	private EmpleadoH empleado;
-
+	
+	@NotBlank
+	@Column(name = "Usuario_h")
+	private String Usuario;
+	
+	@NotBlank
+	@Column(name = "Mca_habilitado")
 	private Boolean MCA_Habilitado;
 	
 	
@@ -64,10 +87,10 @@ public class MovimientoH implements Serializable{
 		this.tipo = m.getTipo();
 		this.fecha_hora = m.getFecha_hora();
 		this.descripcion = m.getDescripcion();
-		this.cuentaAsociada = new CuentaH(m.getCuentaAsociada());
+		this.cuentaAsociada = m.getCuentaAsociada();
 		this.fecha_Actua = m.getFecha_Actua();
 		this.fecha_Creacion = m.getFecha_Creacion();
-		//this.empleado = new Empleado(m.getEmpleado());
+		this.Usuario = m.getUsuario();
 		this.MCA_Habilitado = m.getMCA_Habilitado();
 	}
 
@@ -111,12 +134,12 @@ public class MovimientoH implements Serializable{
 		return fecha_hora;
 	}
 
-	public CuentaH getCuentaAsociada() {
+	public Cuenta getCuentaAsociada() {
 		return cuentaAsociada;
 	}
 
-	public EmpleadoH getEmpleado() {
-		return empleado;
+	public String getUsuario() {
+		return Usuario;
 	}
 
 	//Getters y Setters de Auditoria
