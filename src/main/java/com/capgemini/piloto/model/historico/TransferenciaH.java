@@ -13,9 +13,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.Transferencia;
+
 
 @Entity
-@Table(name="transferencia")
+@Table(name="transferenciaH")
 public class TransferenciaH implements Serializable{
 
 	/**
@@ -52,6 +54,15 @@ public class TransferenciaH implements Serializable{
 		
 		
 		public TransferenciaH() {}
+		
+		public TransferenciaH(Transferencia t) {
+			id_destino = t.getId_destino();
+			id_origen = t.getId_origen();
+			fecha_transferencia = t.getFecha_transferencia();
+			fecha_consolidacion = t.getFecha_consolidacion();
+			canal = t.getCanal();
+			importe = t.getImporte();
+		}
 		
 		
 	
