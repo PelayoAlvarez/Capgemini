@@ -21,30 +21,44 @@ public class EmpleadoH implements Serializable {
 	@Id
 	@Column(name = "Dni")
 	public String dni;	
+	
 	@Column(name = "Nombre")
 	public String nombre;
+	
 	@Column(name = "Apellidos")
 	public String apellidos;
+	
 	@Column(name = "Direccion")
 	public String direccion;
+	
 	@Column(name = "Fijo")
 	public String fijo;
+	
 	@Column(name = "Movil")
 	public String movil;
+	
+	@Column(name = "Email")
+	public String email;
+	
 	@Column(name = "Fec_actu")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
+	
 	@Column(name = "Fec_creacion")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
+	
 	@Column(name = "Usuario")
 	private String usuario;
+	
 	@Column(name = "Mca_habilitado")
 	private boolean mcaHabilitado;
+	
 	@Id
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecAudit;
+	
 	@Column(name = "Usuario_h")
 	private String usuarioH;
 
@@ -58,6 +72,7 @@ public class EmpleadoH implements Serializable {
 		this.direccion = empleado.getDireccion();
 		this.fijo = empleado.getFijo();
 		this.movil = empleado.getMovil();
+		this.email = empleado.getEmail();
 		this.fecActu = empleado.getFecActu();
 		this.fecCreacion = empleado.getFecCreacion();
 		this.usuario = empleado.getUsuario();
@@ -111,6 +126,14 @@ public class EmpleadoH implements Serializable {
 
 	public void setMovil(String movil) {
 		this.movil = movil;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Date getFecActu() {
