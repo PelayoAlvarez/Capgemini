@@ -1,5 +1,6 @@
 package com.capgemini.piloto.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -21,7 +22,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name="Empleado")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"fecActu", "fecCreacion"}, allowGetters = false)
-public class Empleado {
+public class Empleado implements Serializable {
+
+	private static final long serialVersionUID = -6798286537097547476L;
 
 	@Id
 	@Column(name = "Dni")
