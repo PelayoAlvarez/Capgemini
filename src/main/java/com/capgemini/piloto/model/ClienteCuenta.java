@@ -126,8 +126,8 @@ public class ClienteCuenta implements Serializable{
 	public void link(Cliente cliente, Cuenta cuenta) {
 		setCliente(cliente);
 		setCuenta(cuenta);
-		getCliente().getCuentas().add(cuenta);
-		getCuenta().getClientes().add(cliente);
+		getCliente()._getCuentas().add(cuenta);
+		getCuenta()._getClientes().add(cliente);
 	}
 
 	public void unlink() {
