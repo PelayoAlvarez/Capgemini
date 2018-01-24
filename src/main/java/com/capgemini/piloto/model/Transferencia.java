@@ -53,6 +53,15 @@ public class Transferencia implements Serializable{
 		
 		public Transferencia() {}
 		
+		public Transferencia(Transferencia t) {
+			id_destino = t.getId_destino();
+			id_origen = t.getId_origen();
+			fecha_transferencia = t.getFecha_transferencia();
+			fecha_consolidacion = t.getFecha_consolidacion();
+			canal = t.getCanal();
+			importe = t.getImporte();
+		}
+		
 		
 	
 	public Transferencia(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
