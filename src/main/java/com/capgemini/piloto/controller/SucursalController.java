@@ -52,7 +52,6 @@ public class SucursalController {
 	@PostMapping("/")
 	public ResponseEntity<Sucursal> createSucursal(@RequestBody Sucursal sucursal) {
 		Sucursal savedSucursal = sucursalRep.save(sucursal);
-		sucursalHRep.save(new SucursalH(savedSucursal, savedSucursal.getUsuario()));
 		log.info("CREATE: Se guarda la Sucursal con el id [{}]", savedSucursal.getId());
 		return ResponseEntity.ok(savedSucursal);
 	}
