@@ -34,7 +34,10 @@ public class Cuenta implements Serializable {
 	
 	@OneToMany
 	private Set<Cliente> clientes = new HashSet<>();
-
+	
+	@Column(name="Usuario")
+	private String usuario;
+	
 	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<>();
 
@@ -65,13 +68,14 @@ public class Cuenta implements Serializable {
 	}
 
 	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
-			Boolean mCAHabilitado) {
+			Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.fecActu = fecActu;
 		this.fecCreacion = fecCreacion;
 		this.mCAHabilitado = mCAHabilitado;
+		this.usuario=usuario;
 	}
 
 	public String getNumeroCuenta() {
@@ -82,8 +86,12 @@ public class Cuenta implements Serializable {
 		this.numeroCuenta = numeroCuenta;
 	}
 
-	public Set<Movimiento> getMovimientos() {
+	public Set<Movimiento> _getMovimientos() {
 		return new HashSet<>(movimientos);
+	}
+	
+	public Set<Movimiento> getMovimientos() {
+		return movimientos;
 	}
 
 	protected void setMovimientos(Set<Movimiento> movimientos) {
@@ -109,7 +117,11 @@ public class Cuenta implements Serializable {
 	public Set<Transferencia> getTransferencias() {
 		return transferencias;
 	}
-
+	
+	public Set<Transferencia> _getTransferencias() {
+		return new HashSet<>(transferencias);
+	}
+	
 	public void setTransferencias(Set<Transferencia> transferencias) {
 		this.transferencias = transferencias;
 	}
@@ -117,13 +129,25 @@ public class Cuenta implements Serializable {
 	public Set<Cliente> getClientes() {
 		return clientes;
 	}
-
+	
+	public Set<Cliente> _getClientes() {
+		return new HashSet<>(clientes);
+	}
+	
 	public void setClientes(Set<Cliente> clientes) {
 		this.clientes = clientes;
 	}
 
 	// Getters y Setters de Auditoria
 
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	
 	public Date getFecActu() {
 		return fecActu;
 	}

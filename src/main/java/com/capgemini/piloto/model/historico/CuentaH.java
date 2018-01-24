@@ -42,6 +42,9 @@ public class CuentaH implements Serializable {
 	@ManyToOne
 	private Sucursal sucursal;
 	
+	@Column(name="Usuario")
+	private String usuario;
+	
 	@OneToMany
 	private Set<Cliente> clientes = new HashSet<>();
 
@@ -69,7 +72,7 @@ public class CuentaH implements Serializable {
 	private Empleado empleado;
 
 	@Column(name="Mca_habilitado")
-	private Boolean MCAHabilitado;
+	private Boolean mCAHabilitado;
 
 	public CuentaH() {
 	}
@@ -79,17 +82,19 @@ public class CuentaH implements Serializable {
 		movimientos = c.getMovimientos();
 		fecActu = c.getFecActu();
 		fecCreacion = c.getFecCreacion();
-		MCAHabilitado = c.getMCAHabilitado();
+		mCAHabilitado = c.getMCAHabilitado();
+		usuario=c.getUsuario();
 	}
 
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
-			Boolean mCA_Habilitado) {
+			Boolean mCA_Habilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.fecActu = fecActu;
 		this.fecCreacion = fecCreacion;
-		this.MCAHabilitado = mCA_Habilitado;
+		this.mCAHabilitado = mCA_Habilitado;
+		this.usuario=usuario;
 	}
 
 	public Long getId() {
@@ -127,8 +132,18 @@ public class CuentaH implements Serializable {
 	public void setSucursal(Sucursal sucursal) {
 		this.sucursal = sucursal;
 	}
+	
+	
 
 	// Getters y Setters de Auditoria
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
 
 	public Date getFecActu() {
 		return fecActu;
@@ -139,11 +154,11 @@ public class CuentaH implements Serializable {
 	}
 
 	public Boolean getMCAHabilitado() {
-		return MCAHabilitado;
+		return mCAHabilitado;
 	}
 
-	public void setMCAHabilitado(Boolean mCA_Habilitado) {
-		MCAHabilitado = mCA_Habilitado;
+	public void setMCAHabilitado(Boolean mCAHabilitado) {
+		this.mCAHabilitado = mCAHabilitado;
 	}
 
 	public Date getFecCreacion() {
