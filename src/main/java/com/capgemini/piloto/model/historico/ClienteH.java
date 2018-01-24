@@ -60,7 +60,7 @@ public class ClienteH {
 			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean MCA_Habilitado, Set<Cuenta> cuentas,
 			Sucursal surcusal) {
 		super();
-		dni = dni;
+		this.dni = dni;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.direccion = direccion;
@@ -75,18 +75,18 @@ public class ClienteH {
 	}
 	
 	public ClienteH(Cliente cliente) {
-		dni = dni;
-		this.nombre = cliente.nombre;
-		this.apellidos = cliente.apellidos;
-		this.direccion = cliente.direccion;
-		this.movil = cliente.movil;
-		this.fijo = cliente.fijo;
+		this.dni = cliente.getDNI();
+		this.nombre = cliente.getNombre();
+		this.apellidos = cliente.getApellidos();
+		this.direccion = cliente.getDireccion();
+		this.movil = cliente.getMovil();
+		this.fijo = cliente.getFijo();
 		this.fecha_Actua = cliente.getFecha_Actua();
 		this.fecha_Creacion = cliente.getFecha_Creacion();
 		this.empleado = cliente.getEmpleado();
 		this.MCA_Habilitado = cliente.getMCA_Habilitado();
 		this.cuentas = cliente.getCuentas();
-		this.surcusal = surcusal;
+		this.surcusal = cliente.getSurcusal();
 	}
 	
 	
