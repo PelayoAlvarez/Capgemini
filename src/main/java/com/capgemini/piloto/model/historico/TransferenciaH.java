@@ -66,7 +66,8 @@ public class TransferenciaH implements Serializable{
 	@ManyToOne
 	private CuentaH cuenta;
 	
-	//private EmpleadoH empleado;
+	@ManyToOne
+	private EmpleadoH empleado;
 	
 	// Campos de Auditoria
 
