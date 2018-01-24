@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.capgemini.piloto.model.historico.MovimientoH;
 
-public interface MovimientoRepositoryH extends JpaRepository<MovimientoH, Long> {
+public interface MovimientoHRepository extends JpaRepository<MovimientoH, Long> {
 
 }

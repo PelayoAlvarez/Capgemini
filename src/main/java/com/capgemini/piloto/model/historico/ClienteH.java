@@ -15,6 +15,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.Cliente;
+import com.capgemini.piloto.model.Cuenta;
+import com.capgemini.piloto.model.Empleado;
+import com.capgemini.piloto.model.Sucursal;
+
 @Entity
 @Table (name="CLIENTE")
 public class ClienteH {
@@ -22,7 +27,7 @@ public class ClienteH {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	public String DNI;
+	public String dni;
 	public String nombre;
 	public String apellidos;
 	public String direccion;
@@ -37,24 +42,25 @@ public class ClienteH {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecha_Creacion;
 
-	private EmpleadoH empleado;
+	
+	private Empleado empleado;
 
 	private Boolean MCA_Habilitado;
 	
 	@OneToMany
-	private Set<CuentaH> cuentas = new HashSet<CuentaH>();
+	private Set<Cuenta> cuentas = new HashSet<Cuenta>();
 	
-	@ManyToOne public SucursalH surcusal;
+	@ManyToOne public Sucursal surcusal;
 	
 	public ClienteH() {
 		super();
 	}
 
-	public ClienteH(String dNI, String nombre, String apellidos, String direccion, String movil, String fijo,
-			Date fecha_Actua, Date fecha_Creacion, EmpleadoH empleado, Boolean mCA_Habilitado, Set<CuentaH> cuentas,
-			SucursalH surcusal) {
+	public ClienteH(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
+			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean MCA_Habilitado, Set<Cuenta> cuentas,
+			Sucursal surcusal) {
 		super();
-		DNI = dNI;
+		this.dni = dni;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.direccion = direccion;
@@ -63,9 +69,24 @@ public class ClienteH {
 		this.fecha_Actua = fecha_Actua;
 		this.fecha_Creacion = fecha_Creacion;
 		this.empleado = empleado;
-		this.MCA_Habilitado = mCA_Habilitado;
+		this.MCA_Habilitado = MCA_Habilitado;
 		this.cuentas = cuentas;
 		this.surcusal = surcusal;
+	}
+	
+	public ClienteH(Cliente cliente) {
+		this.dni = cliente.getDNI();
+		this.nombre = cliente.getNombre();
+		this.apellidos = cliente.getApellidos();
+		this.direccion = cliente.getDireccion();
+		this.movil = cliente.getMovil();
+		this.fijo = cliente.getFijo();
+		this.fecha_Actua = cliente.getFecha_Actua();
+		this.fecha_Creacion = cliente.getFecha_Creacion();
+		this.empleado = cliente.getEmpleado();
+		this.MCA_Habilitado = cliente.getMCA_Habilitado();
+		this.cuentas = cliente.getCuentas();
+		this.surcusal = cliente.getSurcusal();
 	}
 	
 	
@@ -115,7 +136,7 @@ public class ClienteH {
 	}
 
 	public String getDNI() {
-		return DNI;
+		return dni;
 	}
 
 	public Date getFecha_Actua() {
@@ -134,11 +155,11 @@ public class ClienteH {
 		this.fecha_Creacion = fecha_Creacion;
 	}
 
-	public EmpleadoH getEmpleado() {
+	public Empleado getEmpleado() {
 		return empleado;
 	}
 
-	public void setEmpleado(EmpleadoH empleado) {
+	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
 
@@ -150,19 +171,19 @@ public class ClienteH {
 		MCA_Habilitado = mCA_Habilitado;
 	}
 
-	public Set<CuentaH> getCuentas() {
-		return new HashSet<CuentaH>(cuentas);
+	public Set<Cuenta> getCuentas() {
+		return new HashSet<Cuenta>(cuentas);
 	}
 
-	protected void setCuentas(Set<CuentaH> cuentas) {
+	protected void setCuentas(Set<Cuenta> cuentas) {
 		this.cuentas = cuentas;
 	}
 
-	public SucursalH getSurcusal() {
+	public Sucursal getSurcusal() {
 		return surcusal;
 	}
 
-	public void setSurcusal(SucursalH surcusal) {
+	public void setSurcusal(Sucursal surcusal) {
 		this.surcusal = surcusal;
 	}
 
@@ -170,7 +191,7 @@ public class ClienteH {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((DNI == null) ? 0 : DNI.hashCode());
+		result = prime * result + ((dni == null) ? 0 : dni.hashCode());
 		return result;
 	}
 
@@ -183,17 +204,17 @@ public class ClienteH {
 		if (getClass() != obj.getClass())
 			return false;
 		ClienteH other = (ClienteH) obj;
-		if (DNI == null) {
-			if (other.DNI != null)
+		if (dni == null) {
+			if (other.dni != null)
 				return false;
-		} else if (!DNI.equals(other.DNI))
+		} else if (!dni.equals(other.dni))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
+		return "Cliente [id=" + id + ", DNI=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
 				+ direccion + ", movil=" + movil + ", fijo=" + fijo + ", cuentas=" + cuentas + ", surcusal=" + surcusal
 				+ "]";
 	}
