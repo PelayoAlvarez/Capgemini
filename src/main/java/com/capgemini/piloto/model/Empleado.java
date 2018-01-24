@@ -53,7 +53,7 @@ public class Empleado implements Serializable {
 	@Column(name = "Mca_habilitado", nullable = false)
 	private boolean mcaHabilitado;
 	
-	@OneToMany
+	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
 
 	public Empleado() { };

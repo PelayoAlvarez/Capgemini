@@ -78,7 +78,7 @@ public class CuentaController {
 			return ResponseEntity.notFound().build();
 		}
 
-		cuentaHRepository.save(new CuentaH(cuenta));
+		cuentaHRepository.save(new CuentaH(cuenta, "user"));
 		cuenta.setNumeroCuenta(cuentaDetails.getNumeroCuenta());
 		cuenta.setFecActu(new Date());
 		Cuenta updateCuenta = cuentaRepository.save(cuenta);
@@ -94,9 +94,7 @@ public class CuentaController {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 
-		}
-		cuentaHRepository.save(new CuentaH(cuenta));
-		
+		}		
 		if(cuenta.getClientes().isEmpty()){
 			for(Cliente c : cuenta.getClientes()) {
 				//unlink(c,cuenta);

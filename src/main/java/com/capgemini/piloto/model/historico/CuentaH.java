@@ -84,13 +84,15 @@ public class CuentaH implements Serializable {
 	public CuentaH() {
 	}
 
-	public CuentaH(Cuenta c) {
+	public CuentaH(Cuenta c, String user) {
 		numeroCuenta = c.getNumeroCuenta();
 		movimientos = c.getMovimientos();
 		fecActu = c.getFecActu();
 		fecCreacion = c.getFecCreacion();
 		mCAHabilitado = c.getMCAHabilitado();
 		usuario=c.getUsuario();
+		fecAudit=new Date();
+		this.usuarioH=user;
 	}
 
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
