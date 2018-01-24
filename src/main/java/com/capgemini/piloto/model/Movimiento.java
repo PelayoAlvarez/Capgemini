@@ -3,6 +3,7 @@ package com.capgemini.piloto.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,6 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
@@ -27,38 +32,55 @@ public class Movimiento implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "Id")
 	private Long id;
-
+	
+	@NotBlank
+	@Column(name = "Importe")
 	private Double importe;
 
+	@NotBlank
 	@Enumerated(EnumType.STRING)
+	@Column(name = "Tipo")
 	private TipoMovimiento tipo;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "Fec_movimiento")
 	private Date fecha_hora;
-
+	
+	@NotBlank
+	@Column(name = "Descripcion")
 	private String descripcion;
 
 	@ManyToOne
+	@Column(name = "Numero_Cuenta", nullable = false)
 	private Cuenta cuentaAsociada;
 
 	// Campos de Auditoria
 	
+	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@LastModifiedDate
 	private Date fecha_Actua;
 	
+	@Column(name = "Fec_creacion", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
 	private Date fecha_Creacion;
-
-	private Empleado empleado;
-
+	
+	@NotBlank
+	@Column(name = "Usuario")
+	private String usuario;
+	
+	@NotBlank
+	@Column(name = "Mca_habilitado")
 	private Boolean MCA_Habilitado;
 	
 	
 	Movimiento() {}
 
 	public Movimiento(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, 
-			Cuenta cuentaAsociada, Date fecha_Actua, Date fecha_Creacion, Empleado empleado,
+			Cuenta cuentaAsociada, Date fecha_Actua, Date fecha_Creacion, String usuario,
 			Boolean habilitado) {
 		super();
 		this.importe = importe;
@@ -68,7 +90,7 @@ public class Movimiento implements Serializable{
 		this.cuentaAsociada = cuentaAsociada;
 		this.fecha_Actua = fecha_Actua;
 		this.fecha_Creacion = fecha_Creacion;
-		this.empleado = empleado;
+		this.usuario = usuario;
 		this.MCA_Habilitado = habilitado;
 	}
 
@@ -112,8 +134,8 @@ public class Movimiento implements Serializable{
 		return cuentaAsociada;
 	}
 
-	public Empleado getEmpleado() {
-		return empleado;
+	public String getUsuario() {
+		return usuario;
 	}
 
 	//Getters y Setters de Auditoria
