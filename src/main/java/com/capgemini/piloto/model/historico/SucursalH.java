@@ -1,23 +1,24 @@
-package com.capgemini.piloto.model;
+package com.capgemini.piloto.model.historico;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.Sucursal;
+
 @Entity
-public class Sucursal implements Serializable{
+@Table(name = "Sucursal_H")
+public class SucursalH implements Serializable {
 
 	private static final long serialVersionUID = 2511716031449738119L;
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Id")
 	private Long id;
 	@Column(name = "Nombre")
@@ -34,24 +35,28 @@ public class Sucursal implements Serializable{
 	private String usuario;
 	@Column(name = "Mca_habilitado")
 	private char mcaHabilitado;
-	
-	public Sucursal() {
+	@Column(name = "Fec_audit")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Id
+	private Date fecAudit;
+	@Column(name = "Usuario_h")
+	private String usuarioH;
+
+	public SucursalH() {
 		//Just for JPA
 	}
-	
-	
 
-	public Sucursal(Long id, String nombre, String direccion, String usuario) {
+	public SucursalH(Sucursal sucursal, String usuarioH) {
 		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.direccion = direccion;
-		this.usuario = usuario;
-		this.fecActu = this.fecCreacion = new Date();
-		this.mcaHabilitado = 'S';
+		this.id = sucursal.getId();
+		this.nombre = sucursal.getNombre();
+		this.direccion = sucursal.getDireccion();
+		this.fecActu = sucursal.getFecActu();
+		this.fecCreacion = sucursal.getFecCreacion();
+		this.usuario = sucursal.getUsuario();
+		this.usuarioH = usuarioH;
+		this.fecAudit = new Date();
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -109,11 +114,27 @@ public class Sucursal implements Serializable{
 		this.mcaHabilitado = mcaHabilitado;
 	}
 
+	public Date getFecAudit() {
+		return fecAudit;
+	}
+
+	public void setFecAudit(Date fecAudit) {
+		this.fecAudit = fecAudit;
+	}
+
+	public String getUsuarioH() {
+		return usuarioH;
+	}
+
+	public void setUsuarioH(String usuarioH) {
+		this.usuarioH = usuarioH;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((fecCreacion == null) ? 0 : fecCreacion.hashCode());
+		result = prime * result + ((fecAudit == null) ? 0 : fecAudit.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
@@ -126,11 +147,11 @@ public class Sucursal implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Sucursal other = (Sucursal) obj;
-		if (fecCreacion == null) {
-			if (other.fecCreacion != null)
+		SucursalH other = (SucursalH) obj;
+		if (fecAudit == null) {
+			if (other.fecAudit != null)
 				return false;
-		} else if (!fecCreacion.equals(other.fecCreacion))
+		} else if (!fecAudit.equals(other.fecAudit))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -142,9 +163,7 @@ public class Sucursal implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Sucursal [id=" + id + ", nombre=" + nombre + ", direccion=" + direccion + "]";
+		return "SucursalH [id=" + id + ", nombre=" + nombre + ", fecAudit=" + fecAudit + "]";
 	}
-	
-	
 
 }
