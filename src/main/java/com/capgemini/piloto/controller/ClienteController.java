@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.repository.ClienteRepository;
-import com.capgemini.piloto.repository.historico.ClienteRepositoryH;
+import com.capgemini.piloto.repository.historico.ClienteHRepository;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.historico.ClienteH;
 
@@ -34,7 +34,7 @@ public class ClienteController {
 	
 	
 	@Autowired
-	private ClienteRepositoryH clienteHRepository;
+	private ClienteHRepository clienteHRepository;
 	
 	@Autowired
 	ClienteRepository clienteRepository;
