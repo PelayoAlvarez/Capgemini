@@ -35,13 +35,13 @@ public class EmpleadoController {
 	
 	@GetMapping("/")
 	public List<Empleado> getAllEmpleados() {
-		logger.info("GETALL: Se obtienen todas las instancias de Empleado");
+		logger.info("FINDALL: Se obtienen todos los empleados");
 		return empleadoRep.findByMcaModificado(true);
 	}
 	
 	@GetMapping("/{dni}")
 	public ResponseEntity<Empleado> getEmpleado(@PathVariable(value = "dni") String dni) {
-		logger.info("GET: Se obtiene el empleado con DNI [{}]", dni);
+		logger.info("FIND: Se obtiene el empleado con DNI [{}]", dni);
 		Empleado empleado = empleadoRep.findByDni(dni);
 		if (empleado == null) {
 			logger.info("GET: No se encuentra el empleado con el DNI [{}]", dni);
@@ -53,7 +53,6 @@ public class EmpleadoController {
 	@PostMapping("/")
 	public ResponseEntity<Empleado> createEmpleado(@RequestBody Empleado empleado) {
 		Empleado nuevoEmpleado = empleadoRep.save(empleado);
-		empleadoHRep.save(new EmpleadoH(nuevoEmpleado, nuevoEmpleado.getUsuario()));
 		logger.info("CREATE: Se guarda el empleado con DNI [{}]", nuevoEmpleado.getDni());
 		return ResponseEntity.ok(nuevoEmpleado);
 	}
@@ -61,7 +60,7 @@ public class EmpleadoController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Empleado> updateEmpleado(@RequestBody Empleado empleado) {
 		Empleado antiguoEmpleado = empleadoRep.findByDni(empleado.getDni());
-		if (antiguoEmpleado == null) {
+		if (antiguoEmpleado == null || !empleado.getMcaHabilitado()) {
 			logger.info("UPDATE: No se ha encontrado el empleado con DNI [{}]", empleado.getDni());
 			return ResponseEntity.notFound().build();
 		}
@@ -75,7 +74,7 @@ public class EmpleadoController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Empleado> deleteEmpleado(@PathVariable(name = "dni") String dni) {
 		Empleado empleado = empleadoRep.findByDni(dni);
-		if (empleado == null) {
+		if (empleado == null || !empleado.getMcaHabilitado()) {
 			logger.info("DELETE: No se ha encontrado el empleado con DNI [{}]", dni);
 			return ResponseEntity.notFound().build();
 		}
