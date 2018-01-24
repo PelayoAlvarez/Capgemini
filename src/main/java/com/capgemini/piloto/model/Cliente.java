@@ -166,6 +166,9 @@ public class Cliente {
 	public Set<Cuenta> getCuentas() {
 		return new HashSet<Cuenta>(cuentas);
 	}
+	Set<Cuenta> _getCuentas() {
+		return cuentas;
+	}
 
 	protected void setCuentas(Set<Cuenta> cuentas) {
 		this.cuentas = cuentas;
