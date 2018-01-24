@@ -5,10 +5,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -27,8 +29,12 @@ public class Cuenta implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Column(name="Numero_cuenta")
 	private String numeroCuenta;
-
+	
+	@ManyToOne
+	private Sucursal sucursal;
+	
 	@OneToMany
 	private Set<Cliente> clientes = new HashSet<>();
 
@@ -46,27 +52,29 @@ public class Cuenta implements Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date fecha_Actua;
+	@Column(name="Fec_actu")
+	private Date fecActu;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date fecha_Creacion;
+	@Column(name="Fec_creacion")
+	private Date fecCreacion;
 
 	private Empleado empleado;
 
-	private Boolean MCA_Habilitado;
+	private Boolean MCAHabilitado;
 
 	Cuenta() {
-		fecha_Creacion = new Date();
+		fecCreacion = new Date();
 	}
 
-	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Date fecha_Actua, Date fecha_Creacion,
+	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
 			Boolean mCA_Habilitado) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
-		this.fecha_Actua = fecha_Actua;
-		this.fecha_Creacion = fecha_Creacion;
-		this.MCA_Habilitado = mCA_Habilitado;
+		this.fecActu = fecActu;
+		this.fecCreacion = fecCreacion;
+		this.MCAHabilitado = mCA_Habilitado;
 	}
 
 	public Long getId() {
@@ -96,26 +104,35 @@ public class Cuenta implements Serializable {
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
+	
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
+
 
 	// Getters y Setters de Auditoria
 
-	public Date getFecha_Actua() {
-		return fecha_Actua;
+	public Date getFecActu() {
+		return fecActu;
 	}
 
-	public void setFecha_Actua(Date fecha_Actua) {
-		this.fecha_Actua = fecha_Actua;
+	public void setFecActu(Date fecActu) {
+		this.fecActu = fecActu;
 	}
 
-	public Boolean getMCA_Habilitado() {
-		return MCA_Habilitado;
+	public Boolean getMCAHabilitado() {
+		return MCAHabilitado;
 	}
 
-	public void setMCA_Habilitado(Boolean mCA_Habilitado) {
-		MCA_Habilitado = mCA_Habilitado;
+	public void setMCAHabilitado(Boolean mCA_Habilitado) {
+		MCAHabilitado = mCA_Habilitado;
 	}
 
-	public Date getFecha_Creacion() {
-		return fecha_Creacion;
+	public Date getFecCreacion() {
+		return fecCreacion;
 	}
 }
