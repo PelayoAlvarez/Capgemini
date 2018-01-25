@@ -8,7 +8,7 @@ import com.capgemini.piloto.model.Empleado;
 
 public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
 
-	List<Empleado> findByMcaModificado(boolean modificado);
+	List<Empleado> findByMcaHabilitado(Boolean modificado);
 	
 	Empleado findByDni(String dni);
 	

@@ -40,7 +40,7 @@ public class EmpleadoController {
 	@GetMapping("/")
 	public List<Empleado> getAllEmpleados() {
 		logger.info("FINDALL: Se obtienen todos los empleados");
-		return empleadoRep.findByMcaModificado(true);
+		return empleadoRep.findByMcaHabilitado(true);
 	}
 	
 	@GetMapping("/{dni}")

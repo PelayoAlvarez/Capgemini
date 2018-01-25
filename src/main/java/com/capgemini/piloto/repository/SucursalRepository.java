@@ -8,7 +8,7 @@ import com.capgemini.piloto.model.Sucursal;
 
 public interface SucursalRepository extends JpaRepository<Sucursal, Long>{
 	
-	List<Sucursal> findByMcaModificado(Boolean modificado);
+	List<Sucursal> findByMcaHabilitado(Boolean modificado);
 	
 	Sucursal findById(Long id);
 

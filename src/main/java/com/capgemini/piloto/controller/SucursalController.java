@@ -36,7 +36,7 @@ public class SucursalController {
 	@GetMapping("/")
 	public List<Sucursal> getAllSucursales() {
 		log.info("GETALL: Se obtienen todas las instancias de Sucursal");
-		return sucursalRep.findByMcaModificado(true);
+		return sucursalRep.findByMcaHabilitado(true);
 	}
 
 	@GetMapping("/{id}")
