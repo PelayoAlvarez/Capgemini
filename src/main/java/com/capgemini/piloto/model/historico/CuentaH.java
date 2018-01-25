@@ -17,10 +17,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.capgemini.piloto.model.Cliente;
+import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Sucursal;
+import com.capgemini.piloto.model.Tarjeta;
 import com.capgemini.piloto.model.Transferencia;
 
 @Entity
@@ -46,8 +48,11 @@ public class CuentaH implements Serializable {
 	private String usuario;
 
 	@OneToMany
-	private Set<Cliente> clientes = new HashSet<>();
-
+	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
+	
+	@OneToMany
+	private Set<Tarjeta> tarjetas = new HashSet<>();
+	
 	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<>();
 
@@ -87,6 +92,9 @@ public class CuentaH implements Serializable {
 	public CuentaH(Cuenta c, String user) {
 		numeroCuenta = c.getNumeroCuenta();
 		movimientos = c.getMovimientos();
+		transferencias= c.getTransferencias();
+		clientecuenta=c.getClienteCuenta();
+		tarjetas=c.getTarjetas();
 		fecActu = c.getFecActu();
 		fecCreacion = c.getFecCreacion();
 		mCAHabilitado = c.getMCAHabilitado();
@@ -94,12 +102,17 @@ public class CuentaH implements Serializable {
 		fecAudit = new Date();
 		this.usuarioH = user;
 	}
-
-	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
+	
+	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, 
+			Set<Transferencia> transferencias, Set<ClienteCuenta> clientecuenta,
+			Set<Tarjeta> tarjetas, Date fecActu, Date fecCreacion,
 			Boolean mCA_Habilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
+		this.clientecuenta=clientecuenta;
+		this.transferencias=transferencias;
+		this.tarjetas=tarjetas;
 		this.fecActu = fecActu;
 		fecAudit = new Date();
 		this.fecCreacion = fecCreacion;
@@ -219,5 +232,47 @@ public class CuentaH implements Serializable {
 			return false;
 		return true;
 	}
+
+	public Set<ClienteCuenta> getClientecuenta() {
+		return clientecuenta;
+	}
+
+	public void setClientecuenta(Set<ClienteCuenta> clientecuenta) {
+		this.clientecuenta = clientecuenta;
+	}
+
+	public Set<Tarjeta> getTarjetas() {
+		return tarjetas;
+	}
+
+	public void setTarjetas(Set<Tarjeta> tarjetas) {
+		this.tarjetas = tarjetas;
+	}
+
+	public Set<Transferencia> getTransferencias() {
+		return transferencias;
+	}
+
+	public void setTransferencias(Set<Transferencia> transferencias) {
+		this.transferencias = transferencias;
+	}
+
+	public Boolean getmCAHabilitado() {
+		return mCAHabilitado;
+	}
+
+	public void setmCAHabilitado(Boolean mCAHabilitado) {
+		this.mCAHabilitado = mCAHabilitado;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setFecCreacion(Date fecCreacion) {
+		this.fecCreacion = fecCreacion;
+	}
+	
+	
 
 }
