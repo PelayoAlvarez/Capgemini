@@ -51,7 +51,7 @@ public class Empleado implements Serializable {
 	private String usuario;
 	
 	@Column(name = "Mca_habilitado", nullable = false)
-	private boolean mcaHabilitado;
+	private Boolean mcaHabilitado;
 	
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
@@ -153,12 +153,56 @@ public class Empleado implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public boolean getMcaHabilitado() {
+	public Boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(boolean mcaHabilitado) {
+	public void setMcaHabilitado(Boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
+	
+	public Set<Transferencia> getTransferencias() {
+		return new HashSet<>(transferencias);
+	}
+	
+	protected Set<Transferencia> _getTransferencias() {
+		return transferencias;
+	}
 
+	protected void setTransferencias(Set<Transferencia> transferencias) {
+		this.transferencias = transferencias;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dni == null) ? 0 : dni.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Empleado other = (Empleado) obj;
+		if (dni == null) {
+			if (other.dni != null)
+				return false;
+		} else if (!dni.equals(other.dni))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Empleado [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
+				+ ", fijo=" + fijo + ", movil=" + movil + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
+				+ fecCreacion + ", usuario=" + usuario + ", mcaHabilitado=" + mcaHabilitado + ", transferencias="
+				+ transferencias + "]";
+	}
 }
