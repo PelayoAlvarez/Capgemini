@@ -27,9 +27,6 @@ public class Cuenta implements Serializable {
 	@Column(name = "Numero_cuenta")
 	private String numeroCuenta;
 
-	@ManyToOne
-	private Sucursal sucursal;
-
 	@OneToMany
 	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
 
@@ -130,14 +127,6 @@ public class Cuenta implements Serializable {
 
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
-	}
-
-	public Sucursal getSucursal() {
-		return sucursal;
-	}
-
-	public void setSucursal(Sucursal sucursal) {
-		this.sucursal = sucursal;
 	}
 
 	public Set<Transferencia> getTransferencias() {

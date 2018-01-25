@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -59,7 +60,8 @@ public class Empleado implements Serializable {
 	private Set<Transferencia> transferencias = new HashSet<>();
 	
 	@NotNull
-	@ManyToOne 
+	@ManyToOne
+	@JoinColumn(name = "id_sucursal")
 	public Sucursal sucursal;
 
 	public Empleado() { }

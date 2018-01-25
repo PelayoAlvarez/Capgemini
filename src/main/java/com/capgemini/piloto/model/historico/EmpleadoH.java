@@ -25,7 +25,6 @@ public class EmpleadoH implements Serializable {
 
 	private static final long serialVersionUID = -4428784972707162023L;
 
-	@Id
 	@Column(name = "Dni", nullable = false)
 	public String dni;	
 	

@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,12 +19,10 @@ import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Movimiento;
-import com.capgemini.piloto.model.Sucursal;
-import com.capgemini.piloto.model.Tarjeta;
 import com.capgemini.piloto.model.Transferencia;
 
 @Entity
-@Table(name = "CUENTAH")
+@Table(name = "CUENTA_H")
 public class CuentaH implements Serializable {
 
 	/**
@@ -33,15 +30,8 @@ public class CuentaH implements Serializable {
 	 */
 	private static final long serialVersionUID = -7283533209815501984L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
 	@Column(name = "Numero_cuenta")
 	private String numeroCuenta;
-
-	@ManyToOne
-	private Sucursal sucursal;
 
 	@Column(name = "Usuario")
 	private String usuario;
@@ -66,6 +56,7 @@ public class CuentaH implements Serializable {
 	@Column(name = "Fec_actu")
 	private Date fecActu;
 
+	@Id
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Fec_audit")
 	private Date fecAudit;
@@ -113,10 +104,6 @@ public class CuentaH implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	public String getNumeroCuenta() {
 		return numeroCuenta;
 	}
@@ -139,14 +126,6 @@ public class CuentaH implements Serializable {
 
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
-	}
-
-	public Sucursal getSucursal() {
-		return sucursal;
-	}
-
-	public void setSucursal(Sucursal sucursal) {
-		this.sucursal = sucursal;
 	}
 
 	// Getters y Setters de Auditoria
@@ -240,10 +219,6 @@ public class CuentaH implements Serializable {
 
 	public void setTransferencias(Set<Transferencia> transferencias) {
 		this.transferencias = transferencias;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public void setFecCreacion(Date fecCreacion) {

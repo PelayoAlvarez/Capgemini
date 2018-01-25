@@ -93,25 +93,21 @@ CREATE TABLE Banco.Sucursal
  
  CREATE TABLE Banco.Cuenta
  (Numero_cuenta VARCHAR(25) NOT NULL,
- Id_sucursal INTEGER NOT NULL,
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
  Mca_habilitado BOOLEAN NOT NULL,
- PRIMARY KEY (Numero_cuenta),
- FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
+ PRIMARY KEY (Numero_cuenta));
  
  CREATE TABLE Banco.Cuenta_H
  (Numero_cuenta VARCHAR(25) NOT NULL,
- Id_sucursal INTEGER NOT NULL,
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
  Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
- PRIMARY KEY (Numero_cuenta, Fec_audit),
- FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
+ PRIMARY KEY (Numero_cuenta, Fec_audit));
  
  CREATE TABLE Banco.Cliente_Cuenta
  (Dni VARCHAR(9) NOT NULL,

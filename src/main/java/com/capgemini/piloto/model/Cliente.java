@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,11 +28,11 @@ public class Cliente {
 	private String apellidos;
 	@Column(name = "Direccion", nullable = false)
 	private String direccion;
-	@Column(name = "Movil", nullable = false)
+	@Column(name = "Movil")
 	private String movil;
-	@Column(name = "Fijo", nullable = false)
+	@Column(name = "Fijo")
 	private String fijo;
-	@Column(name = "Email", nullable = false)
+	@Column(name = "Email")
 	private String email;
 	
 	// Campos de Auditoria
@@ -54,6 +55,7 @@ public class Cliente {
 	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
 	
 	@ManyToOne 
+	@JoinColumn(name = "id_sucursal")
 	public Sucursal sucursal;
 	
 	public Cliente() {

@@ -25,15 +25,11 @@ import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
 @Entity
-@Table(name="MOVIMIENTO")
+@Table(name="MOVIMIENTO_H")
 public class MovimientoH implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1129264172419492422L;
 
-	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "Id")
 	private Long id;
@@ -70,6 +66,11 @@ public class MovimientoH implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
 	private Date fechaCreacion;
+
+	@Id
+	@Column(name = "Fec_audit")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fecAudit;
 	
 	@NotBlank
 	@Column(name = "Usuario_h")
@@ -155,6 +156,14 @@ public class MovimientoH implements Serializable{
 		this.fechaActua = fecha_Actua;
 	}
 
+	public Date getFecAudit() {
+		return fecAudit;
+	}
+
+	public void setFecAudit(Date fecAudit) {
+		this.fecAudit = fecAudit;
+	}
+	
 	public Boolean getMCAHabilitado() {
 		return MCAHabilitado;
 	}

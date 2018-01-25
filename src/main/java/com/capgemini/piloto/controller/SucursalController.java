@@ -81,8 +81,6 @@ public class SucursalController {
 		}
 		sucursal.getClientes().forEach(cliente -> cliente.setSurcusal(null));
 		sucursal.setClientes(new HashSet<>());
-		sucursal.getCuentas().forEach(cuenta -> cuenta.setSucursal(null));
-		sucursal.setCuentas(new HashSet<>());
 		sucursal.getEmpleados().forEach(empleado -> empleado.setSucursal(null));
 		sucursal.setEmpleados(new HashSet<>());
 		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));

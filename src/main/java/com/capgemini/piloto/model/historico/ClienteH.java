@@ -1,6 +1,7 @@
 package com.capgemini.piloto.model.historico;
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,10 +20,11 @@ import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Sucursal;
 
 @Entity
-@Table (name="CLIENTE")
-public class ClienteH {
+@Table (name="CLIENTE_H")
+public class ClienteH implements Serializable {
 	
-	@Id
+	private static final long serialVersionUID = -3085799814811860133L;
+	
 	@Column(name = "Dni", nullable = false)
 	private String dni;
 	@Column(name = "Nombre", nullable = false)
@@ -31,11 +33,11 @@ public class ClienteH {
 	private String apellidos;
 	@Column(name = "Direccion", nullable = false)
 	private String direccion;
-	@Column(name = "Movil", nullable = false)
+	@Column(name = "Movil")
 	private String movil;
-	@Column(name = "Fijo", nullable = false)
+	@Column(name = "Fijo")
 	private String fijo;
-	@Column(name = "Email", nullable = false)
+	@Column(name = "Email")
 	private String email;
 	
 	// Campos de Auditoria
@@ -59,6 +61,7 @@ public class ClienteH {
 	
 	@Id
 	@Column(name = "Fec_audit", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecAudit;
 	
 	@OneToMany(mappedBy="cliente")

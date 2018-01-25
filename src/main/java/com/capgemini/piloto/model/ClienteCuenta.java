@@ -2,10 +2,18 @@ package com.capgemini.piloto.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,10 +36,12 @@ public class ClienteCuenta implements Serializable{
 	private static final long serialVersionUID = 8783836770693903915L;
 
 	@Id
+	@JoinColumn(name = "Dni")
 	@ManyToOne
 	private Cliente cliente;
 	
 	@Id
+	@JoinColumn(name = "Numero_cuenta")
 	@ManyToOne
 	private Cuenta cuenta;
 	
@@ -66,12 +76,12 @@ public class ClienteCuenta implements Serializable{
 		Association.TitularCuenta.link(cliente, this, cuenta);
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
 	public Cliente getCliente() {
 		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public Cuenta getCuenta() {

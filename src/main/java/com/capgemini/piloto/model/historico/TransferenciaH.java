@@ -24,15 +24,11 @@ import com.capgemini.piloto.model.types.TipoCanal;
 
 
 @Entity
-@Table(name="transferenciaH")
+@Table(name="transferencia_H")
 public class TransferenciaH implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2858106251027444163L;
 
-	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -77,6 +73,11 @@ public class TransferenciaH implements Serializable{
 	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaCreacion;
+	
+	@Id
+	@Column(name = "Fec_audit")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fecAudit;
 
 	@NotBlank
 	@Column(name = "Mca_habilitado")
@@ -169,6 +170,14 @@ public class TransferenciaH implements Serializable{
 
 	public void setFecha_Creacion(Date fecha_Creacion) {
 		this.fechaConsolidacion = fecha_Creacion;
+	}
+	
+	public Date getFecAudit() {
+		return fecAudit;
+	}
+
+	public void setFecAudit(Date fecAudit) {
+		this.fecAudit = fecAudit;
 	}
 
 	public Boolean getMCA_Habilitado() {

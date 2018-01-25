@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,8 +38,6 @@ public class Sucursal implements Serializable{
 	private String usuario;
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
-	@OneToMany(mappedBy="sucursal")
-	private Set<Cuenta> cuentas = new HashSet<>();
 	@OneToMany(mappedBy = "sucursal")
 	private Set<Empleado> empleados = new HashSet<>();
 	@OneToMany(mappedBy = "sucursal")
@@ -115,16 +114,6 @@ public class Sucursal implements Serializable{
 	public void setMcaHabilitado(Boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
-	
-	
-	public Set<Cuenta> getCuentas() {
-		return cuentas;
-	}
-
-	public void setCuentas(Set<Cuenta> cuentas) {
-		this.cuentas = cuentas;
-	}
-	
 	
 	public Set<Empleado> getEmpleados() {
 		return empleados;

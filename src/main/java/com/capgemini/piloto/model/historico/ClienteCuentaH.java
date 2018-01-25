@@ -3,35 +3,45 @@ package com.capgemini.piloto.model.historico;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
+import com.capgemini.piloto.model.Cuenta;
+import com.capgemini.piloto.model.types.ClienteCuentaKey;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "Cliente_Cuenta")
+@Table(name = "Cliente_Cuenta_H")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updateAt"}, allowGetters = false)
+@IdClass(ClienteCuentaKey.class)
 public class ClienteCuentaH implements Serializable{
 
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5790237128818207030L;
 
 	@Id
-	@Column(name = "Dni")
-	private String dni;
+	@JoinColumn(name = "Dni")
+	@ManyToOne
+	private Cliente cliente;
 	
 	@Id
-	@Column(name = "Numero_cuenta")
-	private String numeroCuenta;
+	@JoinColumn(name = "Numero_cuenta")
+	@ManyToOne
+	private Cuenta cuenta;
 	
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -64,8 +74,8 @@ public class ClienteCuentaH implements Serializable{
 	}
 	
 	public ClienteCuentaH(ClienteCuenta clienteCuenta, String usuarioH) {
-		this.dni = clienteCuenta.getCliente().getDNI();
-		this.numeroCuenta = clienteCuenta.getCuenta().getNumeroCuenta();
+		this.cliente = clienteCuenta.getCliente();
+		this.cuenta = clienteCuenta.getCuenta();
 		this.fecActu = clienteCuenta.getFecActu();
 		this.fecCreacion = clienteCuenta.getFecCreacion();
 		this.usuario = clienteCuenta.getUsuario();
@@ -75,22 +85,21 @@ public class ClienteCuentaH implements Serializable{
 		this.fecAudit = new Date();
 		this.usuarioH = usuarioH;
 	}
-	
-	
-	public String getDni() {
-		return dni;
+
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setDni(String dni) {
-		this.dni = dni;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
-	public String getNumeroCuenta() {
-		return numeroCuenta;
+	public Cuenta getCuenta() {
+		return cuenta;
 	}
 
-	public void setNumeroCuenta(String numeroCuenta) {
-		this.numeroCuenta = numeroCuenta;
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
 	}
 
 	public Date getFecActu() {

@@ -24,7 +24,6 @@ public class SucursalH implements Serializable {
 
 	private static final long serialVersionUID = 2511716031449738119L;
 
-	@Id
 	@Column(name = "Id")
 	private Long id;
 	@Column(name = "Nombre")
@@ -41,8 +40,6 @@ public class SucursalH implements Serializable {
 	private String usuario;
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
-	@OneToMany(mappedBy="sucursal")
-	private Set<Cuenta> cuentas = new HashSet<>();
 	@OneToMany(mappedBy = "sucursal")
 	private Set<Empleado> empleados = new HashSet<>();
 	@OneToMany(mappedBy = "sucursal")
@@ -141,16 +138,6 @@ public class SucursalH implements Serializable {
 	public void setUsuarioH(String usuarioH) {
 		this.usuarioH = usuarioH;
 	}
-
-	public Set<Cuenta> getCuentas() {
-		return cuentas;
-	}
-
-	public void setCuentas(Set<Cuenta> cuentas) {
-		this.cuentas = cuentas;
-	}
-	
-	
 
 	public Set<Empleado> getEmpleados() {
 		return empleados;
