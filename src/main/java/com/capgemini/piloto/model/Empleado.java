@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -55,11 +56,15 @@ public class Empleado implements Serializable {
 	
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
-
-	public Empleado() { };
 	
-	public Empleado(String dni, String nombre, String apellidos, String direccion, String fijo, String movil, 
-			String email, String usuario) {
+	@ManyToOne 
+	public Sucursal sucursal;
+
+	public Empleado() { }
+	
+	public Empleado(String dni, String nombre, String apellidos, String direccion, String fijo, String movil,
+			String email, Date fecActu, Date fecCreacion, String usuario, Boolean mcaHabilitado,
+			Set<Transferencia> transferencias, Sucursal sucursal) {
 		super();
 		this.dni = dni;
 		this.nombre = nombre;
@@ -68,9 +73,12 @@ public class Empleado implements Serializable {
 		this.fijo = fijo;
 		this.movil = movil;
 		this.email = email;
-		this.fecActu = this.fecCreacion = new Date();
+		this.fecActu = fecActu;
+		this.fecCreacion = fecCreacion;
 		this.usuario = usuario;
-		this.mcaHabilitado = true;
+		setMcaHabilitado(mcaHabilitado);
+		this.transferencias = transferencias;
+		this.sucursal = sucursal;
 	}
 
 	public String getDni() {
@@ -172,6 +180,14 @@ public class Empleado implements Serializable {
 	protected void setTransferencias(Set<Transferencia> transferencias) {
 		this.transferencias = transferencias;
 	}
+	
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
 
 	@Override
 	public int hashCode() {
@@ -203,6 +219,6 @@ public class Empleado implements Serializable {
 		return "Empleado [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
 				+ ", fijo=" + fijo + ", movil=" + movil + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
 				+ fecCreacion + ", usuario=" + usuario + ", mcaHabilitado=" + mcaHabilitado + ", transferencias="
-				+ transferencias + "]";
+				+ transferencias + ", surcusal=" + sucursal + "]";
 	}
 }
