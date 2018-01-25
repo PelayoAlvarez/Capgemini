@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.historico.TransferenciaH;
 import com.capgemini.piloto.repository.TransferenciaRepository;
@@ -42,13 +45,20 @@ public class TransferenciaController {
 		
 		//Create a new Transfer
 		@PostMapping("/transferencia")
-		public Transferencia createCuenta(@Valid @RequestBody Transferencia transferencia) {
-			transferenciaHRepository.save(new TransferenciaH(transferencia));
-			logger.info("create a new transfer");
-			return transferenciaRepository.save(transferencia);		
-		}
+		public ResponseEntity<Transferencia> createTransfer(@Valid @RequestBody Transferencia transferencia) {
+			Transferencia t1 = transferenciaRepository.findOne(transferencia.getId());
+			if (t1 != null) {
+				return new ResponseEntity<Transferencia>(t1, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			logger.info("Create new transfer");
+			t1 = transferenciaRepository.save(transferencia);
+			if (t1 == null) {
+				return new ResponseEntity<Transferencia>(t1, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			return new ResponseEntity<Transferencia>(t1, new HttpHeaders(), HttpStatus.OK);
+		}	
 		
-		//Get a Single tranfer
+		//Get a Single transfer
 		@GetMapping("/transferencia/{id}")
 		public ResponseEntity<Transferencia> getTransferenciaById(@PathVariable(value = "id") Long transferenciaId) {
 			Transferencia transferencia = transferenciaRepository.findOne(transferenciaId);
