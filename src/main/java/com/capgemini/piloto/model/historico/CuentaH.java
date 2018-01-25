@@ -46,13 +46,10 @@ public class CuentaH implements Serializable {
 	@Column(name = "Usuario")
 	private String usuario;
 
-	@OneToMany
+	@OneToMany(mappedBy="cuenta")
 	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
-	
-	@OneToMany
-	private Set<Tarjeta> tarjetas = new HashSet<>();
-	
-	@OneToMany
+
+	@OneToMany(mappedBy="cuentaAsociada")
 	private Set<Movimiento> movimientos = new HashSet<>();
 
 	@OneToMany(mappedBy = "cuenta")
@@ -93,7 +90,6 @@ public class CuentaH implements Serializable {
 		movimientos = c.getMovimientos();
 		transferencias= c.getTransferencias();
 		clientecuenta=c.getClienteCuenta();
-		tarjetas=c.getTarjetas();
 		fecActu = c.getFecActu();
 		fecCreacion = c.getFecCreacion();
 		mCAHabilitado = c.getMCAHabilitado();
@@ -103,15 +99,13 @@ public class CuentaH implements Serializable {
 	}
 	
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, 
-			Set<Transferencia> transferencias, Set<ClienteCuenta> clientecuenta,
-			Set<Tarjeta> tarjetas, Date fecActu, Date fecCreacion,
+			Set<Transferencia> transferencias, Set<ClienteCuenta> clientecuenta, Date fecActu, Date fecCreacion,
 			Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.clientecuenta=clientecuenta;
 		this.transferencias=transferencias;
-		this.tarjetas=tarjetas;
 		this.fecActu = fecActu;
 		fecAudit = new Date();
 		this.fecCreacion = fecCreacion;
@@ -238,14 +232,6 @@ public class CuentaH implements Serializable {
 
 	public void setClientecuenta(Set<ClienteCuenta> clientecuenta) {
 		this.clientecuenta = clientecuenta;
-	}
-
-	public Set<Tarjeta> getTarjetas() {
-		return tarjetas;
-	}
-
-	public void setTarjetas(Set<Tarjeta> tarjetas) {
-		this.tarjetas = tarjetas;
 	}
 
 	public Set<Transferencia> getTransferencias() {

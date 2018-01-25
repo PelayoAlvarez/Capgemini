@@ -28,12 +28,10 @@ public class ClienteCuenta implements Serializable{
 	private static final long serialVersionUID = 8783836770693903915L;
 
 	@Id
-	@Column(name = "Dni")
 	@ManyToOne
 	private Cliente cliente;
 	
 	@Id
-	@Column(name = "Numero_cuenta")
 	@ManyToOne
 	private Cuenta cuenta;
 	
@@ -55,8 +53,8 @@ public class ClienteCuenta implements Serializable{
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;	
 	
-	@OneToMany(mappedBy="tarjeta")
-	private Set<Tarjeta> tarjetas = new HashSet<>();
+	@OneToOne
+	private Tarjeta tarjeta;
 	
 	
 	ClienteCuenta() {		
@@ -116,16 +114,16 @@ public class ClienteCuenta implements Serializable{
 		this.mcaHabilitado = mcaHabilitado;
 	}
 
-	public Set<Tarjeta> _getTarjetas() {
-		return tarjetas;
+	public Tarjeta _getTarjeta() {
+		return tarjeta;
 	}
 
-	public Set<Tarjeta> getTarjetas() {
-		return new HashSet<>(tarjetas);
+	public Tarjeta getTarjeta() {
+		return tarjeta;
 	}
 	
-	public void setTarjetas(Set<Tarjeta> tarjetas) {
-		this.tarjetas = tarjetas;
+	public void setTarjeta(Tarjeta tarjeta) {
+		this.tarjeta = tarjeta;
 	}
 	
 	

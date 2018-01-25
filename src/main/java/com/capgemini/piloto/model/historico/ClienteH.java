@@ -61,7 +61,7 @@ public class ClienteH {
 	@Column(name = "Fec_audit", nullable = false)
 	private Date fecAudit;
 	
-	@OneToMany
+	@OneToMany(mappedBy="cliente")
 	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
 	
 	@ManyToOne public Sucursal surcusal;

@@ -36,10 +36,7 @@ public class Cuenta implements Serializable {
 	@Column(name = "Usuario")
 	private String usuario;
 
-	@OneToMany
-	private Set<Tarjeta> tarjetas = new HashSet<>();
-
-	@OneToMany
+	@OneToMany(mappedBy="cuentaAsociada")
 	private Set<Movimiento> movimientos = new HashSet<>();
 
 	@OneToMany(mappedBy = "cuenta")
@@ -70,14 +67,13 @@ public class Cuenta implements Serializable {
 	}
 
 	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Set<Transferencia> transferencias,
-			Set<ClienteCuenta> clientecuenta, Set<Tarjeta> tarjetas, Boolean mCAHabilitado, String usuario) {
+			Set<ClienteCuenta> clientecuenta, Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.transferencias = transferencias;
 		this.clientecuenta = clientecuenta;
 		this.fecActu = new Date();
-		this.tarjetas = tarjetas;
 		this.fecCreacion = new Date();
 		this.mCAHabilitado = mCAHabilitado;
 		this.usuario = usuario;
@@ -126,18 +122,6 @@ public class Cuenta implements Serializable {
 
 	protected void setMovimientos(Set<Movimiento> movimientos) {
 		this.movimientos = movimientos;
-	}
-
-	public Set<Tarjeta> _getTarjetas() {
-		return new HashSet<>(tarjetas);
-	}
-
-	public Set<Tarjeta> getTarjetas() {
-		return tarjetas;
-	}
-
-	protected void setTarjetas(Set<Tarjeta> tarjetas) {
-		this.tarjetas = tarjetas;
 	}
 
 	public Empleado getEmpleado() {

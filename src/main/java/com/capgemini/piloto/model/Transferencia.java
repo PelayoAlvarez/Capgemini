@@ -1,7 +1,7 @@
 package com.capgemini.piloto.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +16,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.capgemini.piloto.model.types.TipoCanal;
 
 @Entity
 @Table(name = "transferencia")
@@ -50,7 +52,7 @@ public class Transferencia implements Serializable {
 	@NotBlank
 	@Enumerated(EnumType.STRING)
 	@Column(name = "Canal")
-	private String canal;
+	private TipoCanal canal;
 
 	@NotBlank
 	@Column(name = "Importe")
@@ -89,7 +91,7 @@ public class Transferencia implements Serializable {
 	}
 
 	public Transferencia(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
-			String canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion, Boolean mCA_Habilitado,
+			TipoCanal canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion, Boolean mCA_Habilitado,
 			Empleado empleado) {
 		super();
 		this.idDestino = id_destino;
@@ -137,11 +139,11 @@ public class Transferencia implements Serializable {
 		this.fechaConsolidacion = fechaConsolidacion;
 	}
 
-	public String getCanal() {
+	public TipoCanal getCanal() {
 		return canal;
 	}
 
-	public void setCanal(String canal) {
+	public void setCanal(TipoCanal canal) {
 		this.canal = canal;
 	}
 

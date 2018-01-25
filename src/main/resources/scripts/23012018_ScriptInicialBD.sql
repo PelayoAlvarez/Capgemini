@@ -36,7 +36,7 @@ CREATE TABLE Banco.Sucursal
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
  Mca_habilitado BOOLEAN NOT NULL,
- PRIMARY KEY (Dni)
+ PRIMARY KEY (Dni),
  FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
  
  CREATE TABLE Banco.Cliente_H
@@ -54,7 +54,7 @@ CREATE TABLE Banco.Sucursal
  Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
- PRIMARY KEY (Dni, Fec_audit)
+ PRIMARY KEY (Dni, Fec_audit),
  FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
  
  CREATE TABLE Banco.Empleado
@@ -70,7 +70,7 @@ CREATE TABLE Banco.Sucursal
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
  Mca_habilitado BOOLEAN NOT NULL, 
- PRIMARY KEY (Dni)
+ PRIMARY KEY (Dni),
  FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
  
  CREATE TABLE Banco.Empleado_H
@@ -88,7 +88,7 @@ CREATE TABLE Banco.Sucursal
  Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
- PRIMARY KEY (Dni, Fec_audit)
+ PRIMARY KEY (Dni, Fec_audit),
  FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
  
  CREATE TABLE Banco.Cuenta

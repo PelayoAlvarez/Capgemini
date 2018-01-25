@@ -50,10 +50,11 @@ public class Cliente {
 	@Column(name = "Mca_Habilitado", nullable = false)
 	private Boolean MCAHabilitado;
 	
-	@OneToMany
+	@OneToMany(mappedBy="cliente")
 	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
 	
-	@ManyToOne public Sucursal surcusal;
+	@ManyToOne 
+	public Sucursal sucursal;
 	
 	public Cliente() {
 		super();
@@ -61,7 +62,7 @@ public class Cliente {
 
 	public Cliente(String dNI, String nombre, String apellidos, String direccion, String movil, String fijo,
 			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean mCAHabilitado, Set<ClienteCuenta> cuentas,
-			Sucursal surcusal, String email) {
+			Sucursal sucursal, String email) {
 		super();
 		DNI = dNI;
 		this.nombre = nombre;
@@ -74,7 +75,7 @@ public class Cliente {
 		this.empleado = empleado.getNombre();
 		this.MCAHabilitado = mCAHabilitado;
 		this.cuentas = cuentas;
-		this.surcusal = surcusal;
+		this.sucursal = sucursal;
 		this.email = email;
 	}
 	
@@ -175,11 +176,11 @@ public class Cliente {
 	}
 
 	public Sucursal getSurcusal() {
-		return surcusal;
+		return sucursal;
 	}
 
 	public void setSurcusal(Sucursal surcusal) {
-		this.surcusal = surcusal;
+		this.sucursal = surcusal;
 	}
 
 	@Override
@@ -210,7 +211,7 @@ public class Cliente {
 	@Override
 	public String toString() {
 		return "Cliente [ DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
-				+ direccion + ", movil=" + movil + ", fijo=" + fijo + ", cuentas=" + cuentas + ", surcusal=" + surcusal
+				+ direccion + ", movil=" + movil + ", fijo=" + fijo + ", cuentas=" + cuentas + ", surcusal=" + sucursal
 				+ "]";
 	}
 
