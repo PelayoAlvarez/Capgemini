@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.capgemini.piloto.model.Cliente;
 
-public interface ClienteRepository extends JpaRepository<Cliente, Long>{
+public interface ClienteRepository extends JpaRepository<Cliente, String>{
 
 	@Query("SELECT c FROM Cliente c WHERE c.dni = :dni")
 	Cliente findByDni(String dni);

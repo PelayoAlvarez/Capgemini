@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
@@ -25,16 +26,16 @@ public class EmpleadoH implements Serializable {
 	private static final long serialVersionUID = -4428784972707162023L;
 
 	@Id
-	@Column(name = "Dni")
+	@Column(name = "Dni", nullable = false)
 	public String dni;	
 	
-	@Column(name = "Nombre")
+	@Column(name = "Nombre", nullable = false)
 	public String nombre;
 	
-	@Column(name = "Apellidos")
+	@Column(name = "Apellidos", nullable = false)
 	public String apellidos;
 	
-	@Column(name = "Direccion")
+	@Column(name = "Direccion", nullable = false)
 	public String direccion;
 	
 	@Column(name = "Fijo")
@@ -46,24 +47,25 @@ public class EmpleadoH implements Serializable {
 	@Column(name = "Email")
 	public String email;
 	
-	@Column(name = "Fec_actu")
+	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
 	
-	@Column(name = "Fec_creacion")
+	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
 	
-	@Column(name = "Usuario")
+	@Column(name = "Usuario", nullable = false)
 	private String usuario;
 	
-	@Column(name = "Mca_habilitado")
+	@Column(name = "Mca_habilitado", nullable = false)
 	private boolean mcaHabilitado;
 	
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
 	
-	@ManyToOne 
+	@NotNull
+	@ManyToOne
 	public Sucursal sucursal;
 	
 	@Id

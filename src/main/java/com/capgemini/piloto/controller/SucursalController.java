@@ -1,6 +1,7 @@
 package com.capgemini.piloto.controller;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -78,9 +79,15 @@ public class SucursalController {
 			log.info("DELETE: No se ha encontrado la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
+		sucursal.getClientes().forEach(cliente -> cliente.setSurcusal(null));
+		sucursal.setClientes(new HashSet<>());
+		sucursal.getCuentas().forEach(cuenta -> cuenta.setSucursal(null));
+		sucursal.setCuentas(new HashSet<>());
+		sucursal.getEmpleados().forEach(empleado -> empleado.setSucursal(null));
+		sucursal.setEmpleados(new HashSet<>());
 		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
-		sucursal.setMcaHabilitado(false);
 		sucursalRep.save(sucursal);
+		//No se si barrar Empleados, Clientes y Cuentas en cascada
 		log.info("DELETE: Se borra la Sucursal con el id [{}]", sucursal.getId());
 		return ResponseEntity.ok(sucursal);
 	}

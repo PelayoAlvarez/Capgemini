@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Empleado;
@@ -106,7 +105,7 @@ public class CuentaH implements Serializable {
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, 
 			Set<Transferencia> transferencias, Set<ClienteCuenta> clientecuenta,
 			Set<Tarjeta> tarjetas, Date fecActu, Date fecCreacion,
-			Boolean mCA_Habilitado, String usuario) {
+			Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
@@ -116,7 +115,7 @@ public class CuentaH implements Serializable {
 		this.fecActu = fecActu;
 		fecAudit = new Date();
 		this.fecCreacion = fecCreacion;
-		this.mCAHabilitado = mCA_Habilitado;
+		this.mCAHabilitado = mCAHabilitado;
 		this.usuario = usuario;
 	}
 
@@ -255,14 +254,6 @@ public class CuentaH implements Serializable {
 
 	public void setTransferencias(Set<Transferencia> transferencias) {
 		this.transferencias = transferencias;
-	}
-
-	public Boolean getmCAHabilitado() {
-		return mCAHabilitado;
-	}
-
-	public void setmCAHabilitado(Boolean mCAHabilitado) {
-		this.mCAHabilitado = mCAHabilitado;
 	}
 
 	public void setId(Long id) {
