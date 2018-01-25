@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -51,15 +52,19 @@ public class Empleado implements Serializable {
 	private String usuario;
 	
 	@Column(name = "Mca_habilitado", nullable = false)
-	private boolean mcaHabilitado;
+	private Boolean mcaHabilitado;
 	
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
-
-	public Empleado() { };
 	
-	public Empleado(String dni, String nombre, String apellidos, String direccion, String fijo, String movil, 
-			String email, String usuario) {
+	@ManyToOne 
+	public Sucursal sucursal;
+
+	public Empleado() { }
+	
+	public Empleado(String dni, String nombre, String apellidos, String direccion, String fijo, String movil,
+			String email, Date fecActu, Date fecCreacion, String usuario, Boolean mcaHabilitado,
+			Set<Transferencia> transferencias, Sucursal sucursal) {
 		super();
 		this.dni = dni;
 		this.nombre = nombre;
@@ -68,9 +73,12 @@ public class Empleado implements Serializable {
 		this.fijo = fijo;
 		this.movil = movil;
 		this.email = email;
-		this.fecActu = this.fecCreacion = new Date();
+		this.fecActu = fecActu;
+		this.fecCreacion = fecCreacion;
 		this.usuario = usuario;
-		this.mcaHabilitado = true;
+		setMcaHabilitado(mcaHabilitado);
+		this.transferencias = transferencias;
+		this.sucursal = sucursal;
 	}
 
 	public String getDni() {
@@ -153,12 +161,64 @@ public class Empleado implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public boolean getMcaHabilitado() {
+	public Boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(boolean mcaHabilitado) {
+	public void setMcaHabilitado(Boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
+	
+	public Set<Transferencia> getTransferencias() {
+		return new HashSet<>(transferencias);
+	}
+	
+	protected Set<Transferencia> _getTransferencias() {
+		return transferencias;
+	}
 
+	protected void setTransferencias(Set<Transferencia> transferencias) {
+		this.transferencias = transferencias;
+	}
+	
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dni == null) ? 0 : dni.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Empleado other = (Empleado) obj;
+		if (dni == null) {
+			if (other.dni != null)
+				return false;
+		} else if (!dni.equals(other.dni))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Empleado [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
+				+ ", fijo=" + fijo + ", movil=" + movil + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
+				+ fecCreacion + ", usuario=" + usuario + ", mcaHabilitado=" + mcaHabilitado + ", transferencias="
+				+ transferencias + ", surcusal=" + sucursal + "]";
+	}
 }
