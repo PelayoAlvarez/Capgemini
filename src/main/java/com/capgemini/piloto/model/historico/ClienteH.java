@@ -15,7 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.capgemini.piloto.model.Cliente;
-import com.capgemini.piloto.model.Cuenta;
+import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Sucursal;
 
 @Entity
@@ -62,7 +62,7 @@ public class ClienteH {
 	private Date fecAudit;
 	
 	@OneToMany
-	private Set<Cuenta> cuentas = new HashSet<Cuenta>();
+	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
 	
 	@ManyToOne public Sucursal surcusal;
 	
@@ -74,7 +74,7 @@ public class ClienteH {
 	
 	public ClienteH(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
 			String email, Date fecha_Actua, Date fechaCreacion, String empleado, Boolean mCAHabilitado, String usuarioH,
-			Date fecAudit, Set<Cuenta> cuentas, Sucursal surcusal) {
+			Date fecAudit, Set<ClienteCuenta> cuentas, Sucursal surcusal) {
 		super();
 		this.dni = dni;
 		this.nombre = nombre;
@@ -106,7 +106,7 @@ public class ClienteH {
 		this.fechaCreacion = cliente.getFecha_Creacion();
 		this.empleado = cliente.getEmpleado();
 		this.MCAHabilitado = cliente.getMCA_Habilitado();
-		this.cuentas = cliente.getCuentas();
+		this.cuentas = cliente.getClienteCuenta();
 		this.surcusal = cliente.getSurcusal();
 		
 		this.usuarioH = empleado;
@@ -199,11 +199,11 @@ public class ClienteH {
 		MCAHabilitado = mCA_Habilitado;
 	}
 
-	public Set<Cuenta> getCuentas() {
-		return new HashSet<Cuenta>(cuentas);
+	public Set<ClienteCuenta> getClienteCuenta() {
+		return new HashSet<ClienteCuenta>(cuentas);
 	}
 
-	protected void setCuentas(Set<Cuenta> cuentas) {
+	protected void setCuentas(Set<ClienteCuenta> cuentas) {
 		this.cuentas = cuentas;
 	}
 

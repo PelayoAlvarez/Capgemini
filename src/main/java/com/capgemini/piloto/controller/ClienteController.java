@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,10 +50,20 @@ public class ClienteController {
 	
 	// Create a new client
 	@PostMapping("/clientes")
-	public Cliente createClient(@Valid @RequestBody Cliente cliente) {
-		clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
+	public ResponseEntity<Cliente> createClient(@Valid @RequestBody Cliente cliente) {
+		Cliente cliente1 = clienteRepository.findByDni(cliente.getDNI());
+		if(cliente1 != null) {
+			logger.error("The client has already created");
+			return new ResponseEntity<Cliente>(cliente1, new HttpHeaders(), HttpStatus.CONFLICT);
+			
+		}	
+		cliente1 = clienteRepository.save(cliente);
+		if(cliente1 == null) {
+			logger.error("The client was not created");
+			return new ResponseEntity<Cliente>(cliente1, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		logger.info("Create a new client");
-		return clienteRepository.save(cliente);
+		return ResponseEntity.ok().body(cliente1);
 		
 	}
 	

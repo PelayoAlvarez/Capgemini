@@ -51,7 +51,7 @@ public class Cliente {
 	private Boolean MCA_Habilitado;
 	
 	@OneToMany
-	private Set<Cuenta> cuentas = new HashSet<Cuenta>();
+	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
 	
 	@ManyToOne public Sucursal surcusal;
 	
@@ -60,7 +60,7 @@ public class Cliente {
 	}
 
 	public Cliente(String dNI, String nombre, String apellidos, String direccion, String movil, String fijo,
-			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean mCA_Habilitado, Set<Cuenta> cuentas,
+			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean mCA_Habilitado, Set<ClienteCuenta> cuentas,
 			Sucursal surcusal, String email) {
 		super();
 		DNI = dNI;
@@ -163,14 +163,14 @@ public class Cliente {
 		MCA_Habilitado = mCA_Habilitado;
 	}
 
-	public Set<Cuenta> getCuentas() {
-		return new HashSet<Cuenta>(cuentas);
+	public Set<ClienteCuenta> getClienteCuenta() {
+		return new HashSet<ClienteCuenta>(cuentas);
 	}
-	Set<Cuenta> _getCuentas() {
+	Set<ClienteCuenta> _getClienteCuenta() {
 		return cuentas;
 	}
 
-	protected void setCuentas(Set<Cuenta> cuentas) {
+	protected void setCuentas(Set<ClienteCuenta> cuentas) {
 		this.cuentas = cuentas;
 	}
 

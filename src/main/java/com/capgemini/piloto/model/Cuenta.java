@@ -37,6 +37,9 @@ public class Cuenta implements Serializable {
 	private String usuario;
 
 	@OneToMany
+	private Set<Tarjeta> tarjetas = new HashSet<>();
+
+	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<>();
 
 	@OneToMany(mappedBy = "cuenta")
@@ -63,17 +66,19 @@ public class Cuenta implements Serializable {
 
 	Cuenta() {
 		fecCreacion = new Date();
+		fecActu = new Date();
 	}
 
 	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Set<Transferencia> transferencias,
-			Set<ClienteCuenta> clientecuenta, Date fecActu, Date fecCreacion, Boolean mCAHabilitado, String usuario) {
+			Set<ClienteCuenta> clientecuenta, Set<Tarjeta> tarjetas, Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.transferencias = transferencias;
 		this.clientecuenta = clientecuenta;
-		this.fecActu = fecActu;
-		this.fecCreacion = fecCreacion;
+		this.fecActu = new Date();
+		this.tarjetas = tarjetas;
+		this.fecCreacion = new Date();
 		this.mCAHabilitado = mCAHabilitado;
 		this.usuario = usuario;
 	}
@@ -123,6 +128,18 @@ public class Cuenta implements Serializable {
 		this.movimientos = movimientos;
 	}
 
+	public Set<Tarjeta> _getTarjetas() {
+		return new HashSet<>(tarjetas);
+	}
+
+	public Set<Tarjeta> getTarjetas() {
+		return tarjetas;
+	}
+
+	protected void setTarjetas(Set<Tarjeta> tarjetas) {
+		this.tarjetas = tarjetas;
+	}
+
 	public Empleado getEmpleado() {
 		return empleado;
 	}
@@ -159,7 +176,7 @@ public class Cuenta implements Serializable {
 		return new HashSet<>(clientecuenta);
 	}
 
-	public void setClientes(Set<ClienteCuenta> clientecuenta) {
+	public void setClienteCuenta(Set<ClienteCuenta> clientecuenta) {
 		this.clientecuenta = clientecuenta;
 	}
 
@@ -192,4 +209,17 @@ public class Cuenta implements Serializable {
 	public Date getFecCreacion() {
 		return fecCreacion;
 	}
+
+	public Boolean getmCAHabilitado() {
+		return mCAHabilitado;
+	}
+
+	public void setmCAHabilitado(Boolean mCAHabilitado) {
+		this.mCAHabilitado = mCAHabilitado;
+	}
+
+	public void setFecCreacion(Date fecCreacion) {
+		this.fecCreacion = fecCreacion;
+	}
+
 }

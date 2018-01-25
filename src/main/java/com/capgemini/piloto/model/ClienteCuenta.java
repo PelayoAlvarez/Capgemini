@@ -3,6 +3,7 @@ package com.capgemini.piloto.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -133,9 +134,19 @@ public class ClienteCuenta implements Serializable{
 //		cliente._getClienteCuenta().add(this);
 //		cuenta._getClienteCuenta().add(this);
 //	}
-//
-//	public void unlink() {
-//		mcaHabilitado = false;
-//	}
 
+	public void unlink() {
+		Association.Titular.unlink(this);
+	}
+
+	public void unlink(Cliente cliente) {
+		Association.Titular.unlink(this);
+		for (ClienteCuenta titular : cuenta._getClienteCuenta()) {
+			if(titular.getMcaHabilitado())
+				return;
+		}
+		
+		//esto habra que pulirlo mas adelante
+		cuenta.setMCAHabilitado(false);
+	}
 }
