@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.model.Cliente;
+import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.historico.CuentaH;
+import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.historico.CuentaHRepository;
 
@@ -34,6 +37,8 @@ public class CuentaController {
 	private CuentaRepository cuentaRepository;
 	@Autowired
 	private CuentaHRepository cuentaHRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
 
 	// Get every account
 	@GetMapping("/cuenta")
@@ -44,9 +49,10 @@ public class CuentaController {
 
 	// Create a new account
 	@PostMapping("/cuenta")
-	public Cuenta createCuenta(@Valid @RequestBody Cuenta cuenta) {
-		cuentaHRepository.save(new CuentaH(cuenta));
+	public Cuenta createCuenta(@Valid @RequestBody Cuenta cuenta, @PathVariable(value="dni") String dni) {
 		logger.info("Created a new account");
+		Cliente aux = clienteRepository.findByDni(dni);
+		//link(cliente,cuenta);
 		return cuentaRepository.save(cuenta);
 	}
 
@@ -72,7 +78,7 @@ public class CuentaController {
 			return ResponseEntity.notFound().build();
 		}
 
-		cuentaHRepository.save(new CuentaH(cuenta));
+		cuentaHRepository.save(new CuentaH(cuenta, "user"));
 		cuenta.setNumeroCuenta(cuentaDetails.getNumeroCuenta());
 		cuenta.setFecActu(new Date());
 		Cuenta updateCuenta = cuentaRepository.save(cuenta);
@@ -88,9 +94,13 @@ public class CuentaController {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 
+		}		
+		if(cuenta.getClientes().isEmpty()){
+			for(Cliente c : cuenta.getClientes()) {
+				//unlink(c,cuenta);
+			}
+				
 		}
-		cuentaHRepository.save(new CuentaH(cuenta));
-
 		cuenta.setMCAHabilitado(false);
 		cuentaRepository.save(cuenta);
 		logger.info("The account was successfully deleted");

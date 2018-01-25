@@ -46,7 +46,7 @@ public class Movimiento implements Serializable{
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Fec_movimiento")
-	private Date fecha_hora;
+	private Date fechahora;
 	
 	@NotBlank
 	@Column(name = "Descripcion")
@@ -61,12 +61,12 @@ public class Movimiento implements Serializable{
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
-	private Date fecha_Actua;
+	private Date fechaActua;
 	
 	@Column(name = "Fec_creacion", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
-	private Date fecha_Creacion;
+	private Date fechaCreacion;
 	
 	@NotBlank
 	@Column(name = "Usuario")
@@ -74,10 +74,12 @@ public class Movimiento implements Serializable{
 	
 	@NotBlank
 	@Column(name = "Mca_habilitado")
-	private Boolean MCA_Habilitado;
+	private Boolean MCAHabilitado;
 	
 	
-	Movimiento() {}
+	Movimiento() {
+		//Solo para jpa		
+	}
 
 	public Movimiento(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, 
 			Cuenta cuentaAsociada, Date fecha_Actua, Date fecha_Creacion, String usuario,
@@ -85,13 +87,13 @@ public class Movimiento implements Serializable{
 		super();
 		this.importe = importe;
 		this.tipo = tipo;
-		this.fecha_hora = fecha;
+		this.fechahora = fecha;
 		this.descripcion = descripcion;
 		this.cuentaAsociada = cuentaAsociada;
-		this.fecha_Actua = fecha_Actua;
-		this.fecha_Creacion = fecha_Creacion;
+		this.fechaActua = fecha_Actua;
+		this.fechaCreacion = fecha_Creacion;
 		this.usuario = usuario;
-		this.MCA_Habilitado = habilitado;
+		this.MCAHabilitado = habilitado;
 	}
 
 	public TipoMovimiento getTipo() {
@@ -111,7 +113,7 @@ public class Movimiento implements Serializable{
 	}
 
 	public void setFecha(Date fecha) {
-		this.fecha_hora = fecha;
+		this.fechahora = fecha;
 	}
 
 	public String getDescripcion() {
@@ -127,7 +129,7 @@ public class Movimiento implements Serializable{
 	}
 	
 	public Date getFecha_hora() {
-		return fecha_hora;
+		return fechahora;
 	}
 
 	public Cuenta getCuentaAsociada() {
@@ -140,24 +142,24 @@ public class Movimiento implements Serializable{
 
 	//Getters y Setters de Auditoria
 
-	public Date getFecha_Actua() {
-		return fecha_Actua;
+	public Date getFechaActua() {
+		return fechaActua;
 	}
 
-	public void setFecha_Actua(Date fecha_Actua) {
-		this.fecha_Actua = fecha_Actua;
+	public void setFechaActua(Date fecha_Actua) {
+		this.fechaActua = fecha_Actua;
 	}
 
-	public Boolean getMCA_Habilitado() {
-		return MCA_Habilitado;
+	public Boolean getMCAHabilitado() {
+		return MCAHabilitado;
 	}
 
-	public void setMCA_Habilitado(Boolean mCA_Habilitado) {
-		MCA_Habilitado = mCA_Habilitado;
+	public void setMCAHabilitado(Boolean mCA_Habilitado) {
+		MCAHabilitado = mCA_Habilitado;
 	}
 
-	public Date getFecha_Creacion() {
-		return fecha_Creacion;
+	public Date getFechaCreacion() {
+		return fechaCreacion;
 	}
 
 	@Override
@@ -166,7 +168,7 @@ public class Movimiento implements Serializable{
 		int result = 1;
 		result = prime * result + ((cuentaAsociada == null) ? 0 : cuentaAsociada.hashCode());
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-		result = prime * result + ((fecha_hora == null) ? 0 : fecha_hora.hashCode());
+		result = prime * result + ((fechahora == null) ? 0 : fechahora.hashCode());
 		result = prime * result + ((importe == null) ? 0 : importe.hashCode());
 		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
 		return result;
@@ -191,10 +193,10 @@ public class Movimiento implements Serializable{
 				return false;
 		} else if (!descripcion.equals(other.descripcion))
 			return false;
-		if (fecha_hora == null) {
-			if (other.fecha_hora != null)
+		if (fechahora == null) {
+			if (other.fechahora != null)
 				return false;
-		} else if (!fecha_hora.equals(other.fecha_hora))
+		} else if (!fechahora.equals(other.fechahora))
 			return false;
 		if (importe == null) {
 			if (other.importe != null)
@@ -208,7 +210,7 @@ public class Movimiento implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Movimiento [id=" + id + ", importe=" + importe + ", tipo=" + tipo + ", fecha_hora=" + fecha_hora
+		return "Movimiento [id=" + id + ", importe=" + importe + ", tipo=" + tipo + ", fecha_hora=" + fechahora
 				+ ", descripcion=" + descripcion + ", cuentaAsociada=" + cuentaAsociada + "]";
 	}
 }
