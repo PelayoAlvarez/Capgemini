@@ -35,16 +35,16 @@ public class CuentaH implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	@Column(name="Numero_cuenta")
+
+	@Column(name = "Numero_cuenta")
 	private String numeroCuenta;
-	
+
 	@ManyToOne
 	private Sucursal sucursal;
-	
-	@Column(name="Usuario")
+
+	@Column(name = "Usuario")
 	private String usuario;
-	
+
 	@OneToMany
 	private Set<Cliente> clientes = new HashSet<>();
 
@@ -62,23 +62,23 @@ public class CuentaH implements Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="Fec_actu")
+	@Column(name = "Fec_actu")
 	private Date fecActu;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="Fec_audit")
+	@Column(name = "Fec_audit")
 	private Date fecAudit;
-	
-	@Column(name= "Usuario_h")
+
+	@Column(name = "Usuario_h")
 	private String usuarioH;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="Fec_creacion")
+	@Column(name = "Fec_creacion")
 	private Date fecCreacion;
 
 	private Empleado empleado;
 
-	@Column(name="Mca_habilitado")
+	@Column(name = "Mca_habilitado")
 	private Boolean mCAHabilitado;
 
 	public CuentaH() {
@@ -90,9 +90,9 @@ public class CuentaH implements Serializable {
 		fecActu = c.getFecActu();
 		fecCreacion = c.getFecCreacion();
 		mCAHabilitado = c.getMCAHabilitado();
-		usuario=c.getUsuario();
-		fecAudit=new Date();
-		this.usuarioH=user;
+		usuario = c.getUsuario();
+		fecAudit = new Date();
+		this.usuarioH = user;
 	}
 
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
@@ -101,9 +101,10 @@ public class CuentaH implements Serializable {
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.fecActu = fecActu;
+		fecAudit = new Date();
 		this.fecCreacion = fecCreacion;
 		this.mCAHabilitado = mCA_Habilitado;
-		this.usuario=usuario;
+		this.usuario = usuario;
 	}
 
 	public Long getId() {
@@ -133,7 +134,7 @@ public class CuentaH implements Serializable {
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
-	
+
 	public Sucursal getSucursal() {
 		return sucursal;
 	}
@@ -141,8 +142,6 @@ public class CuentaH implements Serializable {
 	public void setSucursal(Sucursal sucursal) {
 		this.sucursal = sucursal;
 	}
-	
-	
 
 	// Getters y Setters de Auditoria
 
@@ -220,7 +219,5 @@ public class CuentaH implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }
