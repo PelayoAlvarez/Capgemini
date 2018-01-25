@@ -210,14 +210,6 @@ public class Cuenta implements Serializable {
 		return fecCreacion;
 	}
 
-	public Boolean getmCAHabilitado() {
-		return mCAHabilitado;
-	}
-
-	public void setmCAHabilitado(Boolean mCAHabilitado) {
-		this.mCAHabilitado = mCAHabilitado;
-	}
-
 	public void setFecCreacion(Date fecCreacion) {
 		this.fecCreacion = fecCreacion;
 	}
