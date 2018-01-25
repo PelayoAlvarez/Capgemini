@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.historico.ClienteHRepository;
 import com.capgemini.piloto.model.Cliente;
+import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.historico.ClienteH;
 
 @RestController
@@ -115,7 +116,10 @@ public class ClienteController {
 		//Parte de Alperi para desvincular las cuentas de los clientes en caso de que no haya mas clientes 
 		//asociados a esas cuentas eliminar la cuenta
 		//unlink(cliente);
-		cliente.setMCA_Habilitado(false);
+		for (ClienteCuenta cc : cliente.getClienteCuenta()){
+				cc.unlink(cliente);
+		}
+		cliente.setMCAHabilitado(false);
 		clienteRepository.save(cliente);
 		
 		logger.info("The client was successfullu deleted");
