@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -18,7 +16,6 @@ import javax.persistence.TemporalType;
 
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.Cuenta;
-import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
 
 @Entity
@@ -26,8 +23,6 @@ import com.capgemini.piloto.model.Sucursal;
 public class ClienteH {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 	@Column(name = "Dni", nullable = false)
 	private String dni;
 	@Column(name = "Nombre", nullable = false)
@@ -51,13 +46,20 @@ public class ClienteH {
 
 	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date fecha_Creacion;
+	private Date fechaCreacion;
 
 	@Column(name = "Usuario", nullable = false)
-	private Empleado empleado;
+	private String empleado;
 	
 	@Column(name = "Mca_Habilitado", nullable = false)
-	private Boolean MCA_Habilitado;
+	private Boolean MCAHabilitado;
+	
+	@Column(name = "Usuario_H", nullable = false)
+	private String usuarioH;
+	
+	@Id
+	@Column(name = "Fec_audit", nullable = false)
+	private Date fecAudit;
 	
 	@OneToMany
 	private Set<Cuenta> cuentas = new HashSet<Cuenta>();
@@ -68,9 +70,11 @@ public class ClienteH {
 		super();
 	}
 
+	
+	
 	public ClienteH(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
-			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean MCA_Habilitado, Set<Cuenta> cuentas,
-			Sucursal surcusal) {
+			String email, Date fecha_Actua, Date fechaCreacion, String empleado, Boolean mCAHabilitado, String usuarioH,
+			Date fecAudit, Set<Cuenta> cuentas, Sucursal surcusal) {
 		super();
 		this.dni = dni;
 		this.nombre = nombre;
@@ -78,15 +82,20 @@ public class ClienteH {
 		this.direccion = direccion;
 		this.movil = movil;
 		this.fijo = fijo;
+		this.email = email;
 		this.fecha_Actua = fecha_Actua;
-		this.fecha_Creacion = fecha_Creacion;
+		this.fechaCreacion = fechaCreacion;
 		this.empleado = empleado;
-		this.MCA_Habilitado = MCA_Habilitado;
+		this.MCAHabilitado = mCAHabilitado;
+		this.usuarioH = usuarioH;
+		this.fecAudit = fecAudit;
 		this.cuentas = cuentas;
 		this.surcusal = surcusal;
 	}
-	
-	public ClienteH(Cliente cliente) {
+
+
+
+	public ClienteH(Cliente cliente, String empleado) {
 		this.dni = cliente.getDNI();
 		this.nombre = cliente.getNombre();
 		this.apellidos = cliente.getApellidos();
@@ -94,11 +103,14 @@ public class ClienteH {
 		this.movil = cliente.getMovil();
 		this.fijo = cliente.getFijo();
 		this.fecha_Actua = cliente.getFecha_Actua();
-		this.fecha_Creacion = cliente.getFecha_Creacion();
+		this.fechaCreacion = cliente.getFecha_Creacion();
 		this.empleado = cliente.getEmpleado();
-		this.MCA_Habilitado = cliente.getMCA_Habilitado();
+		this.MCAHabilitado = cliente.getMCA_Habilitado();
 		this.cuentas = cliente.getCuentas();
 		this.surcusal = cliente.getSurcusal();
+		
+		this.usuarioH = empleado;
+		this.fecAudit = new Date();
 	}
 	
 	
@@ -109,10 +121,6 @@ public class ClienteH {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public String getNombre() {
@@ -168,27 +176,27 @@ public class ClienteH {
 	}
 
 	public Date getFecha_Creacion() {
-		return fecha_Creacion;
+		return fechaCreacion;
 	}
 
 	public void setFecha_Creacion(Date fecha_Creacion) {
-		this.fecha_Creacion = fecha_Creacion;
+		this.fechaCreacion = fecha_Creacion;
 	}
 
-	public Empleado getEmpleado() {
+	public String getEmpleado() {
 		return empleado;
 	}
 
-	public void setEmpleado(Empleado empleado) {
+	public void setEmpleado(String empleado) {
 		this.empleado = empleado;
 	}
 
 	public Boolean getMCA_Habilitado() {
-		return MCA_Habilitado;
+		return MCAHabilitado;
 	}
 
 	public void setMCA_Habilitado(Boolean mCA_Habilitado) {
-		MCA_Habilitado = mCA_Habilitado;
+		MCAHabilitado = mCA_Habilitado;
 	}
 
 	public Set<Cuenta> getCuentas() {
@@ -207,11 +215,44 @@ public class ClienteH {
 		this.surcusal = surcusal;
 	}
 
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Boolean getMCAHabilitado() {
+		return MCAHabilitado;
+	}
+
+	public void setMCAHabilitado(Boolean mCAHabilitado) {
+		MCAHabilitado = mCAHabilitado;
+	}
+
+	public String getUsuarioH() {
+		return usuarioH;
+	}
+
+	public void setUsuarioH(String usuarioH) {
+		this.usuarioH = usuarioH;
+	}
+
+	public Date getFecAudit() {
+		return fecAudit;
+	}
+
+	public void setFecAudit(Date fecAudit) {
+		this.fecAudit = fecAudit;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dni == null) ? 0 : dni.hashCode());
+		result = prime * result + ((fecAudit == null) ? 0 : fecAudit.hashCode());
 		return result;
 	}
 
@@ -229,15 +270,21 @@ public class ClienteH {
 				return false;
 		} else if (!dni.equals(other.dni))
 			return false;
+		if (fecAudit == null) {
+			if (other.fecAudit != null)
+				return false;
+		} else if (!fecAudit.equals(other.fecAudit))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", DNI=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
-				+ direccion + ", movil=" + movil + ", fijo=" + fijo + ", cuentas=" + cuentas + ", surcusal=" + surcusal
-				+ "]";
+		return "ClienteH [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
+				+ ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecha_Actua=" + fecha_Actua
+				+ ", fechaCreacion=" + fechaCreacion + ", empleado=" + empleado + ", MCAHabilitado=" + MCAHabilitado
+				+ ", usuarioH=" + usuarioH + ", fecAudit=" + fecAudit + ", cuentas=" + cuentas + ", surcusal="
+				+ surcusal + "]";
 	}
 
-	
 }

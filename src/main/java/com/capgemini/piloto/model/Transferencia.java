@@ -17,10 +17,9 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-
 @Entity
-@Table(name="transferencia")
-public class Transferencia implements Serializable{
+@Table(name = "transferencia")
+public class Transferencia implements Serializable {
 
 	/**
 	 * 
@@ -28,172 +27,183 @@ public class Transferencia implements Serializable{
 	private static final long serialVersionUID = -2858106251027444163L;
 
 	@Id
-	@Column(name="id")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank
-	@Column(name="Numero_cuenta_destino")
-	private String id_destino;
-	
+	@Column(name = "Numero_cuenta_destino")
+	private String idDestino;
+
 	@NotBlank
-	@Column(name="Numero_cuenta_origen")
-	private String id_origen;
-	
-	
+	@Column(name = "Numero_cuenta_origen")
+	private String idOrigen;
+
 	@NotBlank
-	@Column(name="Fec_transferencia")
-	private Date fecha_transferencia;
-	
-	
+	@Column(name = "Fec_transferencia")
+	private Date fechaTransferencia;
+
 	@NotBlank
-	@Column(name="Fec_consolidacion")
-	private Date fecha_consolidacion;
-	
-	
+	@Column(name = "Fec_consolidacion")
+	private Date fechaConsolidacion;
+
 	@NotBlank
 	@Enumerated(EnumType.STRING)
-	@Column(name="Canal")
+	@Column(name = "Canal")
 	private String canal;
-	
-	
+
 	@NotBlank
-	@Column(name="Importe")
+	@Column(name = "Importe")
 	private double importe;
-	
+
 	@ManyToOne
 	private Cuenta cuenta;
-	
-	//private EmpleadoH empleado;
-	
+
+	@ManyToOne
+	private Empleado empleado;
+
 	// Campos de Auditoria
 
-
-	@Column(name="Fec_actu", nullable = false)
+	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date fecha_Actua;
+	private Date fechaActua;
 
-	@Column(name="Fec_creacion", nullable = false)
+	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date fecha_Creacion;
-
+	private Date fechaCreacion;
 
 	@NotBlank
-	@Column(name="Mca_habilitado")
-	private Boolean MCA_Habilitado;
-		
-		
-		public Transferencia() {}
-		
-		public Transferencia(Transferencia t) {
-			id_destino = t.getId_destino();
-			id_origen = t.getId_origen();
-			fecha_transferencia = t.getFecha_transferencia();
-			fecha_consolidacion = t.getFecha_consolidacion();
-			canal = t.getCanal();
-			importe = t.getImporte();
-		}
-		
-		
-	
+	@Column(name = "Mca_habilitado")
+	private Boolean mcaHabilitado;
+
+	public Transferencia() {
+	}
+
+	public Transferencia(Transferencia t) {
+		idDestino = t.getIdDestino();
+		idOrigen = t.getIdOrigen();
+		fechaTransferencia = t.getFechaTransferencia();
+		fechaConsolidacion = t.getFechaConsolidacion();
+		canal = t.getCanal();
+		importe = t.getImporte();
+	}
+
 	public Transferencia(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
-				String canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion,
-				Boolean mCA_Habilitado) {
-			super();
-			this.id_destino = id_destino;
-			this.id_origen = id_origen;
-			this.fecha_transferencia = fecha_transferencia;
-			this.fecha_consolidacion = fecha_consolidacion;
-			this.canal = canal;
-			this.importe = importe;
-			this.cuenta = cuenta;
-			this.fecha_Actua = fecha_Actua;
-			this.fecha_Creacion = fecha_Creacion;
-			setMCA_Habilitado(mCA_Habilitado);
-		}
+			String canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion, Boolean mCA_Habilitado,
+			Empleado empleado) {
+		super();
+		this.idDestino = id_destino;
+		this.idOrigen = id_origen;
+		this.fechaTransferencia = fecha_transferencia;
+		this.fechaConsolidacion = fecha_consolidacion;
+		this.canal = canal;
+		this.importe = importe;
+		this.cuenta = cuenta;
+		this.empleado = empleado;
+		this.fechaActua = fecha_Actua;
+		this.fechaCreacion = fecha_Creacion;
+		setMcaHabilitado(mCA_Habilitado);
+	}
 
+	public String getIdDestino() {
+		return idDestino;
+	}
 
+	public void setIdDestino(String idDestino) {
+		this.idDestino = idDestino;
+	}
 
-	public String getId_destino() {
-		return id_destino;
+	public String getIdOrigen() {
+		return idOrigen;
 	}
-	public void setId_destino(String id_destino) {
-		this.id_destino = id_destino;
+
+	public void setIdOrigen(String idOrigen) {
+		this.idOrigen = idOrigen;
 	}
-	public String getId_origen() {
-		return id_origen;
+
+	public Date getFechaTransferencia() {
+		return fechaTransferencia;
 	}
-	public void setId_origen(String id_origen) {
-		this.id_origen = id_origen;
+
+	public void setFechaTransferencia(Date fechaTransferencia) {
+		this.fechaTransferencia = fechaTransferencia;
 	}
-	public Date getFecha_transferencia() {
-		return fecha_transferencia;
+
+	public Date getFechaConsolidacion() {
+		return fechaConsolidacion;
 	}
-	public void setFecha_transferencia(Date fecha_transferencia) {
-		this.fecha_transferencia = fecha_transferencia;
+
+	public void setFechaConsolidacion(Date fechaConsolidacion) {
+		this.fechaConsolidacion = fechaConsolidacion;
 	}
-	public Date getFecha_consolidacion() {
-		return fecha_consolidacion;
-	}
-	public void setFecha_consolidacion(Date fecha_consolidacion) {
-		this.fecha_consolidacion = fecha_consolidacion;
-	}
+
 	public String getCanal() {
 		return canal;
 	}
+
 	public void setCanal(String canal) {
 		this.canal = canal;
 	}
+
 	public double getImporte() {
 		return importe;
 	}
+
 	public void setImporte(double importe) {
 		this.importe = importe;
 	}
+
+	public Cuenta getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
+	}
+
+	public Empleado getEmpleado() {
+		return empleado;
+	}
+
+	public void setEmpleado(Empleado empleado) {
+		this.empleado = empleado;
+	}
+
+	public Date getFechaActua() {
+		return fechaActua;
+	}
+
+	public void setFechaActua(Date fechaActua) {
+		this.fechaActua = fechaActua;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Boolean getMcaHabilitado() {
+		return mcaHabilitado;
+	}
+
+	public void setMcaHabilitado(Boolean mcaHabilitado) {
+		this.mcaHabilitado = mcaHabilitado;
+	}
+
 	public Long getId() {
 		return id;
 	}
-	
-	public Date getFecha_Actua() {
-		return fecha_Actua;
-	}
-
-	public void setFecha_Actua(Date fecha_Actua) {
-		this.fecha_Actua = fecha_Actua;
-	}
-
-	public Date getFecha_Creacion() {
-		return fecha_Creacion;
-	}
-
-	public void setFecha_Creacion(Date fecha_Creacion) {
-		this.fecha_Creacion = fecha_Creacion;
-	}
-
-	public Boolean getMCA_Habilitado() {
-		return MCA_Habilitado;
-	}
-
-	public void setMCA_Habilitado(Boolean mCA_Habilitado) {
-		MCA_Habilitado = mCA_Habilitado;
-	}
-
-
 
 	@Override
 	public String toString() {
-		return "Transferencia [id=" + id + ", id_destino=" + id_destino + ", id_origen=" + id_origen
-				+ ", fecha_transferencia=" + fecha_transferencia + ", fecha_consolidacion=" + fecha_consolidacion
-				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", fecha_Actua=" + fecha_Actua
-				+ ", fecha_Creacion=" + fecha_Creacion + ", MCA_Habilitado=" + MCA_Habilitado + "]";
+		return "Transferencia [id=" + id + ", id_destino=" + idDestino + ", id_origen=" + idOrigen
+				+ ", fecha_transferencia=" + fechaTransferencia + ", fecha_consolidacion=" + fechaConsolidacion
+				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", empleado =" + empleado
+				+ ", fecha_Actua=" + fechaActua + ", fecha_Creacion=" + fechaCreacion + ", MCA_Habilitado="
+				+ mcaHabilitado + "]";
 	}
-	
 
-
-
-
-
-	
-	
-	
 }

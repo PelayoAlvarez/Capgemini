@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -26,9 +24,6 @@ public class Cuenta implements Serializable {
 	private static final long serialVersionUID = -7283533209815501984L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
 	@Column(name="Numero_cuenta")
 	private String numeroCuenta;
 	
@@ -36,8 +31,11 @@ public class Cuenta implements Serializable {
 	private Sucursal sucursal;
 	
 	@OneToMany
-	private Set<Cliente> clientes = new HashSet<>();
-
+	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
+	
+	@Column(name="Usuario")
+	private String usuario;
+	
 	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<>();
 
@@ -61,24 +59,49 @@ public class Cuenta implements Serializable {
 
 	private Empleado empleado;
 
-	private Boolean MCAHabilitado;
+	private Boolean mCAHabilitado;
 
 	Cuenta() {
 		fecCreacion = new Date();
 	}
 
-	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
-			Boolean mCA_Habilitado) {
+	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, 
+			Set<Transferencia> transferencias, Set<ClienteCuenta> clientecuenta, 
+			Date fecActu, Date fecCreacion, Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
+		this.transferencias=transferencias;
+		this.clientecuenta=clientecuenta;
 		this.fecActu = fecActu;
 		this.fecCreacion = fecCreacion;
-		this.MCAHabilitado = mCA_Habilitado;
+		this.mCAHabilitado = mCAHabilitado;
+		this.usuario=usuario;
 	}
 
-	public Long getId() {
-		return id;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((numeroCuenta == null) ? 0 : numeroCuenta.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cuenta other = (Cuenta) obj;
+		if (numeroCuenta == null) {
+			if (other.numeroCuenta != null)
+				return false;
+		} else if (!numeroCuenta.equals(other.numeroCuenta))
+			return false;
+		return true;
 	}
 
 	public String getNumeroCuenta() {
@@ -89,8 +112,12 @@ public class Cuenta implements Serializable {
 		this.numeroCuenta = numeroCuenta;
 	}
 
-	public Set<Movimiento> getMovimientos() {
+	public Set<Movimiento> _getMovimientos() {
 		return new HashSet<>(movimientos);
+	}
+	
+	public Set<Movimiento> getMovimientos() {
+		return movimientos;
 	}
 
 	protected void setMovimientos(Set<Movimiento> movimientos) {
@@ -113,9 +140,40 @@ public class Cuenta implements Serializable {
 		this.sucursal = sucursal;
 	}
 
+	public Set<Transferencia> getTransferencias() {
+		return transferencias;
+	}
+	
+	public Set<Transferencia> _getTransferencias() {
+		return new HashSet<>(transferencias);
+	}
+	
+	public void setTransferencias(Set<Transferencia> transferencias) {
+		this.transferencias = transferencias;
+	}
+
+	public Set<ClienteCuenta> getClienteCuenta() {
+		return clientecuenta;
+	}
+	
+	public Set<ClienteCuenta> _getClienteCuenta() {
+		return new HashSet<>(clientecuenta);
+	}
+	
+	public void setClientes(Set<ClienteCuenta> clientecuenta) {
+		this.clientecuenta = clientecuenta;
+	}
 
 	// Getters y Setters de Auditoria
 
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	
 	public Date getFecActu() {
 		return fecActu;
 	}
@@ -125,11 +183,11 @@ public class Cuenta implements Serializable {
 	}
 
 	public Boolean getMCAHabilitado() {
-		return MCAHabilitado;
+		return mCAHabilitado;
 	}
 
-	public void setMCAHabilitado(Boolean mCA_Habilitado) {
-		MCAHabilitado = mCA_Habilitado;
+	public void setMCAHabilitado(Boolean MCAHabilitado) {
+		this.mCAHabilitado = MCAHabilitado;
 	}
 
 	public Date getFecCreacion() {

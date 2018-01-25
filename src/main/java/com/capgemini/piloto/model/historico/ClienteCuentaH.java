@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.capgemini.piloto.model.ClienteCuenta;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -18,10 +19,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(value = {"createdAt", "updateAt"}, allowGetters = false)
 public class ClienteCuentaH implements Serializable{
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8783836770693903915L;
+	private static final long serialVersionUID = 5790237128818207030L;
 
 	@Id
 	@Column(name = "Dni")
@@ -33,12 +35,10 @@ public class ClienteCuentaH implements Serializable{
 	
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	@LastModifiedDate
 	private Date fecActu;
 	
 	@Column(name = "Fec_creacion", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	@CreatedDate
 	private Date fecCreacion;
 	
 	@NotBlank
@@ -47,10 +47,36 @@ public class ClienteCuentaH implements Serializable{
 	
 	@NotBlank
 	@Column(name = "Mca_habilitado")
-	private char mcaHabilitado;
+	private Boolean mcaHabilitado;
+	
+	@Id
+	@Column(name = "Fec_audit", nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
+	private Date fecAudit;
+	
+	@Column(name = "Usuario_h")
+	private String usuarioH;
 	
 	
-
+	ClienteCuentaH() {
+		// Necesario para JPA
+	}
+	
+	public ClienteCuentaH(ClienteCuenta clienteCuenta, String usuarioH) {
+		this.dni = clienteCuenta.getCliente().getDNI();
+		this.numeroCuenta = clienteCuenta.getCuenta().getNumeroCuenta();
+		this.fecActu = clienteCuenta.getFecActu();
+		this.fecCreacion = clienteCuenta.getFecCreacion();
+		this.usuario = clienteCuenta.getUsuario();
+		this.mcaHabilitado = clienteCuenta.getMcaHabilitado();
+		
+		//auditoria
+		this.fecAudit = new Date();
+		this.usuarioH = usuarioH;
+	}
+	
+	
 	public String getDni() {
 		return dni;
 	}
@@ -91,12 +117,14 @@ public class ClienteCuentaH implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public char getMcaHabilitado() {
+	public Boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(char mcaHabilitado) {
+	public void setMcaHabilitado(Boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
+	
+	
 
 }

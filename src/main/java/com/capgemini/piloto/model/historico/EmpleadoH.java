@@ -5,78 +5,81 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.capgemini.piloto.model.Empleado;
 
 @Entity
 @Table(name="Empleado_H")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"fecAudit"}, allowGetters = false)
 public class EmpleadoH implements Serializable {
 
 	private static final long serialVersionUID = -4428784972707162023L;
 
 	@Id
 	@Column(name = "Dni")
-	public String dni;
+	public String dni;	
 	
-	@NotBlank
 	@Column(name = "Nombre")
 	public String nombre;
 	
-	@NotBlank
 	@Column(name = "Apellidos")
 	public String apellidos;
 	
-	@NotBlank
 	@Column(name = "Direccion")
 	public String direccion;
 	
-	@NotBlank
 	@Column(name = "Fijo")
 	public String fijo;
 	
-	@NotBlank
 	@Column(name = "Movil")
 	public String movil;
 	
-	@NotBlank
+	@Column(name = "Email")
+	public String email;
+	
 	@Column(name = "Fec_actu")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
 	
-	@NotBlank
 	@Column(name = "Fec_creacion")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
 	
-	@NotBlank
 	@Column(name = "Usuario")
 	private String usuario;
 	
-	@NotBlank
 	@Column(name = "Mca_habilitado")
-	private char mcaHabilitado;
+	private boolean mcaHabilitado;
 	
 	@Id
-	@Column(name = "Fec_audit", nullable = false, updatable = false)
+	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
-	@CreatedDate
 	private Date fecAudit;
 	
-	@NotBlank
 	@Column(name = "Usuario_h")
 	private String usuarioH;
 
+	public EmpleadoH() { };
+	
+	public EmpleadoH(Empleado empleado, String usuarioH) {
+		super();
+		this.dni = empleado.getDni();
+		this.nombre = empleado.getNombre();
+		this.apellidos = empleado.getApellidos();
+		this.direccion = empleado.getDireccion();
+		this.fijo = empleado.getFijo();
+		this.movil = empleado.getMovil();
+		this.email = empleado.getEmail();
+		this.fecActu = empleado.getFecActu();
+		this.fecCreacion = empleado.getFecCreacion();
+		this.usuario = empleado.getUsuario();
+		this.fecAudit = new Date();
+		this.usuarioH = usuarioH;
+	}
+	
 	public String getDni() {
 		return dni;
 	}
@@ -124,6 +127,14 @@ public class EmpleadoH implements Serializable {
 	public void setMovil(String movil) {
 		this.movil = movil;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public Date getFecActu() {
 		return fecActu;
@@ -149,11 +160,11 @@ public class EmpleadoH implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public char getMcaHabilitado() {
+	public boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(char mcaHabilitado) {
+	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
 

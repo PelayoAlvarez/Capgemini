@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.capgemini.piloto.model.Cuenta;
+import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Transferencia;
 
 
@@ -30,68 +32,63 @@ public class TransferenciaH implements Serializable{
 	private static final long serialVersionUID = -2858106251027444163L;
 
 	@Id
-	@Column(name="id")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank
-	@Column(name="Numero_cuenta_destino")
-	private String id_destino;
-	
+	@Column(name = "Numero_cuenta_destino")
+	private String idDestino;
+
 	@NotBlank
-	@Column(name="Numero_cuenta_origen")
-	private String id_origen;
-	
-	
+	@Column(name = "Numero_cuenta_origen")
+	private String idOrigen;
+
 	@NotBlank
-	@Column(name="Fec_transferencia")
-	private Date fecha_transferencia;
-	
-	
+	@Column(name = "Fec_transferencia")
+	private Date fechaTransferencia;
+
 	@NotBlank
-	@Column(name="Fec_consolidacion")
-	private Date fecha_consolidacion;
-	
-	
+	@Column(name = "Fec_consolidacion")
+	private Date fechaConsolidacion;
+
 	@NotBlank
 	@Enumerated(EnumType.STRING)
-	@Column(name="Canal")
+	@Column(name = "Canal")
 	private String canal;
-	
-	
+
 	@NotBlank
-	@Column(name="Importe")
+	@Column(name = "Importe")
 	private double importe;
-	
+
 	@ManyToOne
-	private CuentaH cuenta;
-	
-	//private EmpleadoH empleado;
-	
+	private Cuenta cuenta;
+
+	@ManyToOne
+	private Empleado empleado;
+
 	// Campos de Auditoria
 
+	@Column(name = "Fec_actu", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fechaActua;
 
-		@Column(name="Fec_actu", nullable = false)
-		@Temporal(TemporalType.TIMESTAMP)
-		private Date fecha_Actua;
+	@Column(name = "Fec_creacion", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fechaCreacion;
 
-		@Column(name="Fec_creacion", nullable = false)
-		@Temporal(TemporalType.TIMESTAMP)
-		private Date fecha_Creacion;
-
-
-		@NotBlank
-		@Column(name="Mca_habilitado")
-		private Boolean MCA_Habilitado;
+	@NotBlank
+	@Column(name = "Mca_habilitado")
+	private Boolean mcaHabilitado;
 		
 		
 		public TransferenciaH() {}
 		
 		public TransferenciaH(Transferencia t) {
-			id_destino = t.getId_destino();
-			id_origen = t.getId_origen();
-			fecha_transferencia = t.getFecha_transferencia();
-			fecha_consolidacion = t.getFecha_consolidacion();
+			idDestino = t.getIdDestino();
+			idOrigen = t.getIdOrigen();
+			fechaTransferencia = t.getFechaTransferencia();
+			fechaConsolidacion = t.getFechaConsolidacion();
 			canal = t.getCanal();
 			importe = t.getImporte();
 		}
@@ -99,46 +96,47 @@ public class TransferenciaH implements Serializable{
 		
 	
 	public TransferenciaH(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
-				String canal, double importe, CuentaH cuenta, Date fecha_Actua, Date fecha_Creacion,
-				Boolean mCA_Habilitado) {
+				String canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion,
+				Boolean mCA_Habilitado, Empleado empleado) {
 			super();
-			this.id_destino = id_destino;
-			this.id_origen = id_origen;
-			this.fecha_transferencia = fecha_transferencia;
-			this.fecha_consolidacion = fecha_consolidacion;
+			this.idDestino = id_destino;
+			this.idOrigen = id_origen;
+			this.fechaTransferencia = fecha_transferencia;
+			this.fechaConsolidacion = fecha_consolidacion;
 			this.canal = canal;
 			this.importe = importe;
 			this.cuenta = cuenta;
-			this.fecha_Actua = fecha_Actua;
-			this.fecha_Creacion = fecha_Creacion;
+			this.empleado = empleado;
+			this.fechaActua = fecha_Actua;
+			this.fechaConsolidacion = fecha_Creacion;
 			setMCA_Habilitado(mCA_Habilitado);
 		}
 
 
 
 	public String getId_destino() {
-		return id_destino;
+		return idDestino;
 	}
 	public void setId_destino(String id_destino) {
-		this.id_destino = id_destino;
+		this.idDestino = id_destino;
 	}
 	public String getId_origen() {
-		return id_origen;
+		return idOrigen;
 	}
 	public void setId_origen(String id_origen) {
-		this.id_origen = id_origen;
+		this.idOrigen = id_origen;
 	}
 	public Date getFecha_transferencia() {
-		return fecha_transferencia;
+		return fechaTransferencia;
 	}
 	public void setFecha_transferencia(Date fecha_transferencia) {
-		this.fecha_transferencia = fecha_transferencia;
+		this.fechaTransferencia = fecha_transferencia;
 	}
 	public Date getFecha_consolidacion() {
-		return fecha_consolidacion;
+		return fechaConsolidacion;
 	}
 	public void setFecha_consolidacion(Date fecha_consolidacion) {
-		this.fecha_consolidacion = fecha_consolidacion;
+		this.fechaConsolidacion = fecha_consolidacion;
 	}
 	public String getCanal() {
 		return canal;
@@ -157,37 +155,37 @@ public class TransferenciaH implements Serializable{
 	}
 	
 	public Date getFecha_Actua() {
-		return fecha_Actua;
+		return fechaActua;
 	}
 
 	public void setFecha_Actua(Date fecha_Actua) {
-		this.fecha_Actua = fecha_Actua;
+		this.fechaActua = fecha_Actua;
 	}
 
 	public Date getFecha_Creacion() {
-		return fecha_Creacion;
+		return fechaConsolidacion;
 	}
 
 	public void setFecha_Creacion(Date fecha_Creacion) {
-		this.fecha_Creacion = fecha_Creacion;
+		this.fechaConsolidacion = fecha_Creacion;
 	}
 
 	public Boolean getMCA_Habilitado() {
-		return MCA_Habilitado;
+		return getMCA_Habilitado();
 	}
 
 	public void setMCA_Habilitado(Boolean mCA_Habilitado) {
-		MCA_Habilitado = mCA_Habilitado;
+		mcaHabilitado = mCA_Habilitado;
 	}
 
 
 
 	@Override
 	public String toString() {
-		return "Transferencia [id=" + id + ", id_destino=" + id_destino + ", id_origen=" + id_origen
-				+ ", fecha_transferencia=" + fecha_transferencia + ", fecha_consolidacion=" + fecha_consolidacion
-				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", fecha_Actua=" + fecha_Actua
-				+ ", fecha_Creacion=" + fecha_Creacion + ", MCA_Habilitado=" + MCA_Habilitado + "]";
+		return "Transferencia [id=" + id + ", id_destino=" + idDestino + ", id_origen=" + idOrigen
+				+ ", fecha_transferencia=" + fechaTransferencia + ", fecha_consolidacion=" + fechaConsolidacion
+				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", empleado =" + empleado + ", fecha_Actua=" + fechaActua
+				+ ", fecha_Creacion=" + fechaConsolidacion + ", MCA_Habilitado=" + mcaHabilitado + "]";
 	}
 	
 
