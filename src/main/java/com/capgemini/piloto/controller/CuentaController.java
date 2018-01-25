@@ -55,7 +55,7 @@ public class CuentaController {
 		logger.info("Created a new account");
 		Cliente aux = clienteRepository.findByDni(dni);
 		if (aux != null) {
-			// link(clientecuenta)
+			Association.TitularCuenta.link(cliente, titulo, cuenta);link(clientecuenta)
 			cuentaRepository.save(cuenta);
 			return ResponseEntity.ok().body(cuenta);
 		}
@@ -104,7 +104,7 @@ public class CuentaController {
 
 		if (!cuenta.getClienteCuenta().isEmpty()) {
 			for (ClienteCuenta c : cuenta.getClienteCuenta()) {
-				Association.Titular.unlink(c);
+				c.unlink();
 			}
 		}
 
