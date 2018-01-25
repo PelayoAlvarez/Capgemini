@@ -31,11 +31,13 @@ CREATE TABLE Banco.Sucursal
  Fijo VARCHAR(15),
  Movil VARCHAR(15),
  Email VARCHAR(30),
+ Id_sucursal INTEGER NOT NULL,
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
  Mca_habilitado BOOLEAN NOT NULL,
- PRIMARY KEY (Dni));
+ PRIMARY KEY (Dni)
+ FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
  
  CREATE TABLE Banco.Cliente_H
  (Dni VARCHAR(9) NOT NULL,
@@ -45,37 +47,15 @@ CREATE TABLE Banco.Sucursal
  Fijo VARCHAR(15),
  Movil VARCHAR(15),
  Email VARCHAR(30),
+ Id_sucursal INTEGER NOT NULL,
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
  Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
- PRIMARY KEY (Dni, Fec_audit));
- 
- CREATE TABLE Banco.Sucursal_Cliente
- (Id_sucursal INTEGER NOT NULL,
- Dni VARCHAR(9) NOT NULL,
- Fec_actu DATETIME NOT NULL,
- Fec_creacion DATETIME NOT NULL,
- Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado BOOLEAN NOT NULL,
- PRIMARY KEY (Id_sucursal, Dni),
- FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id),
- FOREIGN KEY (Dni) REFERENCES Banco.Cliente (Dni));
- 
- CREATE TABLE Banco.Sucursal_Cliente_H
- (Id_sucursal INTEGER NOT NULL,
- Dni VARCHAR(9) NOT NULL,
- Fec_actu DATETIME NOT NULL,
- Fec_creacion DATETIME NOT NULL,
- Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado BOOLEAN NOT NULL,
- Fec_audit DATETIME NOT NULL,
- Usuario_h VARCHAR(20) NOT NULL,
- PRIMARY KEY (Id_sucursal, Dni, Fec_audit),
- FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id),
- FOREIGN KEY (Dni) REFERENCES Banco.Cliente (Dni));
+ PRIMARY KEY (Dni, Fec_audit)
+ FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
  
  CREATE TABLE Banco.Empleado
  (Dni VARCHAR(9) NOT NULL,
@@ -85,11 +65,13 @@ CREATE TABLE Banco.Sucursal
  Fijo VARCHAR(15),
  Movil VARCHAR(15),
  Email VARCHAR(30),
+ Id_sucursal INTEGER NOT NULL,
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
- Mca_habilitado BOOLEAN NOT NULL,
- PRIMARY KEY (Dni)); 
+ Mca_habilitado BOOLEAN NOT NULL, 
+ PRIMARY KEY (Dni)
+ FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
  
  CREATE TABLE Banco.Empleado_H
  (Dni VARCHAR(9) NOT NULL,
@@ -99,13 +81,15 @@ CREATE TABLE Banco.Sucursal
  Fijo VARCHAR(15),
  Movil VARCHAR(15),
  Email VARCHAR(30),
+ Id_sucursal INTEGER NOT NULL,
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
  Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,
- PRIMARY KEY (Dni, Fec_audit));
+ PRIMARY KEY (Dni, Fec_audit)
+ FOREIGN KEY (Id_sucursal) REFERENCES Banco.Sucursal (Id));
  
  CREATE TABLE Banco.Cuenta
  (Numero_cuenta VARCHAR(25) NOT NULL,

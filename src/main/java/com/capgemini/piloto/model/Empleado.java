@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Empleado implements Serializable {
@@ -57,6 +58,7 @@ public class Empleado implements Serializable {
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
 	
+	@NotNull
 	@ManyToOne 
 	public Sucursal sucursal;
 
