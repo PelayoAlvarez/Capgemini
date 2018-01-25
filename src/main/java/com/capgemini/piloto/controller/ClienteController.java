@@ -53,7 +53,7 @@ public class ClienteController {
 	public ResponseEntity<Cliente> createClient(@Valid @RequestBody Cliente cliente) {
 		Cliente cliente1 = clienteRepository.findByDni(cliente.getDNI());
 		if(cliente1 != null) {
-			logger.error("The client has already created");
+			logger.error("The client is already created");
 			return new ResponseEntity<Cliente>(cliente1, new HttpHeaders(), HttpStatus.CONFLICT);
 			
 		}	
@@ -99,7 +99,7 @@ public class ClienteController {
 		cliente.setFecha_Actua(new Date());
 
 		Cliente updateClient = clienteRepository.save(cliente);
-		logger.info("The client was successfullu updated");
+		logger.info("The client was successfully updated");
 		return ResponseEntity.ok(updateClient);
 	}
 	
@@ -118,7 +118,7 @@ public class ClienteController {
 		cliente.setMCA_Habilitado(false);
 		clienteRepository.save(cliente);
 		
-		logger.info("The client was successfullu deleted");
+		logger.info("The client was successfully deleted");
 	
 		return ResponseEntity.ok().build();
 	}
