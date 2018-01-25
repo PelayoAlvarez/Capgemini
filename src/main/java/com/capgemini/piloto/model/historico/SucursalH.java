@@ -2,14 +2,20 @@ package com.capgemini.piloto.model.historico;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.Cliente;
+import com.capgemini.piloto.model.Cuenta;
+import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
 
 @Entity
@@ -35,6 +41,12 @@ public class SucursalH implements Serializable {
 	private String usuario;
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
+	@OneToMany(mappedBy="sucursal")
+	private Set<Cuenta> cuentas = new HashSet<>();
+	@OneToMany(mappedBy = "sucursal")
+	private Set<Empleado> empleados = new HashSet<>();
+	@OneToMany(mappedBy = "sucursal")
+	private Set<Cliente> clientes = new HashSet<>();
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Id
@@ -128,6 +140,32 @@ public class SucursalH implements Serializable {
 
 	public void setUsuarioH(String usuarioH) {
 		this.usuarioH = usuarioH;
+	}
+
+	public Set<Cuenta> getCuentas() {
+		return cuentas;
+	}
+
+	public void setCuentas(Set<Cuenta> cuentas) {
+		this.cuentas = cuentas;
+	}
+	
+	
+
+	public Set<Empleado> getEmpleados() {
+		return empleados;
+	}
+
+	public void setEmpleados(Set<Empleado> empleados) {
+		this.empleados = empleados;
+	}
+
+	public Set<Cliente> getClientes() {
+		return clientes;
+	}
+
+	public void setClientes(Set<Cliente> clientes) {
+		this.clientes = clientes;
 	}
 
 	@Override

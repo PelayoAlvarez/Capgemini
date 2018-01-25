@@ -2,12 +2,15 @@ package com.capgemini.piloto.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -34,13 +37,18 @@ public class Sucursal implements Serializable{
 	private String usuario;
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
+	@OneToMany(mappedBy="sucursal")
+	private Set<Cuenta> cuentas = new HashSet<>();
+	@OneToMany(mappedBy = "sucursal")
+	private Set<Empleado> empleados = new HashSet<>();
+	@OneToMany(mappedBy = "sucursal")
+	private Set<Cliente> clientes = new HashSet<>();
 	
 	public Sucursal() {
 		//Just for JPA
 	}
 	
 	
-
 	public Sucursal(Long id, String nombre, String direccion, String usuario) {
 		this.id = id;
 		this.nombre = nombre;
@@ -107,6 +115,36 @@ public class Sucursal implements Serializable{
 	public void setMcaHabilitado(Boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
+	
+	
+	public Set<Cuenta> getCuentas() {
+		return cuentas;
+	}
+
+	public void setCuentas(Set<Cuenta> cuentas) {
+		this.cuentas = cuentas;
+	}
+	
+	
+	public Set<Empleado> getEmpleados() {
+		return empleados;
+	}
+
+
+	public void setEmpleados(Set<Empleado> empleados) {
+		this.empleados = empleados;
+	}
+
+
+	public Set<Cliente> getClientes() {
+		return clientes;
+	}
+
+
+	public void setClientes(Set<Cliente> clientes) {
+		this.clientes = clientes;
+	}
+
 
 	@Override
 	public int hashCode() {

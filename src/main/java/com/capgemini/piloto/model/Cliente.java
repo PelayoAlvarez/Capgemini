@@ -48,7 +48,7 @@ public class Cliente {
 	private String empleado;
 	
 	@Column(name = "Mca_Habilitado", nullable = false)
-	private Boolean MCA_Habilitado;
+	private Boolean MCAHabilitado;
 	
 	@OneToMany
 	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
@@ -60,7 +60,7 @@ public class Cliente {
 	}
 
 	public Cliente(String dNI, String nombre, String apellidos, String direccion, String movil, String fijo,
-			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean mCA_Habilitado, Set<ClienteCuenta> cuentas,
+			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean mCAHabilitado, Set<ClienteCuenta> cuentas,
 			Sucursal surcusal, String email) {
 		super();
 		DNI = dNI;
@@ -72,7 +72,7 @@ public class Cliente {
 		this.fecha_Actua = fecha_Actua;
 		this.fecha_Creacion = fecha_Creacion;
 		this.empleado = empleado.getNombre();
-		this.MCA_Habilitado = mCA_Habilitado;
+		this.MCAHabilitado = mCAHabilitado;
 		this.cuentas = cuentas;
 		this.surcusal = surcusal;
 		this.email = email;
@@ -156,11 +156,11 @@ public class Cliente {
 	}
 
 	public Boolean getMCA_Habilitado() {
-		return MCA_Habilitado;
+		return MCAHabilitado;
 	}
 
-	public void setMCA_Habilitado(Boolean mCA_Habilitado) {
-		MCA_Habilitado = mCA_Habilitado;
+	public void setMCAHabilitado(Boolean mCAHabilitado) {
+		this.MCAHabilitado = mCAHabilitado;
 	}
 
 	public Set<ClienteCuenta> getClienteCuenta() {
