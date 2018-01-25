@@ -52,7 +52,7 @@ public class ClienteController {
 	// Create a new client
 	@PostMapping("/clientes")
 	public ResponseEntity<Cliente> createClient(@Valid @RequestBody Cliente cliente) {
-		Cliente cliente1 = clienteRepository.findByDni(cliente.getDNI());
+		Cliente cliente1 = clienteRepository.findByDni(cliente.getDni());
 		if(cliente1 != null) {
 			logger.error("The client is already created");
 			return new ResponseEntity<Cliente>(cliente1, new HttpHeaders(), HttpStatus.CONFLICT);

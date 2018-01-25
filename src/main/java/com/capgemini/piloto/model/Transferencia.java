@@ -79,7 +79,7 @@ public class Transferencia implements Serializable {
 
 	@NotBlank
 	@Column(name = "Mca_habilitado")
-	private Boolean mcaHabilitado;
+	private Boolean mCAHabilitado;
 
 	public Transferencia() {
 	}
@@ -191,11 +191,11 @@ public class Transferencia implements Serializable {
 	}
 
 	public Boolean getMcaHabilitado() {
-		return mcaHabilitado;
+		return mCAHabilitado;
 	}
 
 	public void setMcaHabilitado(Boolean mcaHabilitado) {
-		this.mcaHabilitado = mcaHabilitado;
+		this.mCAHabilitado = mcaHabilitado;
 	}
 
 	public Long getId() {
@@ -208,7 +208,7 @@ public class Transferencia implements Serializable {
 				+ ", fecha_transferencia=" + fechaTransferencia + ", fecha_consolidacion=" + fechaConsolidacion
 				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", empleado =" + empleado
 				+ ", fecha_Actua=" + fechaActua + ", fecha_Creacion=" + fechaCreacion + ", MCA_Habilitado="
-				+ mcaHabilitado + "]";
+				+ mCAHabilitado + "]";
 	}
 
 }

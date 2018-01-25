@@ -9,6 +9,6 @@ import com.capgemini.piloto.model.Cuenta;
 
 public interface CuentaRepository extends JpaRepository<Cuenta, String> {
 
-	@Query("SELECT c FROM Cuenta c WHERE c.MCA_Habilitado=0")
+	@Query("SELECT c FROM Cuenta c WHERE c.mCAHabilitado=true")
 	List<Cuenta> findMCA();
 }

@@ -21,7 +21,7 @@ public class Cliente {
 	
 	@Id
 	@Column(name = "Dni", nullable = false)
-	private String DNI;
+	private String dni;
 	@Column(name = "Nombre", nullable = false)
 	private String nombre;
 	@Column(name = "Apellidos", nullable = false)
@@ -49,7 +49,7 @@ public class Cliente {
 	private String empleado;
 	
 	@Column(name = "Mca_Habilitado", nullable = false)
-	private Boolean MCAHabilitado;
+	private Boolean mCAHabilitado;
 	
 	@OneToMany(mappedBy="cliente")
 	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
@@ -66,7 +66,7 @@ public class Cliente {
 			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean mCAHabilitado, Set<ClienteCuenta> cuentas,
 			Sucursal sucursal, String email) {
 		super();
-		DNI = dNI;
+		dni = dNI;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.direccion = direccion;
@@ -75,7 +75,7 @@ public class Cliente {
 		this.fecha_Actua = fecha_Actua;
 		this.fecha_Creacion = fecha_Creacion;
 		this.empleado = empleado.getNombre();
-		this.MCAHabilitado = mCAHabilitado;
+		this.mCAHabilitado = mCAHabilitado;
 		this.cuentas = cuentas;
 		this.sucursal = sucursal;
 		this.email = email;
@@ -130,8 +130,8 @@ public class Cliente {
 		this.fijo = fijo;
 	}
 
-	public String getDNI() {
-		return DNI;
+	public String getDni() {
+		return dni;
 	}
 
 	public Date getFecha_Actua() {
@@ -159,11 +159,11 @@ public class Cliente {
 	}
 
 	public Boolean getMCA_Habilitado() {
-		return MCAHabilitado;
+		return mCAHabilitado;
 	}
 
 	public void setMCAHabilitado(Boolean mCAHabilitado) {
-		this.MCAHabilitado = mCAHabilitado;
+		this.mCAHabilitado = mCAHabilitado;
 	}
 
 	public Set<ClienteCuenta> getClienteCuenta() {
@@ -189,7 +189,7 @@ public class Cliente {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((DNI == null) ? 0 : DNI.hashCode());
+		result = prime * result + ((dni == null) ? 0 : dni.hashCode());
 		return result;
 	}
 
@@ -202,17 +202,17 @@ public class Cliente {
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		if (DNI == null) {
-			if (other.DNI != null)
+		if (dni == null) {
+			if (other.dni != null)
 				return false;
-		} else if (!DNI.equals(other.DNI))
+		} else if (!dni.equals(other.dni))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Cliente [ DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
+		return "Cliente [ DNI=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
 				+ direccion + ", movil=" + movil + ", fijo=" + fijo + ", cuentas=" + cuentas + ", surcusal=" + sucursal
 				+ "]";
 	}

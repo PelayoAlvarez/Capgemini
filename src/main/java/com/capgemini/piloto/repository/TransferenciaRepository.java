@@ -9,7 +9,7 @@ import com.capgemini.piloto.model.Transferencia;
 
 public interface TransferenciaRepository  extends JpaRepository<Transferencia,Long>{
 
-	@Query("SELECT t FROM Transferencia t WHERE t.MCA_Habilitado=0")
+	@Query("SELECT t FROM Transferencia t WHERE t.mCAHabilitado=true")
 	List<Transferencia> findMCA();
 
 

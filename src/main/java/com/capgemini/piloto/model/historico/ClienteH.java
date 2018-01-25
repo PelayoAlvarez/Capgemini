@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -67,6 +68,7 @@ public class ClienteH implements Serializable {
 	@OneToMany(mappedBy="cliente")
 	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
 	
+	@JoinColumn(name = "id_sucursal")
 	@ManyToOne public Sucursal surcusal;
 	
 	public ClienteH() {
@@ -99,7 +101,7 @@ public class ClienteH implements Serializable {
 
 
 	public ClienteH(Cliente cliente, String empleado) {
-		this.dni = cliente.getDNI();
+		this.dni = cliente.getDni();
 		this.nombre = cliente.getNombre();
 		this.apellidos = cliente.getApellidos();
 		this.direccion = cliente.getDireccion();

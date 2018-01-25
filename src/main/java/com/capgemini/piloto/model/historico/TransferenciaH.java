@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -59,9 +60,11 @@ public class TransferenciaH implements Serializable{
 	private double importe;
 
 	@ManyToOne
+	@JoinColumn(name = "numero_cuenta")
 	private Cuenta cuenta;
 
 	@ManyToOne
+	@JoinColumn(name = "dni_empleado")
 	private Empleado empleado;
 
 	// Campos de Auditoria

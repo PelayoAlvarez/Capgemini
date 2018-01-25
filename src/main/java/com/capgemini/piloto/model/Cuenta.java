@@ -27,7 +27,7 @@ public class Cuenta implements Serializable {
 	@Column(name = "Numero_cuenta")
 	private String numeroCuenta;
 
-	@OneToMany
+	@OneToMany(mappedBy = "cuenta")
 	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
 
 	@Column(name = "Usuario")

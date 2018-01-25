@@ -21,7 +21,6 @@ public class Sucursal implements Serializable{
 	private static final long serialVersionUID = 2511716031449738119L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Id")
 	private Long id;
 	@Column(name = "Nombre")
