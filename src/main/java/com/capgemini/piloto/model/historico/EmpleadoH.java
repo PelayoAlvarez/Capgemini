@@ -2,15 +2,19 @@ package com.capgemini.piloto.model.historico;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.capgemini.piloto.model.Empleado;
+import com.capgemini.piloto.model.Transferencia;
 
 @Entity
 @Table(name="Empleado_H")
@@ -54,6 +58,9 @@ public class EmpleadoH implements Serializable {
 	@Column(name = "Mca_habilitado")
 	private boolean mcaHabilitado;
 	
+	@OneToMany(mappedBy="empleado")
+	private Set<Transferencia> transferencias = new HashSet<>();
+	
 	@Id
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -76,6 +83,7 @@ public class EmpleadoH implements Serializable {
 		this.fecActu = empleado.getFecActu();
 		this.fecCreacion = empleado.getFecCreacion();
 		this.usuario = empleado.getUsuario();
+		this.transferencias = empleado.getTransferencias();
 		this.fecAudit = new Date();
 		this.usuarioH = usuarioH;
 	}
@@ -167,6 +175,18 @@ public class EmpleadoH implements Serializable {
 	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
+	
+	public Set<Transferencia> getTransferencias() {
+		return new HashSet<>(transferencias);
+	}
+	
+	protected Set<Transferencia> _getTransferencias() {
+		return transferencias;
+	}
+
+	protected void setTransferencias(Set<Transferencia> transferencias) {
+		this.transferencias = transferencias;
+	}
 
 	public Date getFecAudit() {
 		return fecAudit;
@@ -182,5 +202,44 @@ public class EmpleadoH implements Serializable {
 
 	public void setUsuarioH(String usuarioH) {
 		this.usuarioH = usuarioH;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dni == null) ? 0 : dni.hashCode());
+		result = prime * result + ((fecAudit == null) ? 0 : fecAudit.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmpleadoH other = (EmpleadoH) obj;
+		if (dni == null) {
+			if (other.dni != null)
+				return false;
+		} else if (!dni.equals(other.dni))
+			return false;
+		if (fecAudit == null) {
+			if (other.fecAudit != null)
+				return false;
+		} else if (!fecAudit.equals(other.fecAudit))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "EmpleadoH [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
+				+ ", fijo=" + fijo + ", movil=" + movil + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
+				+ fecCreacion + ", usuario=" + usuario + ", mcaHabilitado=" + mcaHabilitado + ", transferencias="
+				+ transferencias + ", fecAudit=" + fecAudit + ", usuarioH=" + usuarioH + "]";
 	}
 }
