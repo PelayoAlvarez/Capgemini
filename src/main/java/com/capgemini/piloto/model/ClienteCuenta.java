@@ -12,12 +12,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.capgemini.piloto.model.types.ClienteCuentaKey;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "Cliente_Cuenta")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updateAt"}, allowGetters = false)
+@IdClass(ClienteCuentaKey.class)
 public class ClienteCuenta implements Serializable{
 
 	/**
@@ -63,7 +65,7 @@ public class ClienteCuenta implements Serializable{
 	public ClienteCuenta(Cliente cliente, Cuenta cuenta) {
 		super();
 		mcaHabilitado = true;
-		Association.TitularCliente.link(cliente, this, cuenta);
+		Association.TitularCuenta.link(cliente, this, cuenta);
 	}
 
 	public void setCliente(Cliente cliente) {
@@ -134,11 +136,11 @@ public class ClienteCuenta implements Serializable{
 //		cuenta._getClienteCuenta().add(this);
 //	}
 
-	public void unlink() {
-		Association.TitularCliente.unlink(this,cuenta);
+	public void unlinkCuenta() {
+		Association.TitularCuenta.unlink(this);
 	}
 
-	public void unlink(Cliente cliente) {
+	public void unlinkCliente() {
 		Association.TitularCliente.unlink(this,cuenta);
 	
 	}

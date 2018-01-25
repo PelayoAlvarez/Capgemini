@@ -1,8 +1,14 @@
 package com.capgemini.piloto.model;
 
 public class Association {
+	
+	private Association() {
+	}
 
 	public static class TitularCliente{
+		
+		private TitularCliente() {
+		}
 		
 		public static void link(Cliente cliente, ClienteCuenta titulo, Cuenta cuenta) {
 			titulo.setCliente(cliente);
@@ -25,6 +31,8 @@ public class Association {
 
 	public static class TitularCuenta{
 		
+		private TitularCuenta() {
+		}
 		public static void link(Cliente cliente, ClienteCuenta titulo, Cuenta cuenta) {
 			titulo.setCliente(cliente);
 			titulo.setCuenta(cuenta);
@@ -32,15 +40,8 @@ public class Association {
 			cuenta._getClienteCuenta().add(titulo);
 		}
 		
-		public static void unlink(ClienteCuenta titulo, Cliente cliente) {
-			titulo.setMcaHabilitado(false);
-			for (ClienteCuenta titular : cliente._getClienteCuenta()) {
-				if(titular.getMcaHabilitado())
-					return;
-			}
-			
-			//esto habra que pulirlo mas adelante
-			cliente.setMCAHabilitado(false);
+		public static void unlink(ClienteCuenta cc) {
+			cc.setMcaHabilitado(false);
 		}
 	}
 }
