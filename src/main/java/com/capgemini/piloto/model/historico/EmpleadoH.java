@@ -8,12 +8,14 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.capgemini.piloto.model.Empleado;
+import com.capgemini.piloto.model.Sucursal;
 import com.capgemini.piloto.model.Transferencia;
 
 @Entity
@@ -61,6 +63,9 @@ public class EmpleadoH implements Serializable {
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
 	
+	@ManyToOne 
+	public Sucursal sucursal;
+	
 	@Id
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -69,7 +74,7 @@ public class EmpleadoH implements Serializable {
 	@Column(name = "Usuario_h")
 	private String usuarioH;
 
-	public EmpleadoH() { };
+	public EmpleadoH() { }
 	
 	public EmpleadoH(Empleado empleado, String usuarioH) {
 		super();
@@ -84,6 +89,7 @@ public class EmpleadoH implements Serializable {
 		this.fecCreacion = empleado.getFecCreacion();
 		this.usuario = empleado.getUsuario();
 		this.transferencias = empleado.getTransferencias();
+		this.sucursal = empleado.getSucursal();
 		this.fecAudit = new Date();
 		this.usuarioH = usuarioH;
 	}
@@ -187,6 +193,14 @@ public class EmpleadoH implements Serializable {
 	protected void setTransferencias(Set<Transferencia> transferencias) {
 		this.transferencias = transferencias;
 	}
+	
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
 
 	public Date getFecAudit() {
 		return fecAudit;
@@ -240,6 +254,6 @@ public class EmpleadoH implements Serializable {
 		return "EmpleadoH [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
 				+ ", fijo=" + fijo + ", movil=" + movil + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
 				+ fecCreacion + ", usuario=" + usuario + ", mcaHabilitado=" + mcaHabilitado + ", transferencias="
-				+ transferencias + ", fecAudit=" + fecAudit + ", usuarioH=" + usuarioH + "]";
+				+ transferencias + ", sucursal=" + sucursal + ", fecAudit=" + fecAudit + ", usuarioH=" + usuarioH + "]";
 	}
 }
