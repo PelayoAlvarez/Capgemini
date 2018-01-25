@@ -35,7 +35,7 @@ public class SucursalController {
 	@GetMapping("/")
 	public List<Sucursal> getAllSucursales() {
 		log.info("GETALL: Se obtienen todas las instancias de Sucursal");
-		return sucursalRep.findByMcaModificado('S');
+		return sucursalRep.findByMcaModificado(true);
 	}
 
 	@GetMapping("/{id}")
@@ -52,7 +52,6 @@ public class SucursalController {
 	@PostMapping("/")
 	public ResponseEntity<Sucursal> createSucursal(@RequestBody Sucursal sucursal) {
 		Sucursal savedSucursal = sucursalRep.save(sucursal);
-		sucursalHRep.save(new SucursalH(savedSucursal, savedSucursal.getUsuario()));
 		log.info("CREATE: Se guarda la Sucursal con el id [{}]", savedSucursal.getId());
 		return ResponseEntity.ok(savedSucursal);
 	}
@@ -65,6 +64,7 @@ public class SucursalController {
 			return ResponseEntity.notFound().build();
 		}
 		oldSucursal.setFecActu(new Date());
+		oldSucursal.setUsuario(sucursal.getUsuario());
 		sucursalHRep.save(new SucursalH(oldSucursal, oldSucursal.getNombre()));
 		sucursalRep.save(sucursal);
 		log.info("UPDATE: Se actualiza la Sucursal con el id [{}]", sucursal.getId());
@@ -80,8 +80,8 @@ public class SucursalController {
 		}
 		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
 		sucursal.setMcaHabilitado(false);
-		log.info("DELETE: Se borra la Sucursal con el id [{}]", sucursal.getId());
 		sucursalRep.save(sucursal);
+		log.info("DELETE: Se borra la Sucursal con el id [{}]", sucursal.getId());
 		return ResponseEntity.ok(sucursal);
 	}
 

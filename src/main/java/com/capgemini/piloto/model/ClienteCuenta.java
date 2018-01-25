@@ -51,7 +51,7 @@ public class ClienteCuenta implements Serializable{
 	
 	@NotBlank
 	@Column(name = "Mca_habilitado")
-	private boolean mcaHabilitado;	
+	private Boolean mcaHabilitado;	
 	
 	@OneToMany(mappedBy="tarjeta")
 	private Set<Tarjeta> tarjetas = new HashSet<>();
@@ -63,7 +63,7 @@ public class ClienteCuenta implements Serializable{
 	public ClienteCuenta(Cliente cliente, Cuenta cuenta) {
 		super();
 		mcaHabilitado = true;
-		link(cliente,cuenta);
+		Association.Titular.link(cliente, this, cuenta);
 	}
 
 	public void setCliente(Cliente cliente) {
@@ -106,7 +106,7 @@ public class ClienteCuenta implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public boolean getMcaHabilitado() {
+	public Boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
@@ -114,24 +114,28 @@ public class ClienteCuenta implements Serializable{
 		this.mcaHabilitado = mcaHabilitado;
 	}
 
-	public Set<Tarjeta> getTarjetas() {
+	public Set<Tarjeta> _getTarjetas() {
 		return tarjetas;
 	}
 
+	public Set<Tarjeta> getTarjetas() {
+		return new HashSet<>(tarjetas);
+	}
+	
 	public void setTarjetas(Set<Tarjeta> tarjetas) {
 		this.tarjetas = tarjetas;
 	}
 	
 	
-	public void link(Cliente cliente, Cuenta cuenta) {
-		setCliente(cliente);
-		setCuenta(cuenta);
-		getCliente()._getCuentas().add(cuenta);
-		getCuenta()._getClientes().add(cliente);
-	}
-
-	public void unlink() {
-		mcaHabilitado = false;
-	}
+//	public void link(Cliente cliente, Cuenta cuenta) {
+//		setCliente(cliente);
+//		setCuenta(cuenta);
+//		cliente._getClienteCuenta().add(this);
+//		cuenta._getClienteCuenta().add(this);
+//	}
+//
+//	public void unlink() {
+//		mcaHabilitado = false;
+//	}
 
 }

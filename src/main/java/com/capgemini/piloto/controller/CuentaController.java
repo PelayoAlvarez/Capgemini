@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.model.Association;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
@@ -29,9 +30,9 @@ import com.capgemini.piloto.repository.historico.CuentaHRepository;
 @RestController
 @RequestMapping(path = "/cuenta")
 public class CuentaController {
-	
+
 	private static final String NOT_FOUND = "The requested account was not found";
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(CuentaController.class);
 	@Autowired
 	private CuentaRepository cuentaRepository;
@@ -49,11 +50,17 @@ public class CuentaController {
 
 	// Create a new account
 	@PostMapping("/cuenta")
-	public Cuenta createCuenta(@Valid @RequestBody Cuenta cuenta, @PathVariable(value="dni") String dni) {
+	public ResponseEntity<Cuenta> createCuenta(@Valid @RequestBody Cuenta cuenta,
+			@PathVariable(value = "dni") String dni) {
 		logger.info("Created a new account");
 		Cliente aux = clienteRepository.findByDni(dni);
-		//link(cliente,cuenta);
-		return cuentaRepository.save(cuenta);
+		if (aux != null) {
+			// link(clientecuenta)
+			cuentaRepository.save(cuenta);
+			return ResponseEntity.ok().body(cuenta);
+		}
+
+		return ResponseEntity.notFound().build();
 	}
 
 	// Find an account by its id
@@ -78,7 +85,7 @@ public class CuentaController {
 			return ResponseEntity.notFound().build();
 		}
 
-		cuentaHRepository.save(new CuentaH(cuenta));
+		cuentaHRepository.save(new CuentaH(cuenta, "user"));
 		cuenta.setNumeroCuenta(cuentaDetails.getNumeroCuenta());
 		cuenta.setFecActu(new Date());
 		Cuenta updateCuenta = cuentaRepository.save(cuenta);
@@ -93,16 +100,14 @@ public class CuentaController {
 		if (cuenta == null || !cuenta.getMCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
+		}
 
-		}
-		cuentaHRepository.save(new CuentaH(cuenta));
-		
-		if(cuenta.getClientes().isEmpty()){
-			for(Cliente c : cuenta.getClientes()) {
-				//unlink(c,cuenta);
+		if (!cuenta.getClienteCuenta().isEmpty()) {
+			for (ClienteCuenta c : cuenta.getClienteCuenta()) {
+				Association.Titular.unlink(c);
 			}
-				
 		}
+
 		cuenta.setMCAHabilitado(false);
 		cuentaRepository.save(cuenta);
 		logger.info("The account was successfully deleted");

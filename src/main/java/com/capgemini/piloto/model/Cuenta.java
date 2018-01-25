@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -26,18 +24,18 @@ public class Cuenta implements Serializable {
 	private static final long serialVersionUID = -7283533209815501984L;
 
 	@Id
-	@Column(name="Numero_cuenta")
+	@Column(name = "Numero_cuenta")
 	private String numeroCuenta;
-	
+
 	@ManyToOne
 	private Sucursal sucursal;
-	
+
 	@OneToMany
-	private Set<Cliente> clientes = new HashSet<>();
-	
-	@Column(name="Usuario")
+	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
+
+	@Column(name = "Usuario")
 	private String usuario;
-	
+
 	@OneToMany
 	private Set<Movimiento> movimientos = new HashSet<>();
 
@@ -52,11 +50,11 @@ public class Cuenta implements Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="Fec_actu")
+	@Column(name = "Fec_actu")
 	private Date fecActu;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="Fec_creacion")
+	@Column(name = "Fec_creacion")
 	private Date fecCreacion;
 
 	private Empleado empleado;
@@ -67,15 +65,17 @@ public class Cuenta implements Serializable {
 		fecCreacion = new Date();
 	}
 
-	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Date fecActu, Date fecCreacion,
-			Boolean mCAHabilitado, String usuario) {
+	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Set<Transferencia> transferencias,
+			Set<ClienteCuenta> clientecuenta, Date fecActu, Date fecCreacion, Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
+		this.transferencias = transferencias;
+		this.clientecuenta = clientecuenta;
 		this.fecActu = fecActu;
 		this.fecCreacion = fecCreacion;
 		this.mCAHabilitado = mCAHabilitado;
-		this.usuario=usuario;
+		this.usuario = usuario;
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class Cuenta implements Serializable {
 	public Set<Movimiento> _getMovimientos() {
 		return new HashSet<>(movimientos);
 	}
-	
+
 	public Set<Movimiento> getMovimientos() {
 		return movimientos;
 	}
@@ -130,7 +130,7 @@ public class Cuenta implements Serializable {
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
-	
+
 	public Sucursal getSucursal() {
 		return sucursal;
 	}
@@ -142,25 +142,25 @@ public class Cuenta implements Serializable {
 	public Set<Transferencia> getTransferencias() {
 		return transferencias;
 	}
-	
+
 	public Set<Transferencia> _getTransferencias() {
 		return new HashSet<>(transferencias);
 	}
-	
+
 	public void setTransferencias(Set<Transferencia> transferencias) {
 		this.transferencias = transferencias;
 	}
 
-	public Set<Cliente> getClientes() {
-		return clientes;
+	public Set<ClienteCuenta> getClienteCuenta() {
+		return clientecuenta;
 	}
-	
-	public Set<Cliente> _getClientes() {
-		return new HashSet<>(clientes);
+
+	public Set<ClienteCuenta> _getClienteCuenta() {
+		return new HashSet<>(clientecuenta);
 	}
-	
-	public void setClientes(Set<Cliente> clientes) {
-		this.clientes = clientes;
+
+	public void setClientes(Set<ClienteCuenta> clientecuenta) {
+		this.clientecuenta = clientecuenta;
 	}
 
 	// Getters y Setters de Auditoria
@@ -172,7 +172,7 @@ public class Cuenta implements Serializable {
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-	
+
 	public Date getFecActu() {
 		return fecActu;
 	}
