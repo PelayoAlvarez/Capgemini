@@ -23,6 +23,7 @@ import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.historico.CuentaH;
+import com.capgemini.piloto.repository.ClienteCuentaRepository;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.historico.CuentaHRepository;
@@ -40,7 +41,9 @@ public class CuentaController {
 	private CuentaHRepository cuentaHRepository;
 	@Autowired
 	private ClienteRepository clienteRepository;
-
+	@Autowired
+	private ClienteCuentaRepository clienteCuentaRepository;
+	
 	// Get every account
 	@GetMapping("/cuenta")
 	public List<Cuenta> getAllCuentas() {
@@ -55,7 +58,8 @@ public class CuentaController {
 		logger.info("Created a new account");
 		Cliente aux = clienteRepository.findByDni(dni);
 		if (aux != null) {
-			// link(clientecuenta)
+			ClienteCuenta cc = new ClienteCuenta(aux,cuenta);
+			clienteCuentaRepository.save(cc);
 			cuentaRepository.save(cuenta);
 			return ResponseEntity.ok().body(cuenta);
 		}
@@ -65,8 +69,8 @@ public class CuentaController {
 
 	// Find an account by its id
 	@GetMapping("/cuenta/{id}")
-	public ResponseEntity<Cuenta> getCuentaById(@PathVariable(value = "id") Long cuentaId) {
-		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
+	public ResponseEntity<Cuenta> getCuentaById(@PathVariable(value = "id") String numeroCuenta) {
+		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta == null || !cuenta.getMCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
@@ -77,9 +81,9 @@ public class CuentaController {
 
 	// Update an account
 	@PutMapping("/cuenta/{id}")
-	public ResponseEntity<Cuenta> updateCuenta(@PathVariable(value = "id") Long cuentaId,
+	public ResponseEntity<Cuenta> updateCuenta(@PathVariable(value = "id") String numeroCuenta,
 			@Valid @RequestBody Cuenta cuentaDetails) {
-		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
+		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta == null || !cuenta.getMCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
@@ -95,8 +99,8 @@ public class CuentaController {
 
 	// Delete an account by its id
 	@DeleteMapping("/cuenta/{id}")
-	public ResponseEntity<Cuenta> deleteCuenta(@PathVariable(value = "id") Long cuentaId) {
-		Cuenta cuenta = cuentaRepository.findOne(cuentaId);
+	public ResponseEntity<Cuenta> deleteCuenta(@PathVariable(value = "id") String numeroCuenta) {
+		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta == null || !cuenta.getMCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
@@ -104,7 +108,7 @@ public class CuentaController {
 
 		if (!cuenta.getClienteCuenta().isEmpty()) {
 			for (ClienteCuenta c : cuenta.getClienteCuenta()) {
-				Association.Titular.unlink(c);
+				c.unlink();
 			}
 		}
 
