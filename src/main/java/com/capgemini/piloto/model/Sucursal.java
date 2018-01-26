@@ -26,24 +26,31 @@ public class Sucursal implements Serializable{
 	@Id
 	@Column(name = "Id")
 	private Long id;
+	
 	@Column(name = "Nombre")
 	private String nombre;
+	
 	@Column(name = "Direccion")
 	private String direccion;
+	
 	@Column(name = "Fec_actu")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
+	
 	@Column(name = "fec_creacion")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
+	
 	@Column(name = "Usuario")
 	private String usuario;
+	
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
-	@JsonIgnore
+	
 	@OneToMany(mappedBy = "sucursal")
 	@JsonIgnore
 	private Set<Empleado> empleados = new HashSet<>();
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "sucursal")
 	private Set<Cliente> clientes = new HashSet<>();

@@ -19,11 +19,10 @@ import javax.validation.constraints.NotNull;
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
 import com.capgemini.piloto.model.Transferencia;
-<<<<<<< HEAD
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-=======
+
 import com.capgemini.piloto.model.dto.EmpleadoDTO;
->>>>>>> f7172422d6f3b8b3c5a093210671ef91ecbdf1fe
 
 @Entity
 @Table(name="Empleado_H")
