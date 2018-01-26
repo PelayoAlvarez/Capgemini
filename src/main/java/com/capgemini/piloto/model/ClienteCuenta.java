@@ -20,6 +20,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.capgemini.piloto.model.types.ClienteCuentaKey;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -37,11 +39,13 @@ public class ClienteCuenta implements Serializable{
 	@Id
 	@JoinColumn(name = "Dni")
 	@ManyToOne
+	@JsonIgnore
 	private Cliente cliente;
 	
 	@Id
 	@JoinColumn(name = "Numero_cuenta")
 	@ManyToOne
+	@JsonIgnore
 	private Cuenta cuenta;
 	
 	@Column(name = "Fec_actu", nullable = false)

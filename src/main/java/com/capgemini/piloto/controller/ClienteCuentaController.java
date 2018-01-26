@@ -32,7 +32,7 @@ public class ClienteCuentaController {
 	
 	//Creacion de una nueva asociacion entre una cuenta y un cliente.
 	@PostMapping("/asociar")
-	public ResponseEntity<ClienteCuenta> createNote(@RequestBody String dni, @RequestBody String numero_cuenta) {
+	public ResponseEntity<ClienteCuenta> createNote(@RequestParam String dni, @RequestParam String numero_cuenta) {
 		Cuenta cuenta = cuentaRepository.findOne(numero_cuenta);
 		if(cuenta == null) {
 			return ResponseEntity.notFound().build();	
@@ -60,7 +60,7 @@ public class ClienteCuentaController {
 	}
 	
 	
-	// Delete a Note
+	// Eliminar asociacion entre cliente y cuenta
 	@DeleteMapping("/notes/{id}")
 	public ResponseEntity<ClienteCuenta> deleteNote(@RequestParam(value = "dni") String dni, @RequestParam(value = "numero_cuenta") String numCuenta) {
 		ClienteCuentaKey ccK = new ClienteCuentaKey(dni,numCuenta);

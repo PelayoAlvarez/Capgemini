@@ -14,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "CUENTA")
@@ -29,7 +30,6 @@ public class Cuenta implements Serializable {
 	private String numeroCuenta;
 
 	@OneToMany(mappedBy = "cuenta")
-	@JsonIgnore
 	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
 
 	@Column(name = "Usuario")
@@ -40,7 +40,6 @@ public class Cuenta implements Serializable {
 	private Set<Movimiento> movimientos = new HashSet<>();
 
 	@OneToMany(mappedBy = "cuenta")
-	@JsonIgnore
 	private Set<Transferencia> transferencias = new HashSet<>();
 
 	// Campos de Auditoria

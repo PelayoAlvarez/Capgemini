@@ -16,7 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table (name="CLIENTE")
@@ -55,7 +56,6 @@ public class Cliente implements Serializable{
 	private Boolean mCAHabilitado;
 	
 	@OneToMany(mappedBy="cliente")
-	@JsonIgnore
 	private Set<ClienteCuenta> clienteCuenta = new HashSet<ClienteCuenta>();
 
 	
