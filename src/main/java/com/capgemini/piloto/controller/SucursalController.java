@@ -58,14 +58,15 @@ public class SucursalController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Sucursal> updateSucursal(@RequestBody Sucursal sucursal) {
-		Sucursal oldSucursal = sucursalRep.findById(sucursal.getId());
-		if (oldSucursal == null || !sucursal.getMcaHabilitado()) {
-			log.info("UPDATE: No se ha encontrado la Sucursal con el id [{}]", sucursal.getId());
+	public ResponseEntity<Sucursal> updateSucursal(@RequestBody Sucursal sucursal, @PathVariable Long id) {
+		Sucursal oldSucursal = sucursalRep.findById(id);
+		if (oldSucursal == null) {
+			log.info("UPDATE: No se ha encontrado la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
 		oldSucursal.setFecActu(new Date());
 		oldSucursal.setUsuario(sucursal.getUsuario());
+		sucursal.setFecActu(new Date());
 		sucursalHRep.save(new SucursalH(oldSucursal, oldSucursal.getNombre()));
 		sucursalRep.save(sucursal);
 		log.info("UPDATE: Se actualiza la Sucursal con el id [{}]", sucursal.getId());
@@ -83,6 +84,8 @@ public class SucursalController {
 		sucursal.setClientes(new HashSet<>());
 		sucursal.getEmpleados().forEach(empleado -> empleado.setSucursal(null));
 		sucursal.setEmpleados(new HashSet<>());
+		sucursal.setMcaHabilitado(false);
+		sucursal.setFecActu(new Date());
 		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
 		sucursalRep.save(sucursal);
 		//No se si barrar Empleados, Clientes y Cuentas en cascada
