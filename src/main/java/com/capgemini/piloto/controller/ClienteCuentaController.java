@@ -1,8 +1,6 @@
 package com.capgemini.piloto.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -64,28 +62,17 @@ public class ClienteCuentaController {
 	
 	// Delete a Note
 	@DeleteMapping("/notes/{id}")
-	public ResponseEntity<ClienteCuenta> deleteNote(@RequestBody String dni, @RequestBody String numero_cuenta) {
+	public ResponseEntity<ClienteCuenta> deleteNote(@RequestParam(value = "dni") String dni, @RequestParam(value = "numero_cuenta") String numCuenta) {
 		ClienteCuentaKey ccK = new ClienteCuentaKey(dni,numCuenta);
 		ClienteCuenta cc = clienteCuentaRepository.findOne(ccK);
 		
 		if(cc == null) {
 			return ResponseEntity.notFound().build();
 		}
-		
-		clienteCuentaHRepository.save(new ClienteCuentaH(cc.getCliente(), cc.getCuenta()));
-		clienteCuentaRepository.delete(cc);
-		return ResponseEntity.ok().build();	
-	}
-		
-		
-		
-		
-		Note note = clienteCuentaRepository.findOne(noteId);
-		if(note == null) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		clienteCuentaRepository.delete(note);
-		return ResponseEntity.ok().build();
+		clienteCuentaHRepository.save(new ClienteCuentaH(cc,cc.getUsuario()));
+		cc.setMcaHabilitado(false);
+		cc.setFecActu(new Date());
+		clienteCuentaRepository.save(cc);
+		return ResponseEntity.ok(cc);
 	}
 }
