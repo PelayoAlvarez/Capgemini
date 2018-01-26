@@ -37,9 +37,29 @@ public class Cliente {
 	
 	// Campos de Auditoria
 
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Fec_actu", nullable = false)
 	private Date fecha_Actua;
+
+	public Boolean getmCAHabilitado() {
+		return mCAHabilitado;
+	}
+
+	public void setmCAHabilitado(Boolean mCAHabilitado) {
+		this.mCAHabilitado = mCAHabilitado;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
 
 	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -48,7 +68,7 @@ public class Cliente {
 	@Column(name = "Usuario", nullable = false)
 	private String empleado;
 	
-	@Column(name = "Mca_Habilitado", nullable = false)
+	@Column(name = "Mca_habilitado", nullable = false)
 	private Boolean mCAHabilitado;
 	
 	@OneToMany(mappedBy="cliente")
