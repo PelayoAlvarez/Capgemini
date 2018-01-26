@@ -45,7 +45,6 @@ public class Sucursal implements Serializable{
 	private Set<Empleado> empleados = new HashSet<>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "sucursal")
-	@JsonIgnore
 	private Set<Cliente> clientes = new HashSet<>();
 	
 	public Sucursal() {
