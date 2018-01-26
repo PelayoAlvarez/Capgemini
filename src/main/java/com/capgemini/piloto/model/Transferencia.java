@@ -77,7 +77,7 @@ public class Transferencia implements Serializable {
 	private Date fechaCreacion;
 
 
-	@Column(name = "Mca_habilitado")
+	@Column(name = "Mca_habilitado", nullable = false)
 	private Boolean mCAHabilitado;
 
 	public Transferencia() {
@@ -107,6 +107,20 @@ public class Transferencia implements Serializable {
 		this.fechaActua = fecha_Actua;
 		this.fechaCreacion = fecha_Creacion;
 		setMcaHabilitado(mCA_Habilitado);
+	}
+
+	public Transferencia(Transferencia t, Cuenta cOrigen, Cuenta cDestino) {
+		super();
+		this.idDestino = cDestino.getNumeroCuenta();
+		this.idOrigen = cOrigen.getNumeroCuenta();
+		this.fechaTransferencia = t.getFechaTransferencia();
+		this.fechaConsolidacion = t.getFechaConsolidacion();
+		this.importe = t.getImporte();
+		this.cuenta = t.getCuenta();
+		this.empleado = t.getEmpleado();
+		this.fechaActua = t.getFechaActua();
+		this.fechaCreacion = t.getFechaCreacion();
+		this.mCAHabilitado = t.getMcaHabilitado();
 	}
 
 	public String getIdDestino() {
