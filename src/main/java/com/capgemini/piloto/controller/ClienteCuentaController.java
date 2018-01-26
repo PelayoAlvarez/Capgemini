@@ -32,8 +32,8 @@ public class ClienteCuentaController {
 	
 	//Creacion de una nueva asociacion entre una cuenta y un cliente.
 	@PostMapping("/asociar")
-	public ResponseEntity<ClienteCuenta> createNote(@RequestBody String dni, @RequestBody String numero_cuenta) {
-		Cuenta cuenta = cuentaRepository.findOne(numero_cuenta);
+	public ResponseEntity<ClienteCuenta> createNote(@RequestParam(value = "dni") String dni, @RequestParam(value = "numero_cuenta") String numCuenta) {
+		Cuenta cuenta = cuentaRepository.findOne(numCuenta);
 		if(cuenta == null) {
 			return ResponseEntity.notFound().build();	
 		}
