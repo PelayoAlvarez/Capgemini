@@ -24,6 +24,7 @@ public class Sucursal implements Serializable{
 	
 	@Id
 	@Column(name = "Id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column(name = "Nombre")
 	private String nombre;

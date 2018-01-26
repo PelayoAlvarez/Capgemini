@@ -39,33 +39,13 @@ public class Cliente {
 	
 	// Campos de Auditoria
 
-	public Sucursal getSucursal() {
-		return sucursal;
-	}
-
-	public void setSucursal(Sucursal sucursal) {
-		this.sucursal = sucursal;
-	}
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Fec_actu", nullable = false)
-	private Date fecha_Actua;
-
-	public Boolean getmCAHabilitado() {
-		return mCAHabilitado;
-	}
-
-	public void setmCAHabilitado(Boolean mCAHabilitado) {
-		this.mCAHabilitado = mCAHabilitado;
-	}
-
-	public void setDni(String dni) {
-		this.dni = dni;
-	}
+	private Date fecActu;
 
 	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date fecha_Creacion;
+	private Date fecCreacion;
 
 	@Column(name = "Usuario", nullable = false)
 	private String empleado;
@@ -75,7 +55,8 @@ public class Cliente {
 	
 	@OneToMany(mappedBy="cliente")
 	@JsonIgnore
-	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
+	private Set<ClienteCuenta> clienteCuenta = new HashSet<ClienteCuenta>();
+
 	
 	@ManyToOne 
 	@JoinColumn(name = "id_sucursal")
@@ -95,21 +76,12 @@ public class Cliente {
 		this.direccion = direccion;
 		this.movil = movil;
 		this.fijo = fijo;
-		this.fecha_Actua = fecha_Actua;
-		this.fecha_Creacion = fecha_Creacion;
+		this.fecActu = fecha_Actua;
+		this.fecCreacion = fecha_Creacion;
 		this.empleado = empleado.getNombre();
 		this.mCAHabilitado = mCAHabilitado;
-		this.cuentas = cuentas;
+		this.clienteCuenta = cuentas;
 		this.sucursal = sucursal;
-		this.email = email;
-	}
-	
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
 		this.email = email;
 	}
 
@@ -153,24 +125,28 @@ public class Cliente {
 		this.fijo = fijo;
 	}
 
-	public String getDni() {
-		return dni;
+	public String getEmail() {
+		return email;
 	}
 
-	public Date getFecha_Actua() {
-		return fecha_Actua;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public void setFecha_Actua(Date fecha_Actua) {
-		this.fecha_Actua = fecha_Actua;
+	public Date getFecActu() {
+		return fecActu;
 	}
 
-	public Date getFecha_Creacion() {
-		return fecha_Creacion;
+	public void setFecActu(Date fecha_Actua) {
+		this.fecActu = fecha_Actua;
 	}
 
-	public void setFecha_Creacion(Date fecha_Creacion) {
-		this.fecha_Creacion = fecha_Creacion;
+	public Date getFecCreacion() {
+		return fecCreacion;
+	}
+
+	public void setFecCreacion(Date fecha_Creacion) {
+		this.fecCreacion = fecha_Creacion;
 	}
 
 	public String getEmpleado() {
@@ -181,31 +157,36 @@ public class Cliente {
 		this.empleado = empleado;
 	}
 
-	public Boolean getMCA_Habilitado() {
+	public Boolean getmCAHabilitado() {
 		return mCAHabilitado;
 	}
 
-	public void setMCAHabilitado(Boolean mCAHabilitado) {
+	public void setmCAHabilitado(Boolean mCAHabilitado) {
 		this.mCAHabilitado = mCAHabilitado;
 	}
 
-	public Set<ClienteCuenta> getClienteCuenta() {
-		return new HashSet<ClienteCuenta>(cuentas);
+	public Set<ClienteCuenta> getClienteCuentas() {
+		return new HashSet<ClienteCuenta>(clienteCuenta);
 	}
-	Set<ClienteCuenta> _getClienteCuenta() {
-		return cuentas;
-	}
-
-	protected void setCuentas(Set<ClienteCuenta> cuentas) {
-		this.cuentas = cuentas;
+	
+	Set<ClienteCuenta> _getClienteCuentas() {
+		return clienteCuenta;
 	}
 
-	public Sucursal getSurcusal() {
+	public void setClienteCuentas(Set<ClienteCuenta> cuentas) {
+		this.clienteCuenta = cuentas;
+	}
+
+	public Sucursal getSucursal() {
 		return sucursal;
 	}
 
-	public void setSurcusal(Sucursal surcusal) {
-		this.sucursal = surcusal;
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
+
+	public String getDni() {
+		return dni;
 	}
 
 	@Override
@@ -235,10 +216,14 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [ DNI=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion="
-				+ direccion + ", movil=" + movil + ", fijo=" + fijo + ", cuentas=" + cuentas + ", surcusal=" + sucursal
-				+ "]";
+		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
+				+ ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecha_Actua=" + fecActu
+				+ ", fecha_Creacion=" + fecCreacion + ", empleado=" + empleado + ", mCAHabilitado=" + mCAHabilitado
+				+ ", cuentas=" + clienteCuenta + ", sucursal=" + sucursal + "]";
 	}
+	
+
+	
 
 	
 }

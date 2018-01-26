@@ -79,7 +79,7 @@ public class SucursalController {
 			log.info("DELETE: No se ha encontrado la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
-		sucursal.getClientes().forEach(cliente -> cliente.setSurcusal(null));
+		sucursal.getClientes().forEach(cliente -> cliente.setSucursal(null));
 		sucursal.setClientes(new HashSet<>());
 		sucursal.getEmpleados().forEach(empleado -> empleado.setSucursal(null));
 		sucursal.setEmpleados(new HashSet<>());

@@ -81,7 +81,7 @@ public class ClienteController {
 	@GetMapping("/clientes/{dni}")
 	public ResponseEntity<Cliente> getClientByDni(@PathVariable(value ="dni") String dni){
 		Cliente cliente = clienteRepository.findByDni(dni);
-		if(cliente == null || !cliente.getMCA_Habilitado()) {
+		if(cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
@@ -94,7 +94,7 @@ public class ClienteController {
 	public ResponseEntity<Cliente> updateNote(@PathVariable(value = "dni") String dni,
 			@Valid @RequestBody Cliente detailsClient) {
 		Cliente cliente = clienteRepository.findByDni(dni);
-		if(cliente == null || !cliente.getMCA_Habilitado()) {
+		if(cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
@@ -106,7 +106,7 @@ public class ClienteController {
 		cliente.setDireccion(detailsClient.getDireccion());
 		cliente.setMovil(detailsClient.getMovil());
 		cliente.setFijo(detailsClient.getFijo());
-		cliente.setFecha_Actua(new Date());
+		cliente.setFecActu(new Date());
 
 		Cliente updateClient = clienteRepository.save(cliente);
 		logger.info("The client was successfully updated");
@@ -117,7 +117,7 @@ public class ClienteController {
 	@DeleteMapping("/cliente/{dni}")
 	public ResponseEntity<Cliente> deleteNote(@PathVariable(value = "dni") String dni) {
 		Cliente cliente = clienteRepository.findByDni(dni);
-		if(cliente == null || !cliente.getMCA_Habilitado()) {
+		if(cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
@@ -125,10 +125,10 @@ public class ClienteController {
 		//Parte de Alperi para desvincular las cuentas de los clientes en caso de que no haya mas clientes 
 		//asociados a esas cuentas eliminar la cuenta
 		//unlink(cliente);
-		for (ClienteCuenta cc : cliente.getClienteCuenta()){
+		for (ClienteCuenta cc : cliente.getClienteCuentas()){
 				cc.unlinkCliente();
 		}
-		cliente.setMCAHabilitado(false);
+		cliente.setmCAHabilitado(false);
 		clienteRepository.save(cliente);
 		
 		logger.info("The client was successfully deleted");
