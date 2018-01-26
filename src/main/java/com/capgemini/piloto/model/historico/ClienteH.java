@@ -110,7 +110,7 @@ public class ClienteH implements Serializable {
 		this.fecha_Actua = cliente.getFecha_Actua();
 		this.fechaCreacion = cliente.getFecha_Creacion();
 		this.empleado = cliente.getEmpleado();
-		this.MCAHabilitado = cliente.getMCA_Habilitado();
+		this.MCAHabilitado = cliente.getmCAHabilitado();
 		this.cuentas = cliente.getClienteCuenta();
 		this.surcusal = cliente.getSurcusal();
 		

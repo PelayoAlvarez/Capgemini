@@ -158,12 +158,20 @@ public class Cliente {
 		this.empleado = empleado;
 	}
 
-	public Boolean getMCA_Habilitado() {
+	public Boolean getmCAHabilitado() {
 		return mCAHabilitado;
 	}
 
-	public void setMCAHabilitado(Boolean mCAHabilitado) {
+	public void setmCAHabilitado(Boolean mCAHabilitado) {
 		this.mCAHabilitado = mCAHabilitado;
+	}
+
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
 	}
 
 	public Set<ClienteCuenta> getClienteCuenta() {
