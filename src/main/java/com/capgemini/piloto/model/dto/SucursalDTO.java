@@ -13,15 +13,21 @@ public class SucursalDTO implements Serializable {
 	private Long id;
 	private String nombre;
 	private String direccion;
+	private String usuario;
 	private Long idSucursal;
 	private Set<String> dniClientes = new HashSet<>();
 	private Set<String> dniEmpleados = new HashSet<>();
+	
+	public SucursalDTO() {
+		
+	}
 	
 	public SucursalDTO(Sucursal sucursal) {
 		super();
 		this.id = sucursal.getId();
 		this.nombre = sucursal.getNombre();
 		this.direccion = sucursal.getDireccion();
+		this.usuario = sucursal.getUsuario();
 		sucursal.getClientes().forEach(cliente -> this.dniClientes.add(cliente.getDni()));
 		sucursal.getEmpleados().forEach(empleado -> this.dniClientes.add(empleado.getDni()));
 	}
@@ -62,6 +68,16 @@ public class SucursalDTO implements Serializable {
 	public void setDniEmpleados(Set<String> dniEmpleados) {
 		this.dniEmpleados = dniEmpleados;
 	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	
+	
 	
 	
 

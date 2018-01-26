@@ -25,7 +25,6 @@ public class Sucursal implements Serializable{
 	
 	@Id
 	@Column(name = "Id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column(name = "Nombre")
 	private String nombre;
@@ -66,7 +65,7 @@ public class Sucursal implements Serializable{
 		this.id = dto.getId();
 		this.nombre = dto.getNombre();
 		this.direccion = dto.getDireccion();
-		this.usuario = "User1";
+		this.usuario = dto.getUsuario();
 		this.fecActu = this.fecCreacion = new Date();
 		this.mcaHabilitado = true;
 	}
