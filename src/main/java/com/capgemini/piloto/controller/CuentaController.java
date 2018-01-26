@@ -53,7 +53,7 @@ public class CuentaController {
 
 	// Create a new account
 	@PostMapping("/cuenta")
-	public ResponseEntity<Cuenta> createCuenta(@Valid @RequestBody Cuenta cuenta,
+	public ResponseEntity<Cuenta> createCuenta(@RequestBody Cuenta cuenta,
 			@PathVariable(value = "dni") String dni) {
 		logger.info("Created a new account");
 		Cliente aux = clienteRepository.findByDni(dni);

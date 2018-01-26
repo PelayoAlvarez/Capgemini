@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Sucursal implements Serializable{
 
@@ -40,6 +42,7 @@ public class Sucursal implements Serializable{
 	@OneToMany(mappedBy = "sucursal")
 	private Set<Empleado> empleados = new HashSet<>();
 	@OneToMany(mappedBy = "sucursal")
+	@JsonIgnore
 	private Set<Cliente> clientes = new HashSet<>();
 	
 	public Sucursal() {

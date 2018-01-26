@@ -19,13 +19,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capgemini.piloto.repository.ClienteRepository;
-import com.capgemini.piloto.repository.historico.ClienteHRepository;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
+import com.capgemini.piloto.model.Sucursal;
 import com.capgemini.piloto.model.historico.ClienteH;
+import com.capgemini.piloto.repository.ClienteRepository;
+import com.capgemini.piloto.repository.SucursalRepository;
+import com.capgemini.piloto.repository.historico.ClienteHRepository;
 
 @RestController
 @RequestMapping("/clientes")
@@ -40,6 +43,9 @@ public class ClienteController {
 	private ClienteHRepository clienteHRepository;
 	
 	@Autowired
+	SucursalRepository sucursalRepository;
+	
+	@Autowired
 	ClienteRepository clienteRepository;
 	
 	// Get every client
@@ -51,20 +57,23 @@ public class ClienteController {
 	
 	// Create a new client
 	@PostMapping("/clientes")
-	public ResponseEntity<Cliente> createClient(@Valid @RequestBody Cliente cliente) {
+	public ResponseEntity<Cliente> createClient(@RequestBody Cliente cliente) {
 		Cliente cliente1 = clienteRepository.findByDni(cliente.getDni());
 		if(cliente1 != null) {
 			logger.error("The client is already created");
-			return new ResponseEntity<Cliente>(cliente1, new HttpHeaders(), HttpStatus.CONFLICT);
+			return new ResponseEntity<>(cliente1, new HttpHeaders(), HttpStatus.CONFLICT);
 			
 		}	
-		cliente1 = clienteRepository.save(cliente);
-		if(cliente1 == null) {
+		Sucursal aux = sucursalRepository.findById(cliente.getSucursal().getId());
+		cliente.setSucursal(aux);
+		aux.getClientes().add(cliente);
+		Cliente c2 = clienteRepository.save(cliente);
+		if(c2 == null) {
 			logger.error("The client was not created");
-			return new ResponseEntity<Cliente>(cliente1, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(c2, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("Create a new client");
-		return ResponseEntity.ok().body(cliente1);
+		return ResponseEntity.ok().body(c2);
 		
 	}
 	
