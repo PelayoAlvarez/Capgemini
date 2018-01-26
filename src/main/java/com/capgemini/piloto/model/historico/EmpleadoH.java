@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
 import com.capgemini.piloto.model.Transferencia;
+import com.capgemini.piloto.model.dto.EmpleadoDTO;
 
 @Entity
 @Table(name="Empleado_H")
@@ -88,6 +89,24 @@ public class EmpleadoH implements Serializable {
 		this.fijo = empleado.getFijo();
 		this.movil = empleado.getMovil();
 		this.email = empleado.getEmail();
+		this.fecActu = empleado.getFecActu();
+		this.fecCreacion = empleado.getFecCreacion();
+		this.usuario = empleado.getUsuario();
+		this.transferencias = empleado.getTransferencias();
+		this.sucursal = empleado.getSucursal();
+		this.fecAudit = new Date();
+		this.usuarioH = usuarioH;
+	}
+	
+	public EmpleadoH(Empleado empleado, EmpleadoDTO empleadoDto, String usuarioH) {
+		super();
+		this.dni = empleado.getDni();
+		this.nombre = empleadoDto.getNombre();
+		this.apellidos = empleadoDto.getApellidos();
+		this.direccion = empleadoDto.getDireccion();
+		this.fijo = empleadoDto.getFijo();
+		this.movil = empleadoDto.getMovil();
+		this.email = empleadoDto.getEmail();
 		this.fecActu = empleado.getFecActu();
 		this.fecCreacion = empleado.getFecCreacion();
 		this.usuario = empleado.getUsuario();

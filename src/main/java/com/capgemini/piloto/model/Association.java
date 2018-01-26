@@ -13,7 +13,7 @@ public class Association {
 		public static void link(Cliente cliente, ClienteCuenta titulo, Cuenta cuenta) {
 			titulo.setCliente(cliente);
 			titulo.setCuenta(cuenta);
-			cliente._getClienteCuenta().add(titulo);
+			cliente._getClienteCuentas().add(titulo);
 			cuenta._getClienteCuenta().add(titulo);
 		}
 		
@@ -25,7 +25,7 @@ public class Association {
 			}
 			
 			//esto habra que pulirlo mas adelante
-			cuenta.setMCAHabilitado(false);
+			cuenta.setmCAHabilitado(false);
 		}
 	}
 
@@ -36,7 +36,7 @@ public class Association {
 		public static void link(Cliente cliente, ClienteCuenta titulo, Cuenta cuenta) {
 			titulo.setCliente(cliente);
 			titulo.setCuenta(cuenta);
-			cliente._getClienteCuenta().add(titulo);
+			cliente._getClienteCuentas().add(titulo);
 			cuenta._getClienteCuenta().add(titulo);
 		}
 		

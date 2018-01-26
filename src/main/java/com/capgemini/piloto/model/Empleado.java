@@ -15,6 +15,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import com.capgemini.piloto.model.dto.EmpleadoDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Empleado implements Serializable {
 
@@ -54,17 +57,32 @@ public class Empleado implements Serializable {
 	private String usuario;
 	
 	@Column(name = "Mca_habilitado", nullable = false)
-	private Boolean mcaHabilitado;
+	private boolean mcaHabilitado;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
 	
+	@JsonIgnore
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_sucursal")
 	public Sucursal sucursal;
 
 	public Empleado() { }
+	
+	public Empleado(EmpleadoDTO empleado) {
+		this.dni = empleado.getDni();
+		this.nombre = empleado.getNombre();
+		this.apellidos = empleado.getApellidos();
+		this.direccion = empleado.getDireccion();
+		this.fijo = empleado.getFijo();
+		this.movil = empleado.getMovil();
+		this.email = empleado.getEmail();
+		this.fecActu = this.fecCreacion = new Date();
+		this.usuario = empleado.getUsuario();
+		setMcaHabilitado(true);
+	}
 	
 	public Empleado(String dni, String nombre, String apellidos, String direccion, String fijo, String movil,
 			String email, Date fecActu, Date fecCreacion, String usuario, Boolean mcaHabilitado,
@@ -165,11 +183,11 @@ public class Empleado implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public Boolean getMcaHabilitado() {
+	public boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(Boolean mcaHabilitado) {
+	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
 	

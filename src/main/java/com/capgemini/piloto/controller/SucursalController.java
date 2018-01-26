@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Sucursal;
+import com.capgemini.piloto.model.dto.SucursalDTO;
 import com.capgemini.piloto.model.historico.SucursalH;
 import com.capgemini.piloto.repository.SucursalRepository;
 import com.capgemini.piloto.repository.historico.SucursalHRepository;
@@ -51,24 +52,22 @@ public class SucursalController {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<Sucursal> createSucursal(@RequestBody Sucursal sucursal) {
-		Sucursal savedSucursal = sucursalRep.save(sucursal);
+	public ResponseEntity<Sucursal> createSucursal(@RequestBody SucursalDTO sucursalDTO) {
+		Sucursal savedSucursal = sucursalRep.save(new Sucursal(sucursalDTO));
 		log.info("CREATE: Se guarda la Sucursal con el id [{}]", savedSucursal.getId());
 		return ResponseEntity.ok(savedSucursal);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Sucursal> updateSucursal(@RequestBody Sucursal sucursal) {
-		Sucursal oldSucursal = sucursalRep.findById(sucursal.getId());
-		if (oldSucursal == null || !sucursal.getMcaHabilitado()) {
-			log.info("UPDATE: No se ha encontrado la Sucursal con el id [{}]", sucursal.getId());
+	public ResponseEntity<Sucursal> updateSucursal(@RequestBody SucursalDTO sucursalDTO, @PathVariable Long id) {
+		Sucursal oldSucursal = sucursalRep.findById(id);
+		if (oldSucursal == null) {
+			log.info("UPDATE: No se ha encontrado la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
-		oldSucursal.setFecActu(new Date());
-		oldSucursal.setUsuario(sucursal.getUsuario());
 		sucursalHRep.save(new SucursalH(oldSucursal, oldSucursal.getNombre()));
-		sucursalRep.save(sucursal);
-		log.info("UPDATE: Se actualiza la Sucursal con el id [{}]", sucursal.getId());
+		Sucursal sucursal = sucursalRep.save(new Sucursal(sucursalDTO));
+		log.info("UPDATE: Se actualiza la Sucursal con el id [{}]", sucursalDTO.getId());
 		return ResponseEntity.ok(sucursal);
 	}
 
@@ -79,10 +78,12 @@ public class SucursalController {
 			log.info("DELETE: No se ha encontrado la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
-		sucursal.getClientes().forEach(cliente -> cliente.setSurcusal(null));
+		sucursal.getClientes().forEach(cliente -> cliente.setSucursal(null));
 		sucursal.setClientes(new HashSet<>());
 		sucursal.getEmpleados().forEach(empleado -> empleado.setSucursal(null));
 		sucursal.setEmpleados(new HashSet<>());
+		sucursal.setMcaHabilitado(false);
+		sucursal.setFecActu(new Date());
 		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
 		sucursalRep.save(sucursal);
 		//No se si barrar Empleados, Clientes y Cuentas en cascada

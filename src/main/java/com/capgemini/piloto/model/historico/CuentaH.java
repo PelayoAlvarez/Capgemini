@@ -83,7 +83,7 @@ public class CuentaH implements Serializable {
 		clientecuenta=c.getClienteCuenta();
 		fecActu = c.getFecActu();
 		fecCreacion = c.getFecCreacion();
-		mCAHabilitado = c.getMCAHabilitado();
+		mCAHabilitado = c.getmCAHabilitado();
 		usuario = c.getUsuario();
 		fecAudit = new Date();
 		this.usuarioH = user;

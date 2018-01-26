@@ -55,11 +55,11 @@ public class ClienteCuenta implements Serializable{
 	@CreatedDate
 	private Date fecCreacion;
 	
-	@NotBlank
+
 	@Column(name = "Usuario")
 	private String usuario;
 	
-	@NotBlank
+
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;	
 	
@@ -73,6 +73,9 @@ public class ClienteCuenta implements Serializable{
 	public ClienteCuenta(Cliente cliente, Cuenta cuenta) {
 		super();
 		mcaHabilitado = true;
+		setFecActu(new Date());
+		setFecCreacion(new Date());
+		setUsuario(cuenta.getUsuario());
 		Association.TitularCuenta.link(cliente, this, cuenta);
 	}
 
