@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.dto.SucursalDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -57,6 +58,15 @@ public class Sucursal implements Serializable{
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.usuario = usuario;
+		this.fecActu = this.fecCreacion = new Date();
+		this.mcaHabilitado = true;
+	}
+	
+	public Sucursal(SucursalDTO dto) {
+		this.id = dto.getId();
+		this.nombre = dto.getNombre();
+		this.direccion = dto.getDireccion();
+		this.usuario = "User1";
 		this.fecActu = this.fecCreacion = new Date();
 		this.mcaHabilitado = true;
 	}
