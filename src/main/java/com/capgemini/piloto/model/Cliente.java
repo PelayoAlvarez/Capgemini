@@ -1,6 +1,7 @@
 package com.capgemini.piloto.model;
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table (name="CLIENTE")
-public class Cliente {
+public class Cliente implements Serializable{
 	
 	@Id
 	@Column(name = "Dni", nullable = false)

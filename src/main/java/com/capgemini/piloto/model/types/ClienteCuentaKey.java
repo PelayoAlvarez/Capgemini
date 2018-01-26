@@ -11,6 +11,17 @@ public class ClienteCuentaKey implements Serializable {
 
 	String cliente;
 	String cuenta;
+	
+	
+	public ClienteCuentaKey() {		
+	}
+	
+	
+	public ClienteCuentaKey(String cliente, String cuenta) {
+		this.cliente = cliente;
+		this.cuenta = cuenta;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -66,6 +66,7 @@ public class SucursalH implements Serializable {
 		this.fecActu = sucursal.getFecActu();
 		this.fecCreacion = sucursal.getFecCreacion();
 		this.usuario = sucursal.getUsuario();
+		this.mcaHabilitado = sucursal.getMcaHabilitado();
 		this.usuarioH = usuarioH;
 		this.fecAudit = new Date();
 	}
