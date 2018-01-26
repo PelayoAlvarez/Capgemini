@@ -19,6 +19,7 @@ import javax.persistence.TemporalType;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Sucursal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table (name="CLIENTE_H")
@@ -67,6 +68,7 @@ public class ClienteH implements Serializable {
 	private Date fecAudit;
 	
 	@OneToMany(mappedBy="cliente")
+	@JsonIgnore
 	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
 	
 	@JoinColumn(name = "id_sucursal")

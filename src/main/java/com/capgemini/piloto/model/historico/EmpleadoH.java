@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
 import com.capgemini.piloto.model.Transferencia;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="Empleado_H")
@@ -62,6 +63,7 @@ public class EmpleadoH implements Serializable {
 	private boolean mcaHabilitado;
 	
 	@OneToMany(mappedBy="empleado")
+	@JsonIgnore
 	private Set<Transferencia> transferencias = new HashSet<>();
 	
 	@NotNull

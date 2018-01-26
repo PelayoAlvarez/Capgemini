@@ -20,6 +20,7 @@ import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "CUENTA_H")
@@ -37,12 +38,15 @@ public class CuentaH implements Serializable {
 	private String usuario;
 
 	@OneToMany(mappedBy="cuenta")
+	@JsonIgnore
 	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
 
 	@OneToMany(mappedBy="cuentaAsociada")
+	@JsonIgnore
 	private Set<Movimiento> movimientos = new HashSet<>();
 
 	@OneToMany(mappedBy = "cuenta")
+	@JsonIgnore
 	private Set<Transferencia> transferencias = new HashSet<>();
 
 	// Campos de Auditoria

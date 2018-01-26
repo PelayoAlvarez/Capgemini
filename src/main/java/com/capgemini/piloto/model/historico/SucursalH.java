@@ -17,6 +17,7 @@ import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Sucursal_H")
@@ -41,8 +42,10 @@ public class SucursalH implements Serializable {
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
 	@OneToMany(mappedBy = "sucursal")
+	@JsonIgnore
 	private Set<Empleado> empleados = new HashSet<>();
 	@OneToMany(mappedBy = "sucursal")
+	@JsonIgnore
 	private Set<Cliente> clientes = new HashSet<>();
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)

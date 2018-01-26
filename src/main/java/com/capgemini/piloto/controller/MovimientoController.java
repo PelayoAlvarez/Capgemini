@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.model.ClienteCuenta;
+import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.historico.MovimientoH;
+import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.MovimientoRepository;
 import com.capgemini.piloto.repository.historico.MovimientoHRepository;
 
@@ -38,21 +42,29 @@ public class MovimientoController {
 
 	@Autowired
 	private MovimientoHRepository movimientoRepositoryH;
+	
+	@Autowired
+	private CuentaRepository cuentaRepository;
 
 	@PostMapping("/")
-	public ResponseEntity<Movimiento> addMovimiento(@Valid @RequestBody Movimiento movimiento) {
-		Movimiento m1 = movimientoRepository.findOne(movimiento.getId());
-		if (m1 != null) {
+	public ResponseEntity<Movimiento> addMovimiento(@RequestBody Movimiento movimiento,
+			@RequestParam String cuenta) {
+		System.out.println(movimiento.toString());
+		//Movimiento m1 = movimientoRepository.findOne(movimiento.getId());
+		Cuenta cu = cuentaRepository.findOne(cuenta);
+		/*if (m1 != null) {
 			return new ResponseEntity<Movimiento>(m1, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		}*/
 		logger.info("Create new transaction");
-		m1 = movimientoRepository.save(movimiento);
-		if (m1 == null) {
-			return new ResponseEntity<Movimiento>(m1, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		movimiento = new Movimiento(movimiento, cu) ;
+		System.out.println(movimiento.toString());
+		movimiento = movimientoRepository.save(movimiento);
+		if (movimiento == null) {
+			return new ResponseEntity<Movimiento>(movimiento, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Movimiento>(m1, new HttpHeaders(), HttpStatus.OK);
+		return new ResponseEntity<Movimiento>(movimiento, new HttpHeaders(), HttpStatus.OK);
 	}
-
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Movimiento> removeMovimiento(@PathVariable(value = "id") Long movimientoId) {
 		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
@@ -60,7 +72,7 @@ public class MovimientoController {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
-		movimiento.setMCAHabilitado(false);
+		movimiento.setmCAHabilitado(false);
 		return ResponseEntity.ok().build();
 	}
 
@@ -68,14 +80,14 @@ public class MovimientoController {
 	public ResponseEntity<Movimiento> updateMovimeinto(@PathVariable(value = "id") Long movimientoId,
 			@Valid @RequestBody Movimiento movimientoDetails) {
 		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
-		if (movimiento == null || !movimiento.getMCAHabilitado()) {
+		if (movimiento == null || !movimiento.getmCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
 
 		movimientoRepositoryH.save(new MovimientoH(movimiento));
 		movimiento.setDescripcion(movimientoDetails.getDescripcion());
-		movimiento.setFecha(movimientoDetails.getFecha_hora());
+		movimiento.setFechahora(movimientoDetails.getFechahora());
 		movimiento.setImporte(movimientoDetails.getImporte());
 		movimiento.setTipo(movimiento.getTipo());
 		movimiento.setFechaActua(new Date());
@@ -87,7 +99,7 @@ public class MovimientoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Movimiento> getCuentaById(@PathVariable(value = "id") Long movimientoId) {
 		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
-		if (movimiento == null || !movimiento.getMCAHabilitado()) {
+		if (movimiento == null || !movimiento.getmCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}

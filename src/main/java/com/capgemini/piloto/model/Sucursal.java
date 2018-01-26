@@ -41,6 +41,7 @@ public class Sucursal implements Serializable{
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
 	@OneToMany(mappedBy = "sucursal")
+	@JsonIgnore
 	private Set<Empleado> empleados = new HashSet<>();
 	@OneToMany(mappedBy = "sucursal")
 	@JsonIgnore

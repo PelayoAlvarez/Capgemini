@@ -62,7 +62,7 @@ public class Empleado implements Serializable {
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
 	
-	@JsonIgnore
+
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_sucursal")
