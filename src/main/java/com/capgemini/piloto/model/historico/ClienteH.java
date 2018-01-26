@@ -45,17 +45,18 @@ public class ClienteH implements Serializable {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Fec_actu", nullable = false)
-	private Date fecha_Actua;
+	private Date fecActu;
+	
 
 	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date fechaCreacion;
+	private Date fecCreacion;
 
 	@Column(name = "Usuario", nullable = false)
 	private String empleado;
 	
 	@Column(name = "Mca_Habilitado", nullable = false)
-	private Boolean MCAHabilitado;
+	private Boolean mCAHabilitado;
 	
 	@Column(name = "Usuario_H", nullable = false)
 	private String usuarioH;
@@ -88,10 +89,10 @@ public class ClienteH implements Serializable {
 		this.movil = movil;
 		this.fijo = fijo;
 		this.email = email;
-		this.fecha_Actua = fecha_Actua;
-		this.fechaCreacion = fechaCreacion;
+		this.fecActu = fecha_Actua;
+		this.fecCreacion = fechaCreacion;
 		this.empleado = empleado;
-		this.MCAHabilitado = mCAHabilitado;
+		this.mCAHabilitado = mCAHabilitado;
 		this.usuarioH = usuarioH;
 		this.fecAudit = fecAudit;
 		this.cuentas = cuentas;
@@ -107,159 +108,208 @@ public class ClienteH implements Serializable {
 		this.direccion = cliente.getDireccion();
 		this.movil = cliente.getMovil();
 		this.fijo = cliente.getFijo();
-		this.fecha_Actua = cliente.getFecha_Actua();
-		this.fechaCreacion = cliente.getFecha_Creacion();
+		this.fecActu = cliente.getFecActu();
+		this.fecCreacion = cliente.getFecCreacion();
 		this.empleado = cliente.getEmpleado();
-		this.MCAHabilitado = cliente.getMCA_Habilitado();
-		this.cuentas = cliente.getClienteCuenta();
-		this.surcusal = cliente.getSurcusal();
+		this.mCAHabilitado = cliente.getmCAHabilitado();
+		this.cuentas = cliente.getClienteCuentas();
+		this.surcusal = cliente.getSucursal();
 		
 		this.usuarioH = empleado;
 		this.fecAudit = new Date();
 	}
-	
-	
 
-	public String getEmail() {
-		return email;
-	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
 
 	public String getNombre() {
 		return nombre;
 	}
 
+
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+
+
 
 	public String getApellidos() {
 		return apellidos;
 	}
 
+
+
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
 	}
+
+
 
 	public String getDireccion() {
 		return direccion;
 	}
 
+
+
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
+
+
 
 	public String getMovil() {
 		return movil;
 	}
 
+
+
 	public void setMovil(String movil) {
 		this.movil = movil;
 	}
+
+
 
 	public String getFijo() {
 		return fijo;
 	}
 
+
+
 	public void setFijo(String fijo) {
 		this.fijo = fijo;
 	}
 
-	public String getDNI() {
-		return dni;
+
+
+	public String getEmail() {
+		return email;
 	}
 
-	public Date getFecha_Actua() {
-		return fecha_Actua;
+
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public void setFecha_Actua(Date fecha_Actua) {
-		this.fecha_Actua = fecha_Actua;
+
+
+	public Date getFecActu() {
+		return fecActu;
 	}
 
-	public Date getFecha_Creacion() {
-		return fechaCreacion;
+
+
+	public void setFecActu(Date fecActu) {
+		this.fecActu = fecActu;
 	}
 
-	public void setFecha_Creacion(Date fecha_Creacion) {
-		this.fechaCreacion = fecha_Creacion;
+
+
+	public Date getFecCreacion() {
+		return fecCreacion;
 	}
+
+
+
+	public void setFecCreacion(Date fecCreacion) {
+		this.fecCreacion = fecCreacion;
+	}
+
+
 
 	public String getEmpleado() {
 		return empleado;
 	}
 
+
+
 	public void setEmpleado(String empleado) {
 		this.empleado = empleado;
 	}
 
-	public Boolean getMCA_Habilitado() {
-		return MCAHabilitado;
+
+
+	public Boolean getmCAHabilitado() {
+		return mCAHabilitado;
 	}
 
-	public void setMCA_Habilitado(Boolean mCA_Habilitado) {
-		MCAHabilitado = mCA_Habilitado;
+
+
+	public void setmCAHabilitado(Boolean mCAHabilitado) {
+		this.mCAHabilitado = mCAHabilitado;
 	}
 
-	public Set<ClienteCuenta> getClienteCuenta() {
-		return new HashSet<ClienteCuenta>(cuentas);
-	}
 
-	protected void setCuentas(Set<ClienteCuenta> cuentas) {
-		this.cuentas = cuentas;
-	}
-
-	public Sucursal getSurcusal() {
-		return surcusal;
-	}
-
-	public void setSurcusal(Sucursal surcusal) {
-		this.surcusal = surcusal;
-	}
-
-	public Date getFechaCreacion() {
-		return fechaCreacion;
-	}
-
-	public void setFechaCreacion(Date fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-
-	public Boolean getMCAHabilitado() {
-		return MCAHabilitado;
-	}
-
-	public void setMCAHabilitado(Boolean mCAHabilitado) {
-		MCAHabilitado = mCAHabilitado;
-	}
 
 	public String getUsuarioH() {
 		return usuarioH;
 	}
 
+
+
 	public void setUsuarioH(String usuarioH) {
 		this.usuarioH = usuarioH;
 	}
+
+
 
 	public Date getFecAudit() {
 		return fecAudit;
 	}
 
+
+
 	public void setFecAudit(Date fecAudit) {
 		this.fecAudit = fecAudit;
 	}
+
+
+
+	public Set<ClienteCuenta> getCuentas() {
+		return cuentas;
+	}
+
+
+
+	public void setCuentas(Set<ClienteCuenta> cuentas) {
+		this.cuentas = cuentas;
+	}
+
+
+
+	public Sucursal getSurcusal() {
+		return surcusal;
+	}
+
+
+
+	public void setSurcusal(Sucursal surcusal) {
+		this.surcusal = surcusal;
+	}
+
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
+
+	public String getDni() {
+		return dni;
+	}
+
+
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dni == null) ? 0 : dni.hashCode());
 		result = prime * result + ((fecAudit == null) ? 0 : fecAudit.hashCode());
 		return result;
 	}
+
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -270,11 +320,6 @@ public class ClienteH implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		ClienteH other = (ClienteH) obj;
-		if (dni == null) {
-			if (other.dni != null)
-				return false;
-		} else if (!dni.equals(other.dni))
-			return false;
 		if (fecAudit == null) {
 			if (other.fecAudit != null)
 				return false;
@@ -283,13 +328,17 @@ public class ClienteH implements Serializable {
 		return true;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "ClienteH [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
-				+ ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecha_Actua=" + fecha_Actua
-				+ ", fechaCreacion=" + fechaCreacion + ", empleado=" + empleado + ", MCAHabilitado=" + MCAHabilitado
-				+ ", usuarioH=" + usuarioH + ", fecAudit=" + fecAudit + ", cuentas=" + cuentas + ", surcusal="
-				+ surcusal + "]";
+				+ ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
+				+ fecCreacion + ", empleado=" + empleado + ", mCAHabilitado=" + mCAHabilitado + ", usuarioH=" + usuarioH
+				+ ", fecAudit=" + fecAudit + ", cuentas=" + cuentas + ", surcusal=" + surcusal + "]";
 	}
+	
+	
 
+	
 }

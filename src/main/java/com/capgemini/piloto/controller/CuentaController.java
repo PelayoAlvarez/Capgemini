@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Association;
@@ -53,8 +54,8 @@ public class CuentaController {
 
 	// Create a new account
 	@PostMapping("/cuenta")
-	public ResponseEntity<Cuenta> createCuenta(@Valid @RequestBody Cuenta cuenta,
-			@PathVariable(value = "dni") String dni) {
+	public ResponseEntity<Cuenta> createCuenta(@RequestBody Cuenta cuenta,
+			@RequestParam String dni) {
 		logger.info("Created a new account");
 		Cliente aux = clienteRepository.findByDni(dni);
 		if (aux != null) {
