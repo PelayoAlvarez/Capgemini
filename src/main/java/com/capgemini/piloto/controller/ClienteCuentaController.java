@@ -16,60 +16,65 @@ import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.historico.ClienteCuentaHRepository;
 
-
 @RestController
 @RequestMapping("/cliente_cuenta")
 public class ClienteCuentaController {
 
-	//Repositorios
-	@Autowired ClienteCuentaRepository clienteCuentaRepository;
-	@Autowired ClienteRepository clienteRepository;	
-	@Autowired CuentaRepository cuentaRepository;
-	
-	//Repositorios de historicos
-	@Autowired ClienteCuentaHRepository clienteCuentaHRepository;
+	// Repositorios
+	@Autowired
+	ClienteCuentaRepository clienteCuentaRepository;
+	@Autowired
+	ClienteRepository clienteRepository;
+	@Autowired
+	CuentaRepository cuentaRepository;
 
-	
-	//Creacion de una nueva asociacion entre una cuenta y un cliente.
+	// Repositorios de historicos
+	@Autowired
+	ClienteCuentaHRepository clienteCuentaHRepository;
+
+	// Creacion de una nueva asociacion entre una cuenta y un cliente.
 	@PostMapping("/asociar")
-	public ResponseEntity<ClienteCuenta> createNote(@RequestParam String dni, @RequestParam String numero_cuenta) {
-		Cuenta cuenta = cuentaRepository.findOne(numero_cuenta);
-		if(cuenta == null) {
-			return ResponseEntity.notFound().build();	
+
+	public ResponseEntity<ClienteCuenta> createNote(@RequestParam(value = "dni") String dni,
+			@RequestParam(value = "numero_cuenta") String numCuenta) {
+		Cuenta cuenta = cuentaRepository.findOne(numCuenta);
+		if (cuenta == null) {
+			return ResponseEntity.notFound().build();
 		}
 		Cliente cliente = clienteRepository.findByDni(dni);
-		if(cliente == null) {
+		if (cliente == null) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		ClienteCuenta cc = new ClienteCuenta(cliente, cuenta);
 		cc = clienteCuentaRepository.save(cc);
-		return ResponseEntity.ok(cc);	
+		return ResponseEntity.ok(cc);
 	}
-	
-	//Obtencion de una asociciacion entre una cuenta y un cliente
+
+	// Obtencion de una asociciacion entre una cuenta y un cliente
 	@GetMapping("/asociar")
-	public ResponseEntity<ClienteCuenta> getNoteById(@RequestParam(value = "dni") String dni, @RequestParam(value = "numero_cuenta") String numCuenta) {	
-		ClienteCuentaKey ccK = new ClienteCuentaKey(dni,numCuenta);
+	public ResponseEntity<ClienteCuenta> getNoteById(@RequestParam(value = "dni") String dni,
+			@RequestParam(value = "numero_cuenta") String numCuenta) {
+		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
 		ClienteCuenta cc = clienteCuentaRepository.findOne(ccK);
-		
-		if(cc == null) {
-			return ResponseEntity.notFound().build();
-		}		
-		return ResponseEntity.ok().body(cc);
-	}
-	
-	
-	// Eliminar asociacion entre cliente y cuenta
-	@DeleteMapping("/notes/{id}")
-	public ResponseEntity<ClienteCuenta> deleteNote(@RequestParam(value = "dni") String dni, @RequestParam(value = "numero_cuenta") String numCuenta) {
-		ClienteCuentaKey ccK = new ClienteCuentaKey(dni,numCuenta);
-		ClienteCuenta cc = clienteCuentaRepository.findOne(ccK);
-		
-		if(cc == null) {
+
+		if (cc == null) {
 			return ResponseEntity.notFound().build();
 		}
-		clienteCuentaHRepository.save(new ClienteCuentaH(cc,cc.getUsuario()));
+		return ResponseEntity.ok().body(cc);
+	}
+
+	// Eliminar asociacion entre cliente y cuenta
+	@DeleteMapping("/notes/{id}")
+	public ResponseEntity<ClienteCuenta> deleteNote(@RequestParam(value = "dni") String dni,
+			@RequestParam(value = "numero_cuenta") String numCuenta) {
+		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
+		ClienteCuenta cc = clienteCuentaRepository.findOne(ccK);
+
+		if (cc == null) {
+			return ResponseEntity.notFound().build();
+		}
+		clienteCuentaHRepository.save(new ClienteCuentaH(cc, cc.getUsuario()));
 		cc.setMcaHabilitado(false);
 		cc.setFecActu(new Date());
 		clienteCuentaRepository.save(cc);

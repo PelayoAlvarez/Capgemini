@@ -23,6 +23,7 @@ import com.capgemini.piloto.model.types.ClienteCuentaKey;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "Cliente_Cuenta")
@@ -66,8 +67,9 @@ public class ClienteCuenta implements Serializable{
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;	
 	
-	@OneToOne
-	private Tarjeta tarjeta;
+//	@OneToOne
+//	@JsonIgnore
+//	private Tarjeta tarjeta;
 	
 	
 	ClienteCuenta() {		
@@ -86,6 +88,7 @@ public class ClienteCuenta implements Serializable{
 		return cliente;
 	}
 
+	
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
@@ -130,18 +133,18 @@ public class ClienteCuenta implements Serializable{
 		this.mcaHabilitado = mcaHabilitado;
 	}
 
-	public Tarjeta _getTarjeta() {
-		return tarjeta;
-	}
-
-	public Tarjeta getTarjeta() {
-		return tarjeta;
-	}
-	
-	public void setTarjeta(Tarjeta tarjeta) {
-		this.tarjeta = tarjeta;
-	}
-	
+//	public Tarjeta _getTarjeta() {
+//		return tarjeta;
+//	}
+//
+//	public Tarjeta getTarjeta() {
+//		return tarjeta;
+//	}
+//	
+//	public void setTarjeta(Tarjeta tarjeta) {
+//		this.tarjeta = tarjeta;
+//	}
+//	
 	
 //	public void link(Cliente cliente, Cuenta cuenta) {
 //		setCliente(cliente);
