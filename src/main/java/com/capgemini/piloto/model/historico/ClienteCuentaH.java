@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,25 +20,21 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
-import com.capgemini.piloto.model.types.ClienteCuentaKey;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "Cliente_Cuenta_H")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updateAt"}, allowGetters = false)
-@IdClass(ClienteCuentaKey.class)
 public class ClienteCuentaH implements Serializable{
 
 	private static final long serialVersionUID = 5790237128818207030L;
 
-	@Id
-	@JoinColumn(name = "Dni")
+	@JoinColumn(name = "Dni", nullable = false)
 	@ManyToOne
 	private Cliente cliente;
 	
-	@Id
-	@JoinColumn(name = "Numero_cuenta")
+	@JoinColumn(name = "Numero_cuenta", nullable = false)
 	@ManyToOne
 	private Cuenta cuenta;
 	
