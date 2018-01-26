@@ -36,11 +36,10 @@ public class Movimiento implements Serializable{
 	@Column(name = "Id")
 	private Long id;
 	
-	@NotBlank
+	
 	@Column(name = "Importe")
 	private Double importe;
 
-	@NotBlank
 	@Enumerated(EnumType.STRING)
 	@Column(name = "Tipo")
 	private TipoMovimiento tipo;
@@ -49,7 +48,7 @@ public class Movimiento implements Serializable{
 	@Column(name = "Fec_movimiento")
 	private Date fechahora;
 	
-	@NotBlank
+
 	@Column(name = "Descripcion")
 	private String descripcion;
 
@@ -69,11 +68,11 @@ public class Movimiento implements Serializable{
 	@CreatedDate
 	private Date fechaCreacion;
 	
-	@NotBlank
+
 	@Column(name = "Usuario")
 	private String usuario;
 	
-	@NotBlank
+
 	@Column(name = "Mca_habilitado")
 	private Boolean MCAHabilitado;
 	

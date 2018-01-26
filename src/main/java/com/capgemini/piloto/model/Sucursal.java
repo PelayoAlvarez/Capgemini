@@ -24,6 +24,7 @@ public class Sucursal implements Serializable{
 	
 	@Id
 	@Column(name = "Id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column(name = "Nombre")
 	private String nombre;
@@ -44,6 +45,7 @@ public class Sucursal implements Serializable{
 	private Set<Empleado> empleados = new HashSet<>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "sucursal")
+	@JsonIgnore
 	private Set<Cliente> clientes = new HashSet<>();
 	
 	public Sucursal() {

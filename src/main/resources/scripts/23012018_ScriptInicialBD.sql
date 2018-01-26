@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS Banco;
 CREATE DATABASE Banco;
 
 CREATE TABLE Banco.Sucursal
- (Id INTEGER NOT NULL, 
+ (Id INTEGER NOT NULL auto_increment, 
  Nombre VARCHAR(15) NOT NULL,
  Direccion VARCHAR(50) NOT NULL,
  Fec_actu DATETIME NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE Banco.Sucursal
  PRIMARY KEY (Id));
  
  CREATE TABLE Banco.Sucursal_H
- (Id INTEGER NOT NULL, 
+ (Id INTEGER NOT NULL auto_increment, 
  Nombre VARCHAR(15) NOT NULL,
  Direccion VARCHAR(50) NOT NULL,
  Fec_actu DATETIME NOT NULL,
@@ -164,7 +164,7 @@ CREATE TABLE Banco.Sucursal
  FOREIGN KEY (Dni, Numero_cuenta) REFERENCES Banco.Cliente_Cuenta (Dni, Numero_cuenta));
  
  CREATE TABLE Banco.Movimiento
- (Id INTEGER NOT NULL,
+ (Id INTEGER NOT NULL auto_increment,
  Importe DOUBLE(15,2) NOT NULL,
  Tipo VARCHAR(25) NOT NULL,
  Fec_movimiento DATETIME NOT NULL,
@@ -178,7 +178,7 @@ CREATE TABLE Banco.Sucursal
  FOREIGN KEY (Numero_cuenta) REFERENCES Banco.Cuenta (Numero_cuenta));
  
  CREATE TABLE Banco.Movimiento_H
- (Id INTEGER NOT NULL,
+ (Id INTEGER NOT NULL auto_increment,
  Importe DOUBLE(15,2) NOT NULL,
  Tipo VARCHAR(25) NOT NULL,
  Fec_movimiento DATETIME NOT NULL,
@@ -194,7 +194,7 @@ CREATE TABLE Banco.Sucursal
  FOREIGN KEY (Numero_cuenta) REFERENCES Banco.Cuenta (Numero_cuenta));
  
  CREATE TABLE Banco.Transferencia
- (Id INTEGER NOT NULL,
+ (Id INTEGER NOT NULL auto_increment,
  Fec_transferencia DATETIME NOT NULL,
  Fec_consolidacion DATETIME,
  Importe DOUBLE(15,2) NOT NULL,
@@ -212,7 +212,7 @@ CREATE TABLE Banco.Sucursal
  FOREIGN KEY (Dni_empleado) REFERENCES Banco.Empleado (Dni));
  
 CREATE TABLE Banco.Transferencia_H
- (Id INTEGER NOT NULL,
+ (Id INTEGER NOT NULL auto_increment,
  Fec_transferencia DATETIME NOT NULL,
  Fec_consolidacion DATETIME,
  Importe DOUBLE(15,2) NOT NULL,

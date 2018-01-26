@@ -39,7 +39,7 @@ public class MovimientoController {
 	@Autowired
 	private MovimientoHRepository movimientoRepositoryH;
 
-	@PostMapping("/movimiento")
+	@PostMapping("/")
 	public ResponseEntity<Movimiento> addMovimiento(@Valid @RequestBody Movimiento movimiento) {
 		Movimiento m1 = movimientoRepository.findOne(movimiento.getId());
 		if (m1 != null) {
@@ -53,7 +53,7 @@ public class MovimientoController {
 		return new ResponseEntity<Movimiento>(m1, new HttpHeaders(), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/movimiento/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Movimiento> removeMovimiento(@PathVariable(value = "id") Long movimientoId) {
 		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
 		if (movimiento == null) {
@@ -64,7 +64,7 @@ public class MovimientoController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PutMapping("/movimiento/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Movimiento> updateMovimeinto(@PathVariable(value = "id") Long movimientoId,
 			@Valid @RequestBody Movimiento movimientoDetails) {
 		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
@@ -84,7 +84,7 @@ public class MovimientoController {
 		return ResponseEntity.ok(movimiento);
 	}
 
-	@GetMapping("/movimiento/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Movimiento> getCuentaById(@PathVariable(value = "id") Long movimientoId) {
 		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
 		if (movimiento == null || !movimiento.getMCAHabilitado()) {
@@ -95,7 +95,7 @@ public class MovimientoController {
 		return ResponseEntity.ok().body(movimiento);
 	}
 
-	@GetMapping("/movimiento")
+	@GetMapping("/")
 	public List<Movimiento> getAllCuentas() {
 		logger.info("Requested every active transaction");
 		return movimientoRepository.findAll();

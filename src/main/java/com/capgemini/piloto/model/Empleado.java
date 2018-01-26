@@ -15,6 +15,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Empleado implements Serializable {
 
@@ -56,9 +58,11 @@ public class Empleado implements Serializable {
 	@Column(name = "Mca_habilitado", nullable = false)
 	private Boolean mcaHabilitado;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
 	
+	@JsonIgnore
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_sucursal")

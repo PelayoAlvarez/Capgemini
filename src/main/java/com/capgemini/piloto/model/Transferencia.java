@@ -34,28 +34,27 @@ public class Transferencia implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
+
 	@Column(name = "Numero_cuenta_destino")
 	private String idDestino;
 
-	@NotBlank
+
 	@Column(name = "Numero_cuenta_origen")
 	private String idOrigen;
 
-	@NotBlank
+
 	@Column(name = "Fec_transferencia")
 	private Date fechaTransferencia;
 
-	@NotBlank
+
 	@Column(name = "Fec_consolidacion")
 	private Date fechaConsolidacion;
 
-	@NotBlank
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "Canal")
 	private TipoCanal canal;
 
-	@NotBlank
 	@Column(name = "Importe")
 	private double importe;
 
@@ -77,7 +76,7 @@ public class Transferencia implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaCreacion;
 
-	@NotBlank
+
 	@Column(name = "Mca_habilitado")
 	private Boolean mCAHabilitado;
 
