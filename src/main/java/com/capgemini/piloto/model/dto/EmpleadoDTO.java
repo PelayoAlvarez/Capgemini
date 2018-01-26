@@ -42,6 +42,8 @@ public class EmpleadoDTO implements Serializable {
 	@NotNull
 	public Long sucursal;
 	
+	public EmpleadoDTO() { }
+	
 	public EmpleadoDTO(Empleado empleado) {
 		this.dni = empleado.getDni();
 		this.nombre = empleado.getNombre();
