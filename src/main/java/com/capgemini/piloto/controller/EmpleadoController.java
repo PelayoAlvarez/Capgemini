@@ -3,6 +3,8 @@ package com.capgemini.piloto.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
+import com.capgemini.piloto.model.dto.EmpleadoDTO;
 import com.capgemini.piloto.model.historico.EmpleadoH;
 import com.capgemini.piloto.repository.EmpleadoRepository;
 import com.capgemini.piloto.repository.SucursalRepository;
@@ -59,31 +61,35 @@ public class EmpleadoController {
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<Empleado> createEmpleado(@RequestBody Empleado empleado, @RequestParam Long sucursalId) {
-		Empleado nuevoEmpleado = empleadoRep.findByDni(empleado.getDni());
-		if (nuevoEmpleado != null) {
-			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}] porque ya existe", nuevoEmpleado.getDni());
-			return new ResponseEntity<>(nuevoEmpleado, new HttpHeaders(), HttpStatus.CONFLICT);
+	public ResponseEntity<Empleado> createEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDto) {
+		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
+		if (empleado != null) {
+			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}] porque ya existe", empleado.getDni());
+			return new ResponseEntity<>(empleado, new HttpHeaders(), HttpStatus.CONFLICT);
 		}
-		Sucursal sucursal = sucursalRep.findById(sucursalId);
+		Sucursal sucursal = sucursalRep.findById(empleadoDto.getSucursal());
+		empleado = new Empleado(empleadoDto);
 		empleado.setSucursal(sucursal);
-		nuevoEmpleado = empleadoRep.save(empleado);
-		if (nuevoEmpleado == null) {
-			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}]", empleado.getDni());
-			return new ResponseEntity<>(nuevoEmpleado, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		empleado = empleadoRep.save(empleado);
+		if (empleado == null) {
+			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}]", empleadoDto.getDni());
+			return new ResponseEntity<>(empleado, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		logger.info("CREATE: Se ha creado el empleado con DNI [{}]", nuevoEmpleado.getDni());
-		return ResponseEntity.ok(nuevoEmpleado);
+		logger.info("CREATE: Se ha creado el empleado con DNI [{}]", empleado.getDni());
+		return ResponseEntity.ok(empleado);
 	}
 	
 	@PutMapping("/{dni}")
-	public ResponseEntity<Empleado> updateEmpleado(@RequestBody Empleado empleado) {
-		Empleado antiguoEmpleado = empleadoRep.findByDni(empleado.getDni());
-		if (antiguoEmpleado == null || !empleado.getMcaHabilitado()) {
-			logger.info("UPDATE: No se ha encontrado el empleado con DNI [{}]", empleado.getDni());
+	public ResponseEntity<Empleado> updateEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDto) {
+		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
+		if (empleado == null || !empleado.getMcaHabilitado()) {
+			logger.info("UPDATE: No se ha encontrado el empleado con DNI [{}]", empleadoDto.getDni());
 			return ResponseEntity.notFound().build();
 		}
-		empleadoHRep.save(new EmpleadoH(antiguoEmpleado, antiguoEmpleado.getUsuario()));
+		EmpleadoH empleadoH = new EmpleadoH(empleado, empleadoDto, empleado.getUsuario());
+		Sucursal sucursal = sucursalRep.findById(empleadoDto.getSucursal());
+		empleadoHRep.save(empleadoH);
+		empleado.setSucursal(sucursal);
 		empleado.setFecActu(new Date());
 		empleadoRep.save(empleado);
 		logger.info("UPDATE: Se ha actualizado el empleado con DNI [{}]", empleado.getDni());
