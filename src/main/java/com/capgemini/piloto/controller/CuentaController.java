@@ -1,5 +1,6 @@
 package com.capgemini.piloto.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,17 +43,19 @@ public class CuentaController {
 	@Autowired
 	private CuentaRepository cuentaRepository;
 	@Autowired
-	private CuentaHRepository cuentaHRepository;
-	@Autowired
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private ClienteCuentaRepository clienteCuentaRepository;
 	
 	// Get every account
 	@GetMapping("/cuenta")
-	public List<Cuenta> getAllCuentas() {
+	public List<CuentaDTO> getAllCuentas() {
 		logger.info("Requested every active account");
-		return cuentaRepository.findMCA();
+		List<Cuenta> aux = cuentaRepository.findMCA();
+		List<CuentaDTO> aux2 = new ArrayList();
+		for(Cuenta c :aux)
+			aux2.add(new CuentaDTO(c));
+		return aux2;
 	}
 
 	// Create a new account
