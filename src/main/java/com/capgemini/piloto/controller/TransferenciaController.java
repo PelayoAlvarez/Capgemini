@@ -59,9 +59,6 @@ public class TransferenciaController {
 			Cuenta cDestino = cuentaRepository.findOne(cuentaDestino);
 			
 			transferencia = new Transferencia(transferencia, cOrigen, cDestino) ;
-			if (transferencia != null) {
-				return new ResponseEntity<Transferencia>(transferencia, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-			}
 			logger.info("Create new transfer");
 			transferencia = transferenciaRepository.save(transferencia);
 			if (transferencia == null) {
@@ -82,7 +79,7 @@ public class TransferenciaController {
 			return ResponseEntity.ok().body(transferencia);
 		}
 		
-		//Update a transfer
+		/*//Update a transfer
 		@PutMapping("/transferencia/{id}")
 		public ResponseEntity<Transferencia> updateTransferencia(@PathVariable(value = "id") Long transferenciaId,
 				@Valid @RequestBody Transferencia transferenciaDetails) {
@@ -118,5 +115,5 @@ public class TransferenciaController {
 			transferenciaRepository.save(transferencia);
 			logger.info("The transfer was succesfully deleted");
 			return ResponseEntity.ok().build();
-		}
+		}*/
 }

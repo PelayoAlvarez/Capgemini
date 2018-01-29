@@ -20,10 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.capgemini.piloto.model.types.ClienteCuentaKey;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "Cliente_Cuenta")
@@ -40,13 +37,11 @@ public class ClienteCuenta implements Serializable{
 	@Id
 	@JoinColumn(name = "Dni")
 	@ManyToOne
-	@JsonIgnore
 	private Cliente cliente;
 	
 	@Id
 	@JoinColumn(name = "Numero_cuenta")
 	@ManyToOne
-	@JsonIgnore
 	private Cuenta cuenta;
 	
 	@Column(name = "Fec_actu", nullable = false)
@@ -67,9 +62,8 @@ public class ClienteCuenta implements Serializable{
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;	
 	
-//	@OneToOne
-//	@JsonIgnore
-//	private Tarjeta tarjeta;
+	@OneToOne
+	private Tarjeta tarjeta;
 	
 	
 	ClienteCuenta() {		
@@ -88,7 +82,6 @@ public class ClienteCuenta implements Serializable{
 		return cliente;
 	}
 
-	
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
@@ -133,18 +126,18 @@ public class ClienteCuenta implements Serializable{
 		this.mcaHabilitado = mcaHabilitado;
 	}
 
-//	public Tarjeta _getTarjeta() {
-//		return tarjeta;
-//	}
-//
-//	public Tarjeta getTarjeta() {
-//		return tarjeta;
-//	}
-//	
-//	public void setTarjeta(Tarjeta tarjeta) {
-//		this.tarjeta = tarjeta;
-//	}
-//	
+	public Tarjeta _getTarjeta() {
+		return tarjeta;
+	}
+
+	public Tarjeta getTarjeta() {
+		return tarjeta;
+	}
+	
+	public void setTarjeta(Tarjeta tarjeta) {
+		this.tarjeta = tarjeta;
+	}
+	
 	
 //	public void link(Cliente cliente, Cuenta cuenta) {
 //		setCliente(cliente);

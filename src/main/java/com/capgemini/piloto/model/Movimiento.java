@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -77,15 +76,14 @@ public class Movimiento implements Serializable {
 	}
 
 	public Movimiento(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, Cuenta cuentaAsociada,
-			Date fecha_Actua, Date fecha_Creacion, String usuario, Boolean habilitado) {
+			String usuario, Boolean habilitado) {
 		super();
 		this.importe = importe;
 		this.tipo = tipo;
 		this.fechahora = fecha;
 		this.descripcion = descripcion;
 		this.cuentaAsociada = cuentaAsociada;
-		this.fechaActua = fecha_Actua;
-		this.fechaCreacion = fecha_Creacion;
+		this.fechaActua = this.fechaCreacion = new Date();
 		this.usuario = usuario;
 		this.mCAHabilitado = true;
 	}

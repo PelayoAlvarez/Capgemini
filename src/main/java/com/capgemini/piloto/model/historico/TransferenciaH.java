@@ -39,10 +39,6 @@ public class TransferenciaH implements Serializable{
 	private String idDestino;
 
 	@NotBlank
-	@Column(name = "Numero_cuenta_origen")
-	private String idOrigen;
-
-	@NotBlank
 	@Column(name = "Fec_transferencia")
 	private Date fechaTransferencia;
 
@@ -91,7 +87,7 @@ public class TransferenciaH implements Serializable{
 		
 		public TransferenciaH(Transferencia t) {
 			idDestino = t.getIdDestino();
-			idOrigen = t.getIdOrigen();
+			cuenta = t.getCuenta();
 			fechaTransferencia = t.getFechaTransferencia();
 			fechaConsolidacion = t.getFechaConsolidacion();
 			canal = t.getCanal();
@@ -100,12 +96,11 @@ public class TransferenciaH implements Serializable{
 		
 		
 	
-	public TransferenciaH(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
+	public TransferenciaH(String id_destino, Date fecha_transferencia, Date fecha_consolidacion,
 				TipoCanal canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion,
 				Boolean mCA_Habilitado, Empleado empleado) {
 			super();
 			this.idDestino = id_destino;
-			this.idOrigen = id_origen;
 			this.fechaTransferencia = fecha_transferencia;
 			this.fechaConsolidacion = fecha_consolidacion;
 			this.canal = canal;
@@ -125,12 +120,7 @@ public class TransferenciaH implements Serializable{
 	public void setId_destino(String id_destino) {
 		this.idDestino = id_destino;
 	}
-	public String getId_origen() {
-		return idOrigen;
-	}
-	public void setId_origen(String id_origen) {
-		this.idOrigen = id_origen;
-	}
+
 	public Date getFecha_transferencia() {
 		return fechaTransferencia;
 	}
@@ -195,7 +185,7 @@ public class TransferenciaH implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Transferencia [id=" + id + ", id_destino=" + idDestino + ", id_origen=" + idOrigen
+		return "Transferencia [id=" + id + ", id_destino=" + idDestino 
 				+ ", fecha_transferencia=" + fechaTransferencia + ", fecha_consolidacion=" + fechaConsolidacion
 				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", empleado =" + empleado + ", fecha_Actua=" + fechaActua
 				+ ", fecha_Creacion=" + fechaConsolidacion + ", MCA_Habilitado=" + mcaHabilitado + "]";
