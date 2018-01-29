@@ -38,7 +38,7 @@ public class Transferencia implements Serializable {
 	private String idDestino;
 
 	@ManyToOne
-	@JoinColumn(name = "numero_cuenta")
+	@JoinColumn(name = "Numero_cuenta_origen")
 	private Cuenta cuenta;
 
 
@@ -74,6 +74,9 @@ public class Transferencia implements Serializable {
 
 	@Column(name = "Mca_habilitado", nullable = false)
 	private Boolean mCAHabilitado;
+	
+	@Column(name="Usuario", nullable = false)
+	private String usuario;
 
 	public Transferencia() {
 	}
@@ -85,6 +88,7 @@ public class Transferencia implements Serializable {
 		fechaConsolidacion = t.getFechaConsolidacion();
 		canal = t.getCanal();
 		importe = t.getImporte();
+		usuario = t.getUsuario();
 	}
 
 	public Transferencia(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
@@ -108,12 +112,14 @@ public class Transferencia implements Serializable {
 		this.idDestino = cDestino.getNumeroCuenta();
 		this.fechaTransferencia = t.getFechaTransferencia();
 		this.fechaConsolidacion = t.getFechaConsolidacion();
+		this.canal = t.getCanal();
 		this.importe = t.getImporte();
-		this.cuenta = t.getCuenta();
+		this.cuenta = cOrigen;
 		this.empleado = t.getEmpleado();
 		this.fechaActua = t.getFechaActua();
 		this.fechaCreacion = t.getFechaCreacion();
-		this.mCAHabilitado = t.getMcaHabilitado();
+		this.mCAHabilitado = true;
+		this.usuario = t.getUsuario();
 	}
 
 	public String getIdDestino() {
@@ -198,6 +204,14 @@ public class Transferencia implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
 	@Override
