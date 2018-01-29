@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.historico.TransferenciaH;
+import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.TransferenciaRepository;
 import com.capgemini.piloto.repository.historico.TransferenciaHRepository;
 
@@ -33,8 +36,12 @@ public class TransferenciaController {
 	private static final Logger logger = LoggerFactory.getLogger(TransferenciaController.class);
 	@Autowired
 	private TransferenciaRepository transferenciaRepository;
+	
 	@Autowired
 	private TransferenciaHRepository transferenciaHRepository;
+	
+	@Autowired
+	private CuentaRepository cuentaRepository;
 	
 	//Get All Transfers
 		@GetMapping("/transferencia")
@@ -45,17 +52,22 @@ public class TransferenciaController {
 		
 		//Create a new Transfer
 		@PostMapping("/transferencia")
-		public ResponseEntity<Transferencia> createTransfer(@Valid @RequestBody Transferencia transferencia) {
-			Transferencia t1 = transferenciaRepository.findOne(transferencia.getId());
-			if (t1 != null) {
-				return new ResponseEntity<Transferencia>(t1, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		public ResponseEntity<Transferencia> createTransfer(@RequestBody Transferencia transferencia,
+				@RequestParam String cuentaOrigen, @RequestParam String cuentaDestino ) {
+			
+			Cuenta cOrigen = cuentaRepository.findOne(cuentaOrigen);
+			Cuenta cDestino = cuentaRepository.findOne(cuentaDestino);
+			
+			transferencia = new Transferencia(transferencia, cOrigen, cDestino) ;
+			if (transferencia != null) {
+				return new ResponseEntity<Transferencia>(transferencia, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			logger.info("Create new transfer");
-			t1 = transferenciaRepository.save(transferencia);
-			if (t1 == null) {
-				return new ResponseEntity<Transferencia>(t1, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			transferencia = transferenciaRepository.save(transferencia);
+			if (transferencia == null) {
+				return new ResponseEntity<Transferencia>(transferencia, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			return new ResponseEntity<Transferencia>(t1, new HttpHeaders(), HttpStatus.OK);
+			return new ResponseEntity<Transferencia>(transferencia, new HttpHeaders(), HttpStatus.OK);
 		}	
 		
 		//Get a Single transfer

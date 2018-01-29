@@ -34,11 +34,11 @@ public class MovimientoH implements Serializable{
 	@Column(name = "Id")
 	private Long id;
 	
-	@NotBlank
+	
 	@Column(name = "Importe")
 	private Double importe;
 	
-	@NotBlank
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "Tipo")
 	private TipoMovimiento tipo;
@@ -47,7 +47,7 @@ public class MovimientoH implements Serializable{
 	@Column(name = "Fec_movimiento")
 	private Date fechahora;
 	
-	@NotBlank
+
 	@Column(name = "Descripcion")
 	private String descripcion;
 
@@ -72,11 +72,11 @@ public class MovimientoH implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecAudit;
 	
-	@NotBlank
+
 	@Column(name = "Usuario_h")
 	private String Usuario;
 	
-	@NotBlank
+
 	@Column(name = "Mca_habilitado")
 	private Boolean MCAHabilitado;
 	
@@ -89,13 +89,13 @@ public class MovimientoH implements Serializable{
 		super();
 		this.importe = m.getImporte();
 		this.tipo = m.getTipo();
-		this.fechahora = m.getFecha_hora();
+		this.fechahora = m.getFechahora();
 		this.descripcion = m.getDescripcion();
 		this.cuentaAsociada = m.getCuentaAsociada();
 		this.fechaActua = m.getFechaActua();
 		this.fechaCreacion = m.getFechaCreacion();
 		this.Usuario = m.getUsuario();
-		this.MCAHabilitado = m.getMCAHabilitado();
+		this.MCAHabilitado = m.getmCAHabilitado();
 	}
 
 	public TipoMovimiento getTipo() {

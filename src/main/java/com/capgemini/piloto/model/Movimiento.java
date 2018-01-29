@@ -23,8 +23,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
 @Entity
-@Table(name="MOVIMIENTO")
-public class Movimiento implements Serializable{
+@Table(name = "MOVIMIENTO")
+public class Movimiento implements Serializable {
 
 	/**
 	 * 
@@ -35,12 +35,10 @@ public class Movimiento implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "Id")
 	private Long id;
-	
-	@NotBlank
+
 	@Column(name = "Importe")
 	private Double importe;
 
-	@NotBlank
 	@Enumerated(EnumType.STRING)
 	@Column(name = "Tipo")
 	private TipoMovimiento tipo;
@@ -48,8 +46,7 @@ public class Movimiento implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Fec_movimiento")
 	private Date fechahora;
-	
-	@NotBlank
+
 	@Column(name = "Descripcion")
 	private String descripcion;
 
@@ -58,33 +55,29 @@ public class Movimiento implements Serializable{
 	private Cuenta cuentaAsociada;
 
 	// Campos de Auditoria
-	
+
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
 	private Date fechaActua;
-	
+
 	@Column(name = "Fec_creacion", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
 	private Date fechaCreacion;
-	
-	@NotBlank
+
 	@Column(name = "Usuario")
 	private String usuario;
-	
-	@NotBlank
-	@Column(name = "Mca_habilitado")
-	private Boolean MCAHabilitado;
-	
-	
+
+	@Column(name = "Mca_habilitado", nullable = false)
+	private Boolean mCAHabilitado;
+
 	Movimiento() {
-		//Solo para jpa		
+		// Solo para jpa
 	}
 
-	public Movimiento(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, 
-			Cuenta cuentaAsociada, Date fecha_Actua, Date fecha_Creacion, String usuario,
-			Boolean habilitado) {
+	public Movimiento(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, Cuenta cuentaAsociada,
+			Date fecha_Actua, Date fecha_Creacion, String usuario, Boolean habilitado) {
 		super();
 		this.importe = importe;
 		this.tipo = tipo;
@@ -94,15 +87,21 @@ public class Movimiento implements Serializable{
 		this.fechaActua = fecha_Actua;
 		this.fechaCreacion = fecha_Creacion;
 		this.usuario = usuario;
-		this.MCAHabilitado = habilitado;
+		this.mCAHabilitado = true;
 	}
 
-	public TipoMovimiento getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoMovimiento tipo) {
-		this.tipo = tipo;
+	public Movimiento(Movimiento m, Cuenta cu) {
+		super();
+		this.id = m.getId();
+		this.importe = m.getImporte();
+		this.tipo = m.getTipo();
+		this.fechahora = m.getFechahora();
+		this.descripcion = m.getDescripcion();
+		this.cuentaAsociada = cu;
+		this.fechaActua = m.getFechaActua();
+		this.fechaCreacion = m.getFechaCreacion();
+		this.usuario = m.getUsuario();
+		this.mCAHabilitado = m.getmCAHabilitado();
 	}
 
 	public Double getImporte() {
@@ -113,8 +112,20 @@ public class Movimiento implements Serializable{
 		this.importe = importe;
 	}
 
-	public void setFecha(Date fecha) {
-		this.fechahora = fecha;
+	public TipoMovimiento getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoMovimiento tipo) {
+		this.tipo = tipo;
+	}
+
+	public Date getFechahora() {
+		return fechahora;
+	}
+
+	public void setFechahora(Date fechahora) {
+		this.fechahora = fechahora;
 	}
 
 	public String getDescripcion() {
@@ -125,53 +136,51 @@ public class Movimiento implements Serializable{
 		this.descripcion = descripcion;
 	}
 
-	public Long getId() {
-		return id;
-	}
-	
-	public Date getFecha_hora() {
-		return fechahora;
-	}
-
-	public Cuenta getCuentaAsociada() {
-		return cuentaAsociada;
-	}
-
-	public String getUsuario() {
-		return usuario;
-	}
-
-	//Getters y Setters de Auditoria
-
 	public Date getFechaActua() {
 		return fechaActua;
 	}
 
-	public void setFechaActua(Date fecha_Actua) {
-		this.fechaActua = fecha_Actua;
-	}
-
-	public Boolean getMCAHabilitado() {
-		return MCAHabilitado;
-	}
-
-	public void setMCAHabilitado(Boolean mCA_Habilitado) {
-		MCAHabilitado = mCA_Habilitado;
+	public void setFechaActua(Date fechaActua) {
+		this.fechaActua = fechaActua;
 	}
 
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
 
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public Boolean getmCAHabilitado() {
+		return mCAHabilitado;
+	}
+
+	public void setmCAHabilitado(Boolean mCAHabilitado) {
+		this.mCAHabilitado = mCAHabilitado;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Cuenta getCuentaAsociada() {
+		return cuentaAsociada;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cuentaAsociada == null) ? 0 : cuentaAsociada.hashCode());
-		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-		result = prime * result + ((fechahora == null) ? 0 : fechahora.hashCode());
-		result = prime * result + ((importe == null) ? 0 : importe.hashCode());
-		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -184,34 +193,20 @@ public class Movimiento implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Movimiento other = (Movimiento) obj;
-		if (cuentaAsociada == null) {
-			if (other.cuentaAsociada != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!cuentaAsociada.equals(other.cuentaAsociada))
-			return false;
-		if (descripcion == null) {
-			if (other.descripcion != null)
-				return false;
-		} else if (!descripcion.equals(other.descripcion))
-			return false;
-		if (fechahora == null) {
-			if (other.fechahora != null)
-				return false;
-		} else if (!fechahora.equals(other.fechahora))
-			return false;
-		if (importe == null) {
-			if (other.importe != null)
-				return false;
-		} else if (!importe.equals(other.importe))
-			return false;
-		if (tipo != other.tipo)
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Movimiento [id=" + id + ", importe=" + importe + ", tipo=" + tipo + ", fecha_hora=" + fechahora
-				+ ", descripcion=" + descripcion + ", cuentaAsociada=" + cuentaAsociada + "]";
+		return "Movimiento [id=" + id + ", importe=" + importe + ", tipo=" + tipo + ", fechahora=" + fechahora
+				+ ", descripcion=" + descripcion + ", cuentaAsociada=" + cuentaAsociada + ", fechaActua=" + fechaActua
+				+ ", fechaCreacion=" + fechaCreacion + ", usuario=" + usuario + ", MCAHabilitado=" + mCAHabilitado
+				+ "]";
 	}
+
 }

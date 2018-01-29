@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Empleado;
+import com.capgemini.piloto.model.Sucursal;
+import com.capgemini.piloto.model.dto.EmpleadoDTO;
 import com.capgemini.piloto.model.historico.EmpleadoH;
 import com.capgemini.piloto.repository.EmpleadoRepository;
+import com.capgemini.piloto.repository.SucursalRepository;
 import com.capgemini.piloto.repository.historico.EmpleadoHRepository;
 
 @RestController
@@ -37,10 +40,13 @@ public class EmpleadoController {
 	@Autowired
 	private EmpleadoHRepository empleadoHRep;
 	
+	@Autowired
+	private SucursalRepository sucursalRep;
+	
 	@GetMapping("/")
 	public List<Empleado> getAllEmpleados() {
 		logger.info("FINDALL: Se obtienen todos los empleados");
-		return empleadoRep.findByMcaHabilitado(true);
+		return empleadoRep.findByMcaHabilitado();
 	}
 	
 	@GetMapping("/{dni}")
@@ -55,36 +61,42 @@ public class EmpleadoController {
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<Empleado> createEmpleado(@Valid @RequestBody Empleado empleado) {
-		Empleado nuevoEmpleado = empleadoRep.findByDni(empleado.getDni());
-		if (nuevoEmpleado != null) {
-			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}] porque ya existe", nuevoEmpleado.getDni());
-			return new ResponseEntity<>(nuevoEmpleado, new HttpHeaders(), HttpStatus.CONFLICT);
-		}		
-		nuevoEmpleado = empleadoRep.save(empleado);
-		if (nuevoEmpleado == null) {
-			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}]", empleado.getDni());
-			return new ResponseEntity<>(nuevoEmpleado, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	public ResponseEntity<Empleado> createEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDto) {
+		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
+		if (empleado != null) {
+			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}] porque ya existe", empleado.getDni());
+			return new ResponseEntity<>(empleado, new HttpHeaders(), HttpStatus.CONFLICT);
 		}
-		logger.info("CREATE: Se ha creado el empleado con DNI [{}]", nuevoEmpleado.getDni());
-		return ResponseEntity.ok(nuevoEmpleado);
+		Sucursal sucursal = sucursalRep.findById(empleadoDto.getSucursal());
+		empleado = new Empleado(empleadoDto);
+		empleado.setSucursal(sucursal);
+		empleado = empleadoRep.save(empleado);
+		if (empleado == null) {
+			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}]", empleadoDto.getDni());
+			return new ResponseEntity<>(empleado, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		logger.info("CREATE: Se ha creado el empleado con DNI [{}]", empleado.getDni());
+		return ResponseEntity.ok(empleado);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<Empleado> updateEmpleado(@Valid @RequestBody Empleado empleado) {
-		Empleado antiguoEmpleado = empleadoRep.findByDni(empleado.getDni());
-		if (antiguoEmpleado == null || !empleado.getMcaHabilitado()) {
-			logger.info("UPDATE: No se ha encontrado el empleado con DNI [{}]", empleado.getDni());
+	@PutMapping("/{dni}")
+	public ResponseEntity<Empleado> updateEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDto) {
+		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
+		if (empleado == null || !empleado.getMcaHabilitado()) {
+			logger.info("UPDATE: No se ha encontrado el empleado con DNI [{}]", empleadoDto.getDni());
 			return ResponseEntity.notFound().build();
 		}
-		empleadoHRep.save(new EmpleadoH(antiguoEmpleado, antiguoEmpleado.getUsuario()));
+		EmpleadoH empleadoH = new EmpleadoH(empleado, empleadoDto, empleado.getUsuario());
+		Sucursal sucursal = sucursalRep.findById(empleadoDto.getSucursal());
+		empleadoHRep.save(empleadoH);
+		empleado.setSucursal(sucursal);
 		empleado.setFecActu(new Date());
 		empleadoRep.save(empleado);
 		logger.info("UPDATE: Se ha actualizado el empleado con DNI [{}]", empleado.getDni());
 		return ResponseEntity.ok(empleado);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{dni}")
 	public ResponseEntity<Empleado> deleteEmpleado(@PathVariable(name = "dni") String dni) {
 		Empleado empleado = empleadoRep.findByDni(dni);
 		if (empleado == null || !empleado.getMcaHabilitado()) {

@@ -15,30 +15,44 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.dto.SucursalDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Sucursal implements Serializable{
 
 	private static final long serialVersionUID = 2511716031449738119L;
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "Id")
 	private Long id;
+	
 	@Column(name = "Nombre")
 	private String nombre;
+	
 	@Column(name = "Direccion")
 	private String direccion;
+	
 	@Column(name = "Fec_actu")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
+	
 	@Column(name = "fec_creacion")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
+	
 	@Column(name = "Usuario")
 	private String usuario;
+	
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
+	
 	@OneToMany(mappedBy = "sucursal")
+	@JsonIgnore
 	private Set<Empleado> empleados = new HashSet<>();
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "sucursal")
 	private Set<Cliente> clientes = new HashSet<>();
 	
@@ -55,8 +69,15 @@ public class Sucursal implements Serializable{
 		this.fecActu = this.fecCreacion = new Date();
 		this.mcaHabilitado = true;
 	}
-
-
+	
+	public Sucursal(SucursalDTO dto) {
+		this.id = dto.getId();
+		this.nombre = dto.getNombre();
+		this.direccion = dto.getDireccion();
+		this.usuario = dto.getUsuario();
+		this.fecActu = this.fecCreacion = new Date();
+		this.mcaHabilitado = true;
+	}
 
 	public Long getId() {
 		return id;

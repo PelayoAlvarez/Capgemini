@@ -8,11 +8,13 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "CUENTA")
@@ -34,6 +36,7 @@ public class Cuenta implements Serializable {
 	private String usuario;
 
 	@OneToMany(mappedBy="cuentaAsociada")
+	@JsonIgnore
 	private Set<Movimiento> movimientos = new HashSet<>();
 
 	@OneToMany(mappedBy = "cuenta")
@@ -47,15 +50,14 @@ public class Cuenta implements Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "Fec_actu")
+	@Column(name = "Fec_actu", nullable = false)
 	private Date fecActu;
 
+	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "Fec_creacion")
 	private Date fecCreacion;
 
-	private Empleado empleado;
-
+	@Column(name = "Mca_habilitado", nullable = false)
 	private Boolean mCAHabilitado;
 
 	Cuenta() {
@@ -120,15 +122,7 @@ public class Cuenta implements Serializable {
 	protected void setMovimientos(Set<Movimiento> movimientos) {
 		this.movimientos = movimientos;
 	}
-
-	public Empleado getEmpleado() {
-		return empleado;
-	}
-
-	public void setEmpleado(Empleado empleado) {
-		this.empleado = empleado;
-	}
-
+	
 	public Set<Transferencia> getTransferencias() {
 		return transferencias;
 	}
@@ -163,20 +157,20 @@ public class Cuenta implements Serializable {
 		this.usuario = usuario;
 	}
 
+	public Boolean getmCAHabilitado() {
+		return mCAHabilitado;
+	}
+
+	public void setmCAHabilitado(Boolean mCAHabilitado) {
+		this.mCAHabilitado = mCAHabilitado;
+	}
+
 	public Date getFecActu() {
 		return fecActu;
 	}
 
 	public void setFecActu(Date fecActu) {
 		this.fecActu = fecActu;
-	}
-
-	public Boolean getMCAHabilitado() {
-		return mCAHabilitado;
-	}
-
-	public void setMCAHabilitado(Boolean MCAHabilitado) {
-		this.mCAHabilitado = MCAHabilitado;
 	}
 
 	public Date getFecCreacion() {

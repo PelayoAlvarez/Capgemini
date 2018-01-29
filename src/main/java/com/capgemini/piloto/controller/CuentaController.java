@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Association;
@@ -53,11 +54,12 @@ public class CuentaController {
 
 	// Create a new account
 	@PostMapping("/cuenta")
-	public ResponseEntity<Cuenta> createCuenta(@Valid @RequestBody Cuenta cuenta,
-			@PathVariable(value = "dni") String dni) {
+	public ResponseEntity<Cuenta> createCuenta(@RequestBody Cuenta cuenta,
+			@RequestParam String dni) {
 		logger.info("Created a new account");
 		Cliente aux = clienteRepository.findByDni(dni);
 		if (aux != null) {
+			cuenta.setFecCreacion(new Date());
 			ClienteCuenta cc = new ClienteCuenta(aux,cuenta);
 			clienteCuentaRepository.save(cc);
 			cuentaRepository.save(cuenta);
@@ -71,7 +73,7 @@ public class CuentaController {
 	@GetMapping("/cuenta/{id}")
 	public ResponseEntity<Cuenta> getCuentaById(@PathVariable(value = "id") String numeroCuenta) {
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
-		if (cuenta == null || !cuenta.getMCAHabilitado()) {
+		if (cuenta == null || !cuenta.getmCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
@@ -84,7 +86,7 @@ public class CuentaController {
 	public ResponseEntity<Cuenta> updateCuenta(@PathVariable(value = "id") String numeroCuenta,
 			@Valid @RequestBody Cuenta cuentaDetails) {
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
-		if (cuenta == null || !cuenta.getMCAHabilitado()) {
+		if (cuenta == null || !cuenta.getmCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
@@ -101,7 +103,7 @@ public class CuentaController {
 	@DeleteMapping("/cuenta/{id}")
 	public ResponseEntity<Cuenta> deleteCuenta(@PathVariable(value = "id") String numeroCuenta) {
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
-		if (cuenta == null || !cuenta.getMCAHabilitado()) {
+		if (cuenta == null || !cuenta.getmCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
@@ -112,7 +114,7 @@ public class CuentaController {
 			}
 		}
 
-		cuenta.setMCAHabilitado(false);
+		cuenta.setmCAHabilitado(false);
 		cuentaRepository.save(cuenta);
 		logger.info("The account was successfully deleted");
 		return ResponseEntity.ok().build();
