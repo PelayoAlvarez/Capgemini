@@ -67,9 +67,9 @@ public class ClienteCuenta implements Serializable{
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;	
 	
-//	@OneToOne
-//	@JsonIgnore
-//	private Tarjeta tarjeta;
+	@OneToOne
+	@JsonIgnore
+	private Tarjeta tarjeta;
 	
 	
 	ClienteCuenta() {		

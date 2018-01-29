@@ -11,6 +11,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Tarjeta implements Serializable{
 
@@ -20,25 +22,34 @@ public class Tarjeta implements Serializable{
 	@NotNull
 	@Column(name="Numero_tarjeta")
 	private String numeroTarjeta;
+	
 	@NotNull
 	@Column(name="Mes_caducidad")
 	private Integer mesCaducidad;
+	
 	@NotNull
 	@Column(name="Anyo_caducidad")
 	private Integer anyoCaducidad;
+	
 	@NotNull
 	@Column(name="Ccv")
 	private Integer ccv;
+	
 	@OneToOne
+	@JsonIgnore
 	private ClienteCuenta clienteCuenta;
+	
 	@Column(name = "Fec_actu")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
+	
 	@Column(name = "fec_creacion")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
+	
 	@Column(name = "Usuario")
 	private String usuario;
+	
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
 	
