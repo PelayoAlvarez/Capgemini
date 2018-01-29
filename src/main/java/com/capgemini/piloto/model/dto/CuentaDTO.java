@@ -1,80 +1,52 @@
-package com.capgemini.piloto.model;
+package com.capgemini.piloto.model.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.hibernate.validator.constraints.NotBlank;
 
-import com.capgemini.piloto.model.dto.CuentaDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
-@Table(name = "CUENTA")
-public class Cuenta implements Serializable {
+public class CuentaDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7283533209815501984L;
 
-	@Id
-	@Column(name = "Numero_cuenta")
+	@NotBlank
 	private String numeroCuenta;
 
-	@OneToMany(mappedBy = "cuenta")
-	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
+	private Set<Dictionary<Long,Long>> clientecuenta = new HashSet<>();
 
-	@Column(name = "Usuario")
 	private String usuario;
 
-	@OneToMany(mappedBy="cuentaAsociada")
-	@JsonIgnore
-	private Set<Movimiento> movimientos = new HashSet<>();
+	private Set<Long> movimientos = new HashSet<>();
 
-	@OneToMany(mappedBy = "cuenta")
-	private Set<Transferencia> transferencias = new HashSet<>();
+	private Set<Long> transferencias = new HashSet<>();
 
 	// Campos de Auditoria
-	
+
 	@Override
 	public String toString() {
 		return "Cuenta [numeroCuenta=" + numeroCuenta;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "Fec_actu", nullable = false)
 	private Date fecActu;
 
-	@Column(name = "Fec_creacion", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
 
-	@Column(name = "Mca_habilitado", nullable = false)
 	private Boolean mCAHabilitado;
 
-	Cuenta() {
+	CuentaDTO() {
 		fecCreacion = new Date();
 		fecActu = new Date();
 	}
-	
-	public Cuenta(CuentaDTO cuentadto) {
-		this.numeroCuenta=cuentadto.getNumeroCuenta();
-		this.usuario=cuentadto.getUsuario();
-		this.fecActu=new Date();
-		this.fecCreacion=new Date();
-		this.mCAHabilitado=true;
-	}
 
-	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Set<Transferencia> transferencias,
-			Set<ClienteCuenta> clientecuenta, Boolean mCAHabilitado, String usuario) {
+	public CuentaDTO(String numeroCuenta, Set<Long> movimientos, Set<Long> transferencias,
+			Set<Dictionary<Long,Long>> clientecuenta, Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
@@ -102,7 +74,7 @@ public class Cuenta implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cuenta other = (Cuenta) obj;
+		CuentaDTO other = (CuentaDTO) obj;
 		if (numeroCuenta == null) {
 			if (other.numeroCuenta != null)
 				return false;
@@ -119,39 +91,39 @@ public class Cuenta implements Serializable {
 		this.numeroCuenta = numeroCuenta;
 	}
 
-	public Set<Movimiento> _getMovimientos() {
+	public Set<Long> _getMovimientos() {
 		return new HashSet<>(movimientos);
 	}
 
-	public Set<Movimiento> getMovimientos() {
+	public Set<Long> getMovimientos() {
 		return movimientos;
 	}
 
-	protected void setMovimientos(Set<Movimiento> movimientos) {
+	protected void setMovimientos(Set<Long> movimientos) {
 		this.movimientos = movimientos;
 	}
 	
-	public Set<Transferencia> getTransferencias() {
+	public Set<Long> getTransferencias() {
 		return transferencias;
 	}
 
-	public Set<Transferencia> _getTransferencias() {
+	public Set<Long> _getTransferencias() {
 		return new HashSet<>(transferencias);
 	}
 
-	public void setTransferencias(Set<Transferencia> transferencias) {
+	public void setTransferencias(Set<Long> transferencias) {
 		this.transferencias = transferencias;
 	}
 
-	public Set<ClienteCuenta> getClienteCuenta() {
+	public Set<Dictionary<Long,Long>> getClienteCuenta() {
 		return clientecuenta;
 	}
 
-	public Set<ClienteCuenta> _getClienteCuenta() {
+	public Set<Dictionary<Long,Long>> _getClienteCuenta() {
 		return new HashSet<>(clientecuenta);
 	}
 
-	public void setClienteCuenta(Set<ClienteCuenta> clientecuenta) {
+	public void setClienteCuenta(Set<Dictionary<Long,Long>> clientecuenta) {
 		this.clientecuenta = clientecuenta;
 	}
 
