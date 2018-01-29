@@ -1,17 +1,12 @@
 package com.capgemini.piloto.model.dto;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.capgemini.piloto.model.Cliente;
-import com.capgemini.piloto.model.ClienteCuenta;
 
-public class ClienteDTO implements Serializable{
+public class ClienteBDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,14 +27,9 @@ public class ClienteDTO implements Serializable{
 	private String fijo;
 	
 	private String email;
-	
-	private Set<CuentaDTO> clienteCuenta = new HashSet<CuentaDTO>();
 
-	@NotNull
-	public Long sucursal;
-
-	public ClienteDTO(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
-			String email, Set<CuentaDTO> clienteCuenta, Long sucursal) {
+	public ClienteBDTO(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
+			String email) {
 		super();
 		this.dni = dni;
 		this.nombre = nombre;
@@ -48,11 +38,9 @@ public class ClienteDTO implements Serializable{
 		this.movil = movil;
 		this.fijo = fijo;
 		this.email = email;
-		this.clienteCuenta = clienteCuenta;
-		this.sucursal = sucursal;
 	}
 	
-	public ClienteDTO(Cliente c)
+	public ClienteBDTO(Cliente c)
 	{
 		this.dni=c.getDni();
 		this.nombre=c.getNombre();
@@ -61,8 +49,6 @@ public class ClienteDTO implements Serializable{
 		this.movil=c.getMovil();
 		this.fijo=c.getFijo();
 		this.email=c.getEmail();
-		for(ClienteCuenta cl : c.getClienteCuentas())
-			this.getClienteCuenta().add(new CuentaDTO(cl.getCuenta()));
 	}
 
 	public String getNombre() {
@@ -111,22 +97,6 @@ public class ClienteDTO implements Serializable{
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public Set<CuentaDTO> getClienteCuenta() {
-		return clienteCuenta;
-	}
-
-	public void setClienteCuenta(Set<CuentaDTO> clienteCuenta) {
-		this.clienteCuenta = clienteCuenta;
-	}
-
-	public Long getSucursal() {
-		return sucursal;
-	}
-
-	public void setSucursal(Long sucursal) {
-		this.sucursal = sucursal;
 	}
 
 	public String getDni() {
