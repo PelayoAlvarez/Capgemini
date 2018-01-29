@@ -13,8 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.dto.CuentaDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "CUENTA")
@@ -43,7 +43,7 @@ public class Cuenta implements Serializable {
 	private Set<Transferencia> transferencias = new HashSet<>();
 
 	// Campos de Auditoria
-
+	
 	@Override
 	public String toString() {
 		return "Cuenta [numeroCuenta=" + numeroCuenta;
@@ -63,6 +63,14 @@ public class Cuenta implements Serializable {
 	Cuenta() {
 		fecCreacion = new Date();
 		fecActu = new Date();
+	}
+	
+	public Cuenta(CuentaDTO cuentadto) {
+		this.numeroCuenta=cuentadto.getNumeroCuenta();
+		this.usuario=cuentadto.getUsuario();
+		this.fecActu=new Date();
+		this.fecCreacion=new Date();
+		this.mCAHabilitado=true;
 	}
 
 	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Set<Transferencia> transferencias,
