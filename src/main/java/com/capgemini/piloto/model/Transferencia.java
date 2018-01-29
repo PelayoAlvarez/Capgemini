@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.validator.constraints.NotBlank;
 
 import com.capgemini.piloto.model.types.TipoCanal;
 
@@ -31,16 +30,16 @@ public class Transferencia implements Serializable {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 
 	@Column(name = "Numero_cuenta_destino")
 	private String idDestino;
 
-
-	@Column(name = "Numero_cuenta_origen")
-	private String idOrigen;
+	@ManyToOne
+	@JoinColumn(name = "numero_cuenta")
+	private Cuenta cuenta;
 
 
 	@Column(name = "Fec_transferencia")
@@ -57,10 +56,6 @@ public class Transferencia implements Serializable {
 
 	@Column(name = "Importe")
 	private double importe;
-
-	@ManyToOne
-	@JoinColumn(name = "numero_cuenta")
-	private Cuenta cuenta;
 
 	@ManyToOne
 	@JoinColumn(name = "dni_empleado")
@@ -85,7 +80,7 @@ public class Transferencia implements Serializable {
 
 	public Transferencia(Transferencia t) {
 		idDestino = t.getIdDestino();
-		idOrigen = t.getIdOrigen();
+		cuenta = t.getCuenta();
 		fechaTransferencia = t.getFechaTransferencia();
 		fechaConsolidacion = t.getFechaConsolidacion();
 		canal = t.getCanal();
@@ -97,7 +92,6 @@ public class Transferencia implements Serializable {
 			Empleado empleado) {
 		super();
 		this.idDestino = id_destino;
-		this.idOrigen = id_origen;
 		this.fechaTransferencia = fecha_transferencia;
 		this.fechaConsolidacion = fecha_consolidacion;
 		this.canal = canal;
@@ -112,7 +106,6 @@ public class Transferencia implements Serializable {
 	public Transferencia(Transferencia t, Cuenta cOrigen, Cuenta cDestino) {
 		super();
 		this.idDestino = cDestino.getNumeroCuenta();
-		this.idOrigen = cOrigen.getNumeroCuenta();
 		this.fechaTransferencia = t.getFechaTransferencia();
 		this.fechaConsolidacion = t.getFechaConsolidacion();
 		this.importe = t.getImporte();
@@ -129,14 +122,6 @@ public class Transferencia implements Serializable {
 
 	public void setIdDestino(String idDestino) {
 		this.idDestino = idDestino;
-	}
-
-	public String getIdOrigen() {
-		return idOrigen;
-	}
-
-	public void setIdOrigen(String idOrigen) {
-		this.idOrigen = idOrigen;
 	}
 
 	public Date getFechaTransferencia() {
@@ -217,7 +202,7 @@ public class Transferencia implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Transferencia [id=" + id + ", id_destino=" + idDestino + ", id_origen=" + idOrigen
+		return "Transferencia [id=" + id + ", id_destino=" + idDestino
 				+ ", fecha_transferencia=" + fechaTransferencia + ", fecha_consolidacion=" + fechaConsolidacion
 				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", empleado =" + empleado
 				+ ", fecha_Actua=" + fechaActua + ", fecha_Creacion=" + fechaCreacion + ", MCA_Habilitado="

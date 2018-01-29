@@ -17,7 +17,6 @@ public class TransferenciaDTO implements Serializable{
 	
 	private Long id;
 	private String idDestino;
-	private String idOrigen;
 	private Date fechaTransferencia;
 	private Date fechaConsolidacion;
 	private TipoCanal canal;
@@ -31,7 +30,7 @@ public class TransferenciaDTO implements Serializable{
 	
 	public TransferenciaDTO(Transferencia t) {
 		idDestino = t.getIdDestino();
-		idOrigen = t.getIdOrigen();
+		cuenta = t.getCuenta();
 		fechaTransferencia = t.getFechaTransferencia();
 		fechaConsolidacion = t.getFechaConsolidacion();
 		canal = t.getCanal();
@@ -46,13 +45,7 @@ public class TransferenciaDTO implements Serializable{
 		this.idDestino = idDestino;
 	}
 
-	public String getIdOrigen() {
-		return idOrigen;
-	}
 
-	public void setIdOrigen(String idOrigen) {
-		this.idOrigen = idOrigen;
-	}
 
 	public Date getFechaTransferencia() {
 		return fechaTransferencia;
