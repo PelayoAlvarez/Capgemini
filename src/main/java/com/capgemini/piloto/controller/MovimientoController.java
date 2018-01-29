@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.historico.MovimientoH;
@@ -49,15 +48,9 @@ public class MovimientoController {
 	@PostMapping("/")
 	public ResponseEntity<Movimiento> addMovimiento(@RequestBody Movimiento movimiento,
 			@RequestParam String cuenta) {
-		System.out.println(movimiento.toString());
-		//Movimiento m1 = movimientoRepository.findOne(movimiento.getId());
 		Cuenta cu = cuentaRepository.findOne(cuenta);
-		/*if (m1 != null) {
-			return new ResponseEntity<Movimiento>(m1, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}*/
 		logger.info("Create new transaction");
 		movimiento = new Movimiento(movimiento, cu) ;
-		System.out.println(movimiento.toString());
 		movimiento = movimientoRepository.save(movimiento);
 		if (movimiento == null) {
 			return new ResponseEntity<Movimiento>(movimiento, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
