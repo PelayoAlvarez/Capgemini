@@ -40,6 +40,7 @@ public class Cuenta implements Serializable {
 	private Set<Movimiento> movimientos = new HashSet<>();
 
 	@OneToMany(mappedBy = "cuenta")
+	@JsonIgnore
 	private Set<Transferencia> transferencias = new HashSet<>();
 
 	// Campos de Auditoria
