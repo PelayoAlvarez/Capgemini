@@ -30,6 +30,7 @@ public class Cuenta implements Serializable {
 	private String numeroCuenta;
 
 	@OneToMany(mappedBy = "cuenta")
+	@JsonIgnore
 	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
 
 	@Column(name = "Usuario")
