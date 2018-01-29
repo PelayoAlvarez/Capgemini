@@ -63,6 +63,14 @@ public class Cliente implements Serializable{
 	@JoinColumn(name = "id_sucursal")
 	public Sucursal sucursal;
 	
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
+
 	public Cliente() {
 		super();
 	}
@@ -176,14 +184,6 @@ public class Cliente implements Serializable{
 
 	public void setClienteCuentas(Set<ClienteCuenta> cuentas) {
 		this.clienteCuenta = cuentas;
-	}
-
-	public Sucursal getSucursal() {
-		return sucursal;
-	}
-
-	public void setSucursal(Sucursal sucursal) {
-		this.sucursal = sucursal;
 	}
 
 	public String getDni() {
