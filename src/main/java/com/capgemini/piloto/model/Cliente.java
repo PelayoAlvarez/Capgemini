@@ -58,6 +58,14 @@ public class Cliente {
 	@JoinColumn(name = "id_sucursal")
 	public Sucursal sucursal;
 	
+	public Sucursal getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Sucursal sucursal) {
+		this.sucursal = sucursal;
+	}
+
 	public Cliente() {
 		super();
 	}
