@@ -8,6 +8,12 @@ import java.util.Set;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.capgemini.piloto.model.Cliente;
+import com.capgemini.piloto.model.ClienteCuenta;
+import com.capgemini.piloto.model.Cuenta;
+import com.capgemini.piloto.model.Movimiento;
+import com.capgemini.piloto.model.Transferencia;
+
 
 public class CuentaDTO implements Serializable {
 
@@ -19,7 +25,7 @@ public class CuentaDTO implements Serializable {
 	@NotBlank
 	private String numeroCuenta;
 
-	private Set<Dictionary<Long,Long>> clientecuenta = new HashSet<>();
+	private Set<String> clientes = new HashSet<>();
 
 	private String usuario;
 
@@ -44,14 +50,27 @@ public class CuentaDTO implements Serializable {
 		fecCreacion = new Date();
 		fecActu = new Date();
 	}
+	
+	public CuentaDTO(Cuenta cuenta) {
+		this.numeroCuenta=cuenta.getNumeroCuenta();
+		this.usuario=cuenta.getUsuario();
+		this.fecActu=new Date();
+		this.fecCreacion=new Date();
+		for(Transferencia t : cuenta.getTransferencias())
+			this.getTransferencias().add(t.getId());
+		for(Movimiento m : cuenta.getMovimientos())
+			this.getMovimientos().add(m.getId());
+		for(ClienteCuenta cl : cuenta.getClienteCuenta())
+			this.getClientes().add(cl.getCliente().getDni());
+	}
 
 	public CuentaDTO(String numeroCuenta, Set<Long> movimientos, Set<Long> transferencias,
-			Set<Dictionary<Long,Long>> clientecuenta, Boolean mCAHabilitado, String usuario) {
+			Set<String> clientes, Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.transferencias = transferencias;
-		this.clientecuenta = clientecuenta;
+		this.clientes = clientes;
 		this.fecActu = new Date();
 		this.fecCreacion = new Date();
 		this.mCAHabilitado = mCAHabilitado;
@@ -115,16 +134,16 @@ public class CuentaDTO implements Serializable {
 		this.transferencias = transferencias;
 	}
 
-	public Set<Dictionary<Long,Long>> getClienteCuenta() {
-		return clientecuenta;
+	public Set<String> getClientes() {
+		return clientes;
 	}
 
-	public Set<Dictionary<Long,Long>> _getClienteCuenta() {
-		return new HashSet<>(clientecuenta);
+	public Set<String> _getClientes() {
+		return new HashSet<>(clientes);
 	}
 
-	public void setClienteCuenta(Set<Dictionary<Long,Long>> clientecuenta) {
-		this.clientecuenta = clientecuenta;
+	public void setClienteCuenta(Set<String> clientecuenta) {
+		this.clientes = clientecuenta;
 	}
 
 	// Getters y Setters de Auditoria
