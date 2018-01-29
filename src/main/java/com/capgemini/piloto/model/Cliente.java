@@ -186,14 +186,6 @@ public class Cliente implements Serializable{
 		this.clienteCuenta = cuentas;
 	}
 
-	public Sucursal getSucursal() {
-		return sucursal;
-	}
-
-	public void setSucursal(Sucursal sucursal) {
-		this.sucursal = sucursal;
-	}
-
 	public String getDni() {
 		return dni;
 	}
