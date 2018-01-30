@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 
-public interface MovimientoRepository extends JpaRepository<Movimiento, Long>{
-	
+public interface MovimientoRepository extends JpaRepository<Movimiento, Long> {
+
 	Movimiento findMovimientoById(Long id);
 
 	List<Movimiento> findByCuentaAsociada(Cuenta cuenta);

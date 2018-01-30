@@ -11,43 +11,42 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 
-public class ClienteDTO implements Serializable{
+public class ClienteDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@NotBlank
 	private String dni;
-	
+
 	@NotBlank
 	private String nombre;
-	
+
 	@NotBlank
 	private String apellidos;
 
 	@NotBlank
 	private String direccion;
-	
+
 	private String movil;
-	
+
 	private String fijo;
-	
+
 	private String email;
-	
-	private Set<ListarClientesCuentaDTO> cuentas= new HashSet<ListarClientesCuentaDTO>();
+
+	private Set<ListarClientesCuentaDTO> cuentas = new HashSet<ListarClientesCuentaDTO>();
 
 	@NotNull
 	public Long sucursal;
-	
-	public ClienteDTO(Cliente c)
-	{
-		this.dni=c.getDni();
-		this.nombre=c.getNombre();
-		this.apellidos=c.getApellidos();
-		this.direccion=c.getDireccion();
-		this.movil=c.getMovil();
-		this.fijo=c.getFijo();
-		this.email=c.getEmail();
-		for(ClienteCuenta cl : c.getClienteCuentas())
+
+	public ClienteDTO(Cliente c) {
+		this.dni = c.getDni();
+		this.nombre = c.getNombre();
+		this.apellidos = c.getApellidos();
+		this.direccion = c.getDireccion();
+		this.movil = c.getMovil();
+		this.fijo = c.getFijo();
+		this.email = c.getEmail();
+		for (ClienteCuenta cl : c.getClienteCuentas())
 			this.getCuentas().add(new ListarClientesCuentaDTO(cl.getCuenta()));
 	}
 
@@ -118,7 +117,5 @@ public class ClienteDTO implements Serializable{
 	public String getDni() {
 		return dni;
 	}
-	
-	
-	
+
 }

@@ -23,10 +23,9 @@ import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.types.TipoCanal;
 
-
 @Entity
-@Table(name="transferencia_H")
-public class TransferenciaH implements Serializable{
+@Table(name = "transferencia_H")
+public class TransferenciaH implements Serializable {
 
 	private static final long serialVersionUID = -2858106251027444163L;
 
@@ -72,7 +71,7 @@ public class TransferenciaH implements Serializable{
 	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaCreacion;
-	
+
 	@Id
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -81,42 +80,39 @@ public class TransferenciaH implements Serializable{
 	@NotBlank
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
-		
-		
-		public TransferenciaH() {}
-		
-		public TransferenciaH(Transferencia t) {
-			idDestino = t.getIdDestino();
-			cuenta = t.getCuenta();
-			fechaTransferencia = t.getFechaTransferencia();
-			fechaConsolidacion = t.getFechaConsolidacion();
-			canal = t.getCanal();
-			importe = t.getImporte();
-		}
-		
-		
-	
-	public TransferenciaH(String id_destino, Date fecha_transferencia, Date fecha_consolidacion,
-				TipoCanal canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion,
-				Boolean mCA_Habilitado, Empleado empleado) {
-			super();
-			this.idDestino = id_destino;
-			this.fechaTransferencia = fecha_transferencia;
-			this.fechaConsolidacion = fecha_consolidacion;
-			this.canal = canal;
-			this.importe = importe;
-			this.cuenta = cuenta;
-			this.empleado = empleado;
-			this.fechaActua = fecha_Actua;
-			this.fechaConsolidacion = fecha_Creacion;
-			setMCA_Habilitado(mCA_Habilitado);
-		}
 
+	public TransferenciaH() {
+	}
 
+	public TransferenciaH(Transferencia t) {
+		idDestino = t.getIdDestino();
+		cuenta = t.getCuenta();
+		fechaTransferencia = t.getFechaTransferencia();
+		fechaConsolidacion = t.getFechaConsolidacion();
+		canal = t.getCanal();
+		importe = t.getImporte();
+	}
+
+	public TransferenciaH(String id_destino, Date fecha_transferencia, Date fecha_consolidacion, TipoCanal canal,
+			double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion, Boolean mCA_Habilitado,
+			Empleado empleado) {
+		super();
+		this.idDestino = id_destino;
+		this.fechaTransferencia = fecha_transferencia;
+		this.fechaConsolidacion = fecha_consolidacion;
+		this.canal = canal;
+		this.importe = importe;
+		this.cuenta = cuenta;
+		this.empleado = empleado;
+		this.fechaActua = fecha_Actua;
+		this.fechaConsolidacion = fecha_Creacion;
+		setMCA_Habilitado(mCA_Habilitado);
+	}
 
 	public String getId_destino() {
 		return idDestino;
 	}
+
 	public void setId_destino(String id_destino) {
 		this.idDestino = id_destino;
 	}
@@ -124,31 +120,39 @@ public class TransferenciaH implements Serializable{
 	public Date getFecha_transferencia() {
 		return fechaTransferencia;
 	}
+
 	public void setFecha_transferencia(Date fecha_transferencia) {
 		this.fechaTransferencia = fecha_transferencia;
 	}
+
 	public Date getFecha_consolidacion() {
 		return fechaConsolidacion;
 	}
+
 	public void setFecha_consolidacion(Date fecha_consolidacion) {
 		this.fechaConsolidacion = fecha_consolidacion;
 	}
+
 	public TipoCanal getCanal() {
 		return canal;
 	}
+
 	public void setCanal(TipoCanal canal) {
 		this.canal = canal;
 	}
+
 	public double getImporte() {
 		return importe;
 	}
+
 	public void setImporte(double importe) {
 		this.importe = importe;
 	}
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public Date getFecha_Actua() {
 		return fechaActua;
 	}
@@ -164,7 +168,7 @@ public class TransferenciaH implements Serializable{
 	public void setFecha_Creacion(Date fecha_Creacion) {
 		this.fechaConsolidacion = fecha_Creacion;
 	}
-	
+
 	public Date getFecAudit() {
 		return fecAudit;
 	}
@@ -181,22 +185,12 @@ public class TransferenciaH implements Serializable{
 		mcaHabilitado = mCA_Habilitado;
 	}
 
-
-
 	@Override
 	public String toString() {
-		return "Transferencia [id=" + id + ", id_destino=" + idDestino 
-				+ ", fecha_transferencia=" + fechaTransferencia + ", fecha_consolidacion=" + fechaConsolidacion
-				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", empleado =" + empleado + ", fecha_Actua=" + fechaActua
-				+ ", fecha_Creacion=" + fechaConsolidacion + ", MCA_Habilitado=" + mcaHabilitado + "]";
+		return "Transferencia [id=" + id + ", id_destino=" + idDestino + ", fecha_transferencia=" + fechaTransferencia
+				+ ", fecha_consolidacion=" + fechaConsolidacion + ", canal=" + canal + ", importe=" + importe
+				+ ", cuenta=" + cuenta + ", empleado =" + empleado + ", fecha_Actua=" + fechaActua + ", fecha_Creacion="
+				+ fechaConsolidacion + ", MCA_Habilitado=" + mcaHabilitado + "]";
 	}
-	
 
-
-
-
-
-	
-	
-	
 }

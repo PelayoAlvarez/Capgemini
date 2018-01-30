@@ -15,35 +15,36 @@ import com.capgemini.piloto.model.Transferencia;
 public class EmpleadoDTO implements Serializable {
 
 	private static final long serialVersionUID = 7180975093272384810L;
-	
+
 	@NotBlank
 	public String dni;
-	
+
 	@NotBlank
 	public String nombre;
-	
+
 	@NotBlank
 	public String apellidos;
-	
+
 	@NotBlank
 	public String direccion;
-	
+
 	public String fijo;
-	
+
 	public String movil;
-	
+
 	public String email;
-	
+
 	@NotBlank
 	public String usuario;
-	
+
 	private Set<Long> transferencias = new HashSet<>();
-	
+
 	@NotNull
 	public Long sucursal;
-	
-	public EmpleadoDTO() { }
-	
+
+	public EmpleadoDTO() {
+	}
+
 	public EmpleadoDTO(Empleado empleado) {
 		this.dni = empleado.getDni();
 		this.nombre = empleado.getNombre();
@@ -53,7 +54,8 @@ public class EmpleadoDTO implements Serializable {
 		this.movil = empleado.getMovil();
 		this.email = empleado.getEmail();
 		this.usuario = empleado.getUsuario();
-		this.transferencias = empleado.getTransferencias().stream().map(Transferencia::getId).collect(Collectors.toSet());
+		this.transferencias = empleado.getTransferencias().stream().map(Transferencia::getId)
+				.collect(Collectors.toSet());
 		this.sucursal = empleado.getSucursal().getId();
 	}
 

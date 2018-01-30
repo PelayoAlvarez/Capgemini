@@ -4,17 +4,17 @@ import java.io.Serializable;
 
 import com.capgemini.piloto.model.Tarjeta;
 
-public class TarjetaDTO implements Serializable{
+public class TarjetaDTO implements Serializable {
 
 	private static final long serialVersionUID = -4883586195871239103L;
 	private String numeroTarjeta;
 	private String numeroCuenta;
 	private Double importe;
-	
+
 	public TarjetaDTO() {
-		
+
 	}
-	
+
 	public TarjetaDTO(Tarjeta tarjeta) {
 		this.numeroTarjeta = tarjeta.getNumeroTarjeta();
 		this.numeroCuenta = tarjeta.getClienteCuenta().getCuenta().getNumeroCuenta();
@@ -44,6 +44,5 @@ public class TarjetaDTO implements Serializable{
 	public void setImporte(Double importe) {
 		this.importe = importe;
 	}
-	
-	
+
 }

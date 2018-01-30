@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.capgemini.piloto.model.historico.ClienteH;
 
-public interface ClienteHRepository extends JpaRepository<ClienteH, Long>{
+public interface ClienteHRepository extends JpaRepository<ClienteH, Long> {
 
 }

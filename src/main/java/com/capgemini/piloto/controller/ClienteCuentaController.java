@@ -25,8 +25,8 @@ import com.capgemini.piloto.repository.historico.ClienteCuentaHRepository;
 @RestController
 @RequestMapping("/cliente_cuenta")
 public class ClienteCuentaController {
-	
-	//Logger
+
+	// Logger
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	// Repositorios
@@ -41,7 +41,6 @@ public class ClienteCuentaController {
 	@Autowired
 	ClienteCuentaHRepository clienteCuentaHRepository;
 
-	
 	// Creacion de una nueva asociacion entre una cuenta y un cliente.
 	@PutMapping("/asociar")
 	public ResponseEntity<GestionTitularesCuentaDTO> createNote(@RequestBody GestionTitularesCuentaDTO datos) {
@@ -53,7 +52,7 @@ public class ClienteCuentaController {
 		if (datos.getDniTitulares().isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}
-		
+
 		Set<Cliente> clientes = new HashSet<>();
 		for (String dniTitular : datos.getDniTitulares()) {
 			Cliente cliente = clienteRepository.findByDni(dniTitular);
@@ -71,27 +70,30 @@ public class ClienteCuentaController {
 					clienteCuentaHRepository.save(new ClienteCuentaH(cc, cc.getUsuario()));
 					cc.setMcaHabilitado(true);
 					cc.setFecActu(new Date());
-					log.info("PUT: Se crea la relación de titular entre la cuenta con nº[{}] y con el cliente con DNI[{}]",
-							datos.getNumeroCuenta(),cc.getCliente().getDni());
+					log.info(
+							"PUT: Se crea la relación de titular entre la cuenta con nº[{}] y con el cliente con DNI[{}]",
+							datos.getNumeroCuenta(), cc.getCliente().getDni());
 					clienteCuentaRepository.save(cc);
 				}
 				clientes.remove(cc.getCliente());
 			} else {
-				// el cliente ya no esta en la lista de clientes titulares --> hay que borrarlo logicamente en la tabla ClienteCuenta
+				// el cliente ya no esta en la lista de clientes titulares --> hay que borrarlo
+				// logicamente en la tabla ClienteCuenta
 				clienteCuentaHRepository.save(new ClienteCuentaH(cc, cc.getUsuario()));
 				cc.setMcaHabilitado(false);
 				cc.setFecActu(new Date());
 				log.info("PUT: Se borra la relación de titular entre la cuenta con nº[{}] y con el cliente con DNI[{}]",
-						datos.getNumeroCuenta(),cc.getCliente().getDni());
+						datos.getNumeroCuenta(), cc.getCliente().getDni());
 				clienteCuentaRepository.save(cc);
-			}		
+			}
 		}
 
-		// Son clientes que nunca han tenido antes una relacion con la cuenta que recibimos
+		// Son clientes que nunca han tenido antes una relacion con la cuenta que
+		// recibimos
 		for (Cliente cliente : clientes) {
 			clienteCuentaRepository.save(new ClienteCuenta(cliente, cuenta));
 			log.info("PUT: Se crea la relación de titular entre la cuenta con nº[{}] y con el cliente con DNI[{}]",
-					datos.getNumeroCuenta(),cliente.getDni());
+					datos.getNumeroCuenta(), cliente.getDni());
 		}
 
 		return ResponseEntity.ok().build();
@@ -125,14 +127,15 @@ public class ClienteCuentaController {
 		clienteCuentaRepository.save(cc);
 		return ResponseEntity.ok(new GestionTitularesCuentaDTO(cc));
 	}
-	
+
 	// Obtencion de una asociciacion entre una cuenta y un cliente
-		@GetMapping("/titulares/{cuenta}")
-		public ResponseEntity<GestionTitularesCuentaDTO> getTitularesByCuenta(@PathVariable(name = "cuenta") String numCuenta) {
-			List<ClienteCuenta> ccs = clienteCuentaRepository.findByNumeroCuenta(numCuenta);
-			if (ccs == null) {
-				return ResponseEntity.notFound().build();
-			}
-			return ResponseEntity.ok().body(new GestionTitularesCuentaDTO(ccs));
+	@GetMapping("/titulares/{cuenta}")
+	public ResponseEntity<GestionTitularesCuentaDTO> getTitularesByCuenta(
+			@PathVariable(name = "cuenta") String numCuenta) {
+		List<ClienteCuenta> ccs = clienteCuentaRepository.findByNumeroCuenta(numCuenta);
+		if (ccs == null) {
+			return ResponseEntity.notFound().build();
 		}
+		return ResponseEntity.ok().body(new GestionTitularesCuentaDTO(ccs));
+	}
 }

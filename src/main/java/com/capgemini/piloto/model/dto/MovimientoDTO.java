@@ -7,8 +7,8 @@ import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
-public class MovimientoDTO implements Serializable{
-	
+public class MovimientoDTO implements Serializable {
+
 	/**
 	 * 
 	 */
@@ -25,11 +25,11 @@ public class MovimientoDTO implements Serializable{
 	private String descripcion;
 
 	private Cuenta cuentaAsociada;
-	
+
 	private String usuario;
-	
+
 	public MovimientoDTO() {
-		
+
 	}
 
 	public MovimientoDTO(Movimiento m) {

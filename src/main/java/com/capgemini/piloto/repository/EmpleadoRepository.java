@@ -11,7 +11,7 @@ public interface EmpleadoRepository extends JpaRepository<Empleado, String> {
 
 	@Query("SELECT e FROM Empleado e WHERE e.mcaHabilitado=true")
 	List<Empleado> findByMcaHabilitado();
-	
+
 	Empleado findByDni(String dni);
-	
+
 }

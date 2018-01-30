@@ -5,19 +5,19 @@ import java.io.Serializable;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
-public class MisMovimientosDTO implements Serializable{
+public class MisMovimientosDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private double importe;
-	
+
 	private TipoMovimiento tipo;
-	
+
 	private String descripcion;
-	
+
 	public MisMovimientosDTO(Movimiento m) {
 		this.importe = m.getImporte();
 		this.tipo = m.getTipo();

@@ -13,7 +13,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -25,47 +24,46 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "Cliente_Cuenta_H")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdAt", "updateAt"}, allowGetters = false)
-public class ClienteCuentaH implements Serializable{
+@JsonIgnoreProperties(value = { "createdAt", "updateAt" }, allowGetters = false)
+public class ClienteCuentaH implements Serializable {
 
 	private static final long serialVersionUID = 5790237128818207030L;
 
 	@JoinColumn(name = "Dni", nullable = false)
 	@ManyToOne
 	private Cliente cliente;
-	
+
 	@JoinColumn(name = "Numero_cuenta", nullable = false)
 	@ManyToOne
 	private Cuenta cuenta;
-	
+
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
-	
+
 	@Column(name = "Fec_creacion", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
-	
+
 	@Column(name = "Usuario")
 	private String usuario;
-	
+
 	@Column(name = "Mca_habilitado")
 	private boolean mcaHabilitado;
-	
+
 	@Id
 	@Column(name = "Fec_audit", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
 	private Date fecAudit;
-	
+
 	@Column(name = "Usuario_h")
 	private String usuarioH;
-	
-	
+
 	ClienteCuentaH() {
 		// Necesario para JPA
 	}
-	
+
 	public ClienteCuentaH(ClienteCuenta clienteCuenta, String usuarioH) {
 		this.cliente = clienteCuenta.getCliente();
 		this.cuenta = clienteCuenta.getCuenta();
@@ -73,8 +71,8 @@ public class ClienteCuentaH implements Serializable{
 		this.fecCreacion = clienteCuenta.getFecCreacion();
 		this.usuario = clienteCuenta.getUsuario();
 		this.mcaHabilitado = clienteCuenta.getMcaHabilitado();
-		
-		//auditoria
+
+		// auditoria
 		this.fecAudit = new Date();
 		this.usuarioH = usuarioH;
 	}
@@ -126,7 +124,5 @@ public class ClienteCuentaH implements Serializable{
 	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
-	
-	
 
 }

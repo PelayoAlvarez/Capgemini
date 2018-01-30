@@ -1,16 +1,10 @@
 package com.capgemini.piloto.model.dto;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.capgemini.piloto.model.Cuenta;
-import com.capgemini.piloto.model.Movimiento;
-import com.capgemini.piloto.model.Transferencia;
-
 
 public class GenerarTransferenciaCuentaDTO implements Serializable {
 
@@ -22,35 +16,28 @@ public class GenerarTransferenciaCuentaDTO implements Serializable {
 	@NotBlank
 	private String numeroCuenta;
 
-	
 	private Double importe;
 
-
 	public GenerarTransferenciaCuentaDTO(Cuenta cuenta) {
-		this.numeroCuenta=cuenta.getNumeroCuenta();
+		this.numeroCuenta = cuenta.getNumeroCuenta();
 		this.importe = cuenta.getImporte();
 	}
-
 
 	public String getNumeroCuenta() {
 		return numeroCuenta;
 	}
 
-
 	public void setNumeroCuenta(String numeroCuenta) {
 		this.numeroCuenta = numeroCuenta;
 	}
-
 
 	public Double getImporte() {
 		return importe;
 	}
 
-
 	public void setImporte(Double importe) {
 		this.importe = importe;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -60,7 +47,6 @@ public class GenerarTransferenciaCuentaDTO implements Serializable {
 		result = prime * result + ((numeroCuenta == null) ? 0 : numeroCuenta.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -84,15 +70,9 @@ public class GenerarTransferenciaCuentaDTO implements Serializable {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
 		return "GenerarTransferenciaCuentaDTO [numeroCuenta=" + numeroCuenta + ", importe=" + importe + "]";
 	}
-	
-	
-
-	
-	
 
 }

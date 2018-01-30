@@ -6,26 +6,26 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.capgemini.piloto.model.Cliente;
 
-public class ClienteBDTO implements Serializable{
+public class ClienteBDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@NotBlank
 	private String dni;
-	
+
 	@NotBlank
 	private String nombre;
-	
+
 	@NotBlank
 	private String apellidos;
 
 	@NotBlank
 	private String direccion;
-	
+
 	private String movil;
-	
+
 	private String fijo;
-	
+
 	private String email;
 
 	public ClienteBDTO(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
@@ -39,16 +39,15 @@ public class ClienteBDTO implements Serializable{
 		this.fijo = fijo;
 		this.email = email;
 	}
-	
-	public ClienteBDTO(Cliente c)
-	{
-		this.dni=c.getDni();
-		this.nombre=c.getNombre();
-		this.apellidos=c.getApellidos();
-		this.direccion=c.getDireccion();
-		this.movil=c.getMovil();
-		this.fijo=c.getFijo();
-		this.email=c.getEmail();
+
+	public ClienteBDTO(Cliente c) {
+		this.dni = c.getDni();
+		this.nombre = c.getNombre();
+		this.apellidos = c.getApellidos();
+		this.direccion = c.getDireccion();
+		this.movil = c.getMovil();
+		this.fijo = c.getFijo();
+		this.email = c.getEmail();
 	}
 
 	public String getNombre() {
@@ -102,7 +101,5 @@ public class ClienteBDTO implements Serializable{
 	public String getDni() {
 		return dni;
 	}
-	
-	
-	
+
 }

@@ -1,6 +1,5 @@
 package com.capgemini.piloto.controller;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,84 +34,80 @@ import com.capgemini.piloto.repository.historico.ClienteHRepository;
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
-	
+
 	private static final String NOT_FOUND = "The requested client was not found";
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
-	
-	
+
 	@Autowired
 	private ClienteHRepository clienteHRepository;
-	
+
 	@Autowired
 	SucursalRepository sucursalRepository;
-	
+
 	@Autowired
 	ClienteRepository clienteRepository;
-	
+
 	// Get every client
 	@GetMapping("/listarClientes")
-	public List<ClienteDTO> getAllClientes(){
+	public List<ClienteDTO> getAllClientes() {
 		logger.info("Requested evey active client");
-		List<Cliente> clientes = clienteRepository.findMCA();	
+		List<Cliente> clientes = clienteRepository.findMCA();
 		List<ClienteDTO> clientesDTO = new ArrayList<>();
-		for(Cliente cliente : clientes) {
+		for (Cliente cliente : clientes) {
 			clientesDTO.add(new ClienteDTO(cliente));
 		}
 		return clientesDTO;
 	}
-	
+
 	// Create a new client
 	@PostMapping("/clientes")
 	public ResponseEntity<Cliente> createClient(@RequestBody Cliente cliente, @RequestParam Long sucursalId) {
 		Cliente cliente1 = clienteRepository.findByDni(cliente.getDni());
-		if(cliente1 != null) {
+		if (cliente1 != null) {
 			logger.error("The client is already created");
 			return new ResponseEntity<>(cliente1, new HttpHeaders(), HttpStatus.CONFLICT);
-			
-		}	
+
+		}
 		Sucursal aux = sucursalRepository.findById(sucursalId);
 		cliente.setSucursal(aux);
 		aux.getClientes().add(cliente);
 		Cliente c2 = clienteRepository.save(cliente);
-		if(c2 == null) {
+		if (c2 == null) {
 			logger.error("The client was not created");
 			return new ResponseEntity<>(c2, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("Create a new client");
 		return ResponseEntity.ok().body(c2);
-		
+
 	}
-	
+
 	// Find a client by its dni
 	@GetMapping("/buscarCliente/{dni}")
-	public ResponseEntity<ClienteDTO> getClientByDni(@PathVariable(value ="dni") String dni){
+	public ResponseEntity<ClienteDTO> getClientByDni(@PathVariable(value = "dni") String dni) {
 		Cliente cliente = clienteRepository.findByDni(dni);
-		if(cliente == null || !cliente.getmCAHabilitado()) {
+		if (cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
 		logger.info("The requested cliente vas found");
 		ClienteDTO clienteDTO = new ClienteDTO(cliente);
-		if(clienteDTO == null){
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
+
 		return ResponseEntity.ok().body(clienteDTO);
 	}
-	
+
 	// Update a client
 	@PutMapping("/cliente/{dni}")
 	public ResponseEntity<Cliente> updateNote(@PathVariable(value = "dni") String dni,
 			@Valid @RequestBody Cliente detailsClient) {
 		Cliente cliente = clienteRepository.findByDni(dni);
-		if(cliente == null || !cliente.getmCAHabilitado()) {
+		if (cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
-		
-		//Cogemos como prueba el usuario de la entidad
-		clienteHRepository.save(new ClienteH(cliente,cliente.getEmpleado()));
+
+		// Cogemos como prueba el usuario de la entidad
+		clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
 		cliente.setNombre(detailsClient.getNombre());
 		cliente.setApellidos(detailsClient.getApellidos());
 		cliente.setDireccion(detailsClient.getDireccion());
@@ -124,31 +119,26 @@ public class ClienteController {
 		logger.info("The client was successfully updated");
 		return ResponseEntity.ok(updateClient);
 	}
-	
+
 	// Delete a cliente by its dni
 	@DeleteMapping("/cliente/{dni}")
 	public ResponseEntity<ClienteDTO> deleteNote(@PathVariable(value = "dni") String dni) {
 		Cliente cliente = clienteRepository.findByDni(dni);
-		if(cliente == null || !cliente.getmCAHabilitado()) {
+		if (cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
 		clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
-		//Parte de Alperi para desvincular las cuentas de los clientes en caso de que no haya mas clientes 
-		//asociados a esas cuentas eliminar la cuenta
-		//unlink(cliente);
-		for (ClienteCuenta cc : cliente.getClienteCuentas()){
-				cc.unlinkCliente();
+
+		for (ClienteCuenta cc : cliente.getClienteCuentas()) {
+			cc.unlinkCliente();
 		}
 		cliente.setmCAHabilitado(false);
 		clienteRepository.save(cliente);
-		
+
 		logger.info("The client was successfully deleted");
 		ClienteDTO clienteDTO = new ClienteDTO(cliente);
-		if(clienteDTO == null){
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	
+
 		return ResponseEntity.ok().body(clienteDTO);
 	}
 

@@ -48,7 +48,7 @@ public class CuentaController {
 	public List<CuentaDTO> getAllCuentas() {
 		logger.info("Requested every active account");
 		List<Cuenta> aux = cuentaRepository.findMCA();
-		List<CuentaDTO> aux2 = new ArrayList<CuentaDTO>();
+		List<CuentaDTO> aux2 = new ArrayList<>();
 		for (Cuenta c : aux)
 			aux2.add(new CuentaDTO(c));
 		return aux2;
@@ -61,14 +61,16 @@ public class CuentaController {
 		Cliente cliente = clienteRepository.findByDni(dni);
 		if (cliente == null) {
 			logger.info(NOT_FOUND);
-			return null;
+			return new ArrayList<>();
 		}
 		List<ClienteCuenta> cuentas = clienteCuentaRepository.findByDni(dni);
 		List<MisCuentasDTO> misCuentas = new ArrayList<>();
-		for (ClienteCuenta cuenta: cuentas) {
+		for (ClienteCuenta cuenta : cuentas) {
 			List<ClienteTitularDTO> titulares = new ArrayList<>();
-			List<ClienteCuenta> clientes = clienteCuentaRepository.findByNumeroCuenta(cuenta.getCuenta().getNumeroCuenta());
-			clientes.forEach(titular -> titulares.add(new ClienteTitularDTO(clienteRepository.findByDni(titular.getCliente().getDni()))));
+			List<ClienteCuenta> clientes = clienteCuentaRepository
+					.findByNumeroCuenta(cuenta.getCuenta().getNumeroCuenta());
+			clientes.forEach(titular -> titulares
+					.add(new ClienteTitularDTO(clienteRepository.findByDni(titular.getCliente().getDni()))));
 			misCuentas.add(new MisCuentasDTO(cuenta.getCuenta().getNumeroCuenta(), titulares));
 		}
 		return misCuentas;

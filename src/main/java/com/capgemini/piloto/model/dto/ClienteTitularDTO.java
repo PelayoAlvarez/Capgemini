@@ -12,17 +12,18 @@ public class ClienteTitularDTO implements Serializable {
 
 	@NotBlank
 	private String nombre;
-	
+
 	@NotBlank
 	private String apellidos;
 
-	public ClienteTitularDTO() { }
-	
+	public ClienteTitularDTO() {
+	}
+
 	public ClienteTitularDTO(String nombre, String apellidos) {
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 	}
-	
+
 	public ClienteTitularDTO(Cliente c) {
 		this.nombre = c.getNombre();
 		this.apellidos = c.getApellidos();

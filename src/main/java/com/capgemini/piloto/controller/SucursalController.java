@@ -1,7 +1,6 @@
 package com.capgemini.piloto.controller;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -85,7 +84,7 @@ public class SucursalController {
 		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
 		sucursal.setMcaHabilitado(false);
 		sucursalRep.save(sucursal);
-		//No se si barrar Empleados, Clientes y Cuentas en cascada
+		// No se si barrar Empleados, Clientes y Cuentas en cascada
 		log.info("DELETE: Se borra la Sucursal con el id [{}]", sucursal.getId());
 		return ResponseEntity.ok(sucursal);
 	}

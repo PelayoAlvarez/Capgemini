@@ -7,15 +7,13 @@ import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.types.TipoCanal;
 
-public class TransferenciaDTO implements Serializable{
+public class TransferenciaDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
-	private Long id;
+
 	private String idDestino;
 	private Date fechaTransferencia;
 	private Date fechaConsolidacion;
@@ -23,11 +21,11 @@ public class TransferenciaDTO implements Serializable{
 	private double importe;
 	private Cuenta cuenta;
 	private Empleado empleado;
-	
-	public TransferenciaDTO(){
-		
+
+	public TransferenciaDTO() {
+
 	}
-	
+
 	public TransferenciaDTO(Transferencia t) {
 		idDestino = t.getIdDestino();
 		cuenta = t.getCuenta();
@@ -36,7 +34,7 @@ public class TransferenciaDTO implements Serializable{
 		canal = t.getCanal();
 		importe = t.getImporte();
 	}
-	
+
 	public String getIdDestino() {
 		return idDestino;
 	}
@@ -44,8 +42,6 @@ public class TransferenciaDTO implements Serializable{
 	public void setIdDestino(String idDestino) {
 		this.idDestino = idDestino;
 	}
-
-
 
 	public Date getFechaTransferencia() {
 		return fechaTransferencia;
@@ -94,7 +90,5 @@ public class TransferenciaDTO implements Serializable{
 	public void setEmpleado(Empleado empleado) {
 		this.empleado = empleado;
 	}
-
-	
 
 }
