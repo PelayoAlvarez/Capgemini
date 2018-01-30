@@ -1,5 +1,6 @@
 package com.capgemini.piloto.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.dto.CuentaBDTO;
 import com.capgemini.piloto.model.dto.GenerarTransferenciaDTO;
+import com.capgemini.piloto.model.dto.ListarTransferenciasNumeroCuentaDTO;
 import com.capgemini.piloto.model.historico.TransferenciaH;
 import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.TransferenciaRepository;
@@ -46,36 +48,12 @@ public class TransferenciaController {
 	private CuentaRepository cuentaRepository;
 	
 	//Get All Transfers
-		@GetMapping("/transferencia")
+		@GetMapping("/listarTransferenciasHabilitados")
 		public List<Transferencia> getAllTransferencias() {
 			logger.info("Request every active transfers");
 			return transferenciaRepository.findMCA();
 		}
 		
-		/*//Create a new Transfer
-		@PostMapping("/transferencia")
-		public ResponseEntity<CuentaBDTO> createTransfer(@RequestBody GenerarTransferenciaDTO transferencia,
-				@RequestParam String cuentaOrigen, @RequestParam String cuentaDestino, @RequestParam double importe ) {
-			if(cuentaOrigen == null || cuentaDestino == null || importe <= 0 ){
-				return new ResponseEntity<CuentaBDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			Cuenta cOrigen = cuentaRepository.findOne(cuentaOrigen);
-			Cuenta cDestino = cuentaRepository.findOne(cuentaDestino);
-			
-			
-			Transferencia trans = new GenerarTransferenciaDTO(transferencia, cOrigen, cDestino, importe) ;
-			cOrigen.setImporte(cOrigen.getImporte()-importe);
-			cDestino.setImporte(cDestino.getImporte()+importe);
-			logger.info("Create new transfer");
-			trans = transferenciaRepository.save(trans);
-			cuentaRepository.save(cOrigen);
-			cuentaRepository.save(cDestino);
-			CuentaBDTO cOrigeDto = new CuentaBDTO(cOrigen);
-			if (trans == null) {
-				return new ResponseEntity<CuentaBDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			return new ResponseEntity<CuentaBDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.OK);
-		}	*/
 		
 		//Create a new Transfer
 				@PostMapping("/transferencia")
@@ -115,6 +93,22 @@ public class TransferenciaController {
 			logger.info("The requested transfer was found");
 			return ResponseEntity.ok().body(transferencia);
 		}
+		
+		//Create a new Transfer
+		@GetMapping("/listarTransferenciaId/{cuenta}")
+		public ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>> createTransfer(@PathVariable(value = "cuenta") String numeroCuenta) {
+			if(numeroCuenta == null){
+				return new ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
+			List<Transferencia> listaTrasnfer = transferenciaRepository.findByCuenta(cuenta);
+			
+			List<ListarTransferenciasNumeroCuentaDTO> transfers = new ArrayList<>();
+			for (Transferencia transferencia : listaTrasnfer) {
+				transfers.add(new ListarTransferenciasNumeroCuentaDTO(transferencia));
+			}
+			return new ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>>(transfers, new HttpHeaders(), HttpStatus.OK);
+		}	
 		
 		/*//Update a transfer
 		@PutMapping("/transferencia/{id}")
