@@ -46,13 +46,11 @@ public class ClienteCuentaH implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
 	
-	@NotBlank
 	@Column(name = "Usuario")
 	private String usuario;
 	
-	@NotBlank
 	@Column(name = "Mca_habilitado")
-	private Boolean mcaHabilitado;
+	private boolean mcaHabilitado;
 	
 	@Id
 	@Column(name = "Fec_audit", nullable = false, updatable = false)
@@ -121,11 +119,11 @@ public class ClienteCuentaH implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public Boolean getMcaHabilitado() {
+	public boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(Boolean mcaHabilitado) {
+	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
 	

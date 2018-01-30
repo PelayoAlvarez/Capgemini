@@ -22,8 +22,11 @@ public class GestionTitularesCuentaDTO {
 		this.dniTitulares = dniTitulares;
 	}
 	
+	public GestionTitularesCuentaDTO() {
+		
+	}
+	
 	public GestionTitularesCuentaDTO(String numeroCuenta, Set<String> dniTitulares) {
-		super();
 		this.numeroCuenta = numeroCuenta;
 		this.dniTitulares = dniTitulares;
 	}
