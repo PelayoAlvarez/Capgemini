@@ -15,9 +15,6 @@ import com.capgemini.piloto.model.Transferencia;
 
 public class CuentaDTO implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7283533209815501984L;
 
 	@NotBlank
@@ -26,6 +23,8 @@ public class CuentaDTO implements Serializable {
 	private Set<ClienteBDTO> clientes = new HashSet<>();
 
 	private String usuario;
+	
+	private Double importe;
 
 	private Set<Long> movimientos = new HashSet<>();
 
@@ -177,5 +176,15 @@ public class CuentaDTO implements Serializable {
 	public void setFecCreacion(Date fecCreacion) {
 		this.fecCreacion = fecCreacion;
 	}
+
+	public Double getImporte() {
+		return importe;
+	}
+
+	public void setImporte(Double importe) {
+		this.importe = importe;
+	}
+	
+	
 
 }

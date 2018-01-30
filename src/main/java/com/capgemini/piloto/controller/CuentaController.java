@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
-import com.capgemini.piloto.model.dto.ClienteDTO;
+import com.capgemini.piloto.model.dto.ClienteTitularDTO;
 import com.capgemini.piloto.model.dto.CuentaDTO;
+import com.capgemini.piloto.model.dto.MisCuentasDTO;
 import com.capgemini.piloto.repository.ClienteCuentaRepository;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.CuentaRepository;
@@ -56,17 +56,22 @@ public class CuentaController {
 
 	// Get every account and its owners with X dni
 	@GetMapping("/miscuentas")
-	public List<CuentaDTO> getMisCuentas(@RequestParam String dni) {
+	public List<MisCuentasDTO> getMisCuentas(@RequestParam String dni) {
 		logger.info("Requested mis cuentas");
-		Cliente aux = clienteRepository.findByDni(dni);
-		if (aux == null) {
+		Cliente cliente = clienteRepository.findByDni(dni);
+		if (cliente == null) {
 			logger.info(NOT_FOUND);
 			return null;
 		}
-		ClienteDTO dto = new ClienteDTO(aux);
-		List<CuentaDTO> cuentas = new ArrayList<>(); 
-		cuentas.addAll(dto.getClienteCuenta());
-		return cuentas;
+		List<ClienteCuenta> cuentas = clienteCuentaRepository.findByDni(dni);
+		List<MisCuentasDTO> misCuentas = new ArrayList<>();
+		for (ClienteCuenta cuenta: cuentas) {
+			List<ClienteTitularDTO> titulares = new ArrayList<>();
+			List<ClienteCuenta> clientes = clienteCuentaRepository.findByNumeroCuenta(cuenta.getCuenta().getNumeroCuenta());
+			clientes.forEach(titular -> titulares.add(new ClienteTitularDTO(clienteRepository.findByDni(titular.getCliente().getDni()))));
+			misCuentas.add(new MisCuentasDTO(cuenta.getCuenta().getNumeroCuenta(), titulares));
+		}
+		return misCuentas;
 	}
 
 	// Create a new account

@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -70,9 +69,8 @@ public class Empleado implements Serializable {
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
 
-	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "id_sucursal")
+	@JoinColumn(name = "id_sucursal", nullable = false)
 	public Sucursal sucursal;
 
 	public Empleado() { }
@@ -197,6 +195,7 @@ public class Empleado implements Serializable {
 		this.mcaHabilitado = mcaHabilitado;
 	}
 	
+	@JsonIgnore
 	public Set<Transferencia> getTransferencias() {
 		return new HashSet<>(transferencias);
 	}

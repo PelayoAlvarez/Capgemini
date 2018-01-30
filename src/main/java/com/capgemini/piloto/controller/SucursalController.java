@@ -67,6 +67,7 @@ public class SucursalController {
 		}
 		sucursalHRep.save(new SucursalH(oldSucursal, oldSucursal.getNombre()));
 		Sucursal sucursal = sucursalRep.save(new Sucursal(sucursalDTO));
+		sucursalRep.save(sucursal);
 		log.info("UPDATE: Se actualiza la Sucursal con el id [{}]", sucursalDTO.getId());
 		return ResponseEntity.ok(sucursal);
 	}
@@ -78,13 +79,9 @@ public class SucursalController {
 			log.info("DELETE: No se ha encontrado la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
-		sucursal.getClientes().forEach(cliente -> cliente.setSucursal(null));
-		sucursal.setClientes(new HashSet<>());
-		sucursal.getEmpleados().forEach(empleado -> empleado.setSucursal(null));
-		sucursal.setEmpleados(new HashSet<>());
-		sucursal.setMcaHabilitado(false);
 		sucursal.setFecActu(new Date());
 		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
+		sucursal.setMcaHabilitado(false);
 		sucursalRep.save(sucursal);
 		//No se si barrar Empleados, Clientes y Cuentas en cascada
 		log.info("DELETE: Se borra la Sucursal con el id [{}]", sucursal.getId());

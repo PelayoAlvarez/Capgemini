@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -36,6 +34,9 @@ public class CuentaH implements Serializable {
 
 	@Column(name = "Usuario")
 	private String usuario;
+	
+	@Column(name = "Importe")
+	private Double importe;
 
 	@OneToMany(mappedBy="cuenta")
 	@JsonIgnore
@@ -90,7 +91,9 @@ public class CuentaH implements Serializable {
 		mCAHabilitado = c.getmCAHabilitado();
 		usuario = c.getUsuario();
 		fecAudit = new Date();
+		importe = c.getImporte();
 		this.usuarioH = user;
+		this.importe = c.getImporte();
 	}
 	
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, 
@@ -176,6 +179,16 @@ public class CuentaH implements Serializable {
 
 	public void setUsuarioH(String usuarioH) {
 		this.usuarioH = usuarioH;
+	}
+	
+	
+
+	public Double getImporte() {
+		return importe;
+	}
+
+	public void setImporte(Double importe) {
+		this.importe = importe;
 	}
 
 	@Override

@@ -1,9 +1,8 @@
 package com.capgemini.piloto.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
+import com.capgemini.piloto.model.dto.MisMovimientosDTO;
+import com.capgemini.piloto.model.dto.MovimientoDTO;
+import com.capgemini.piloto.model.historico.CuentaH;
 import com.capgemini.piloto.model.historico.MovimientoH;
+import com.capgemini.piloto.model.types.TipoMovimiento;
 import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.MovimientoRepository;
+import com.capgemini.piloto.repository.historico.CuentaHRepository;
 import com.capgemini.piloto.repository.historico.MovimientoHRepository;
 
 @RestController
@@ -38,71 +42,160 @@ public class MovimientoController {
 
 	@Autowired
 	private MovimientoRepository movimientoRepository;
-
+	
+	@Autowired
+	private CuentaRepository cuentaRepository;
+	
 	@Autowired
 	private MovimientoHRepository movimientoRepositoryH;
 	
 	@Autowired
-	private CuentaRepository cuentaRepository;
+	private CuentaHRepository cuentaRepositoryH;
 
 	@PostMapping("/")
-	public ResponseEntity<Movimiento> addMovimiento(@RequestBody Movimiento movimiento,
+	public ResponseEntity<Movimiento> addMovimiento(@RequestBody MovimientoDTO movimientoDto,
 			@RequestParam String cuenta) {
 		Cuenta cu = cuentaRepository.findByNumeroCuenta(cuenta);
-		logger.info("Create new transaction");
-		movimiento = new Movimiento(movimiento, cu) ;
+		Movimiento movimiento = new Movimiento(movimientoDto, cu) ;
 		movimiento = movimientoRepository.save(movimiento);
 		if (movimiento == null) {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
+		cuentaRepositoryH.save(new CuentaH(cu, cu.getUsuario()));
+		
+		if(movimiento.getTipo() == TipoMovimiento.ABONO) {
+			cu.setImporte(cu.getImporte() + movimiento.getImporte());
+		}
+		else {
+			cu.setImporte(cu.getImporte() - movimiento.getImporte());
+		}
+		cuentaRepository.save(cu);
+		logger.info("CREATE: Se guarda el Movimiento con el id [{}]", movimiento.getId());
 		return ResponseEntity.ok().body(movimiento);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Movimiento> removeMovimiento(@PathVariable(value = "id") Long movimientoId) {
-		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
+	public ResponseEntity<Movimiento> removeMovimiento(@PathVariable(value = "id") Long id) {
+		Movimiento movimiento = movimientoRepository.findOne(id);
 		if (movimiento == null) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
+		MovimientoH mHistorico = new MovimientoH(movimiento, movimiento.getUsuario());
+		movimientoRepositoryH.save(mHistorico);
 		movimiento.setmCAHabilitado(false);
+		movimientoRepository.save(movimiento);
+		logger.info("DELETE: Se borra el Movimiento con el id [{}]", movimiento.getId());
 		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Movimiento> updateMovimeinto(@PathVariable(value = "id") Long movimientoId,
-			@Valid @RequestBody Movimiento movimientoDetails) {
-		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
+	public ResponseEntity<Movimiento> updateMovimeinto(@PathVariable(value = "id") Long id,
+			@RequestBody MovimientoDTO movimientoDetails) {
+		Movimiento movimiento = movimientoRepository.findMovimientoById(id);
+		Cuenta cuenta = cuentaRepository.findByNumeroCuenta(movimiento.getCuentaAsociada().getNumeroCuenta());
 		if (movimiento == null || !movimiento.getmCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
-
-		movimientoRepositoryH.save(new MovimientoH(movimiento));
+		
+		calcularImporte(cuenta, movimiento, movimientoDetails);
+		
+		movimientoRepositoryH.save(new MovimientoH(movimiento, movimiento.getUsuario()));
 		movimiento.setDescripcion(movimientoDetails.getDescripcion());
+		movimiento.setFechaActua(new Date());
 		movimiento.setFechahora(movimientoDetails.getFechahora());
 		movimiento.setImporte(movimientoDetails.getImporte());
-		movimiento.setTipo(movimiento.getTipo());
-		movimiento.setFechaActua(new Date());
+		movimiento.setTipo(movimientoDetails.getTipo());
+		movimiento.setUsuario(movimientoDetails.getUsuario());
 		movimiento = movimientoRepository.save(movimiento);
-		logger.info("The transaction was succesfuly updated");
+		
+		logger.info("UPDATE: Se actualiza el Movimiento con el id [{}]", movimiento.getId());
+		
 		return ResponseEntity.ok(movimiento);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Movimiento> getCuentaById(@PathVariable(value = "id") Long movimientoId) {
-		Movimiento movimiento = movimientoRepository.findOne(movimientoId);
+	public ResponseEntity<Movimiento> getMovimientoById(@PathVariable(value = "id") Long id) {
+		Movimiento movimiento = movimientoRepository.findOne(id);
 		if (movimiento == null || !movimiento.getmCAHabilitado()) {
-			logger.info(NOT_FOUND);
+			logger.info("GET: No se encuentra el Movimiento con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
-		logger.info("The requested transaction was found");
+		logger.info("GET: Se obtiene el Movimiento con el id [{}]", id);
 		return ResponseEntity.ok().body(movimiento);
 	}
 
 	@GetMapping("/")
-	public List<Movimiento> getAllCuentas() {
-		logger.info("Requested every active transaction");
+	public List<Movimiento> getAllMovimiento() {
+		logger.info("GETALL: Se obtienen todas las instancias de Movimiento");
 		return movimientoRepository.findAll();
+	}
+	
+	@GetMapping("/mismovimientos/{cuenta}")
+	public ResponseEntity<List<MisMovimientosDTO>> getMisMovimientos(@PathVariable(value = "cuenta") String numeroCuenta) {
+		if(numeroCuenta == null){
+			return new ResponseEntity<List<MisMovimientosDTO>>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
+		if(cuenta != null) {
+			List<Movimiento> listaMovs = movimientoRepository.findByCuentaAsociada(cuenta);
+			
+			List<MisMovimientosDTO> movimientos = new ArrayList<>();
+			for (Movimiento m : listaMovs) {
+				movimientos.add(new MisMovimientosDTO(m));
+			}
+			return new ResponseEntity<List<MisMovimientosDTO>>(movimientos, new HttpHeaders(), HttpStatus.OK);
+		}
+		return new ResponseEntity<List<MisMovimientosDTO>>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}	
+	
+	// ---------------------------------------------------------------------------------------------------------------
+	
+	private void calcularImporte(Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
+		double saldo = cuenta.getImporte();
+		if(movimiento.getTipo().equals(movimientoDetails.getTipo())) {
+			if(movimiento.getImporte()!=movimientoDetails.getImporte()) {
+				double valor = Math.abs(movimiento.getImporte() - movimientoDetails.getImporte());
+				if(movimientoDetails.getTipo() == TipoMovimiento.CARGO) {
+					cuenta.setImporte(cuenta.getImporte() - valor);
+				}
+				else {
+					cuenta.setImporte(cuenta.getImporte() + valor);
+				}
+			}
+		}
+		else {
+			double valor = 0;
+			if(movimiento.getImporte() != movimientoDetails.getImporte()) {
+				valor = movimiento.getImporte() + movimientoDetails.getImporte();
+				if(movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
+					cuenta.setImporte(cuenta.getImporte() + valor);
+				}
+				else {
+					cuenta.setImporte(cuenta.getImporte() - valor);
+				}
+			}
+			else {
+				if(movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
+					cuenta.setImporte(cuenta.getImporte() + 2*movimientoDetails.getImporte());
+				}
+				else {
+					cuenta.setImporte(cuenta.getImporte() - 2*movimientoDetails.getImporte());
+				}
+			}
+		}
+		
+		actualizarCuenta(saldo, cuenta);
+	}
+	
+	private void actualizarCuenta(double saldo, Cuenta cuenta) {
+		if(saldo != cuenta.getImporte()) {
+			CuentaH ch = new CuentaH(cuenta, cuenta.getUsuario());
+			ch.setImporte(saldo);
+			cuentaRepositoryH.save(ch);
+			cuentaRepository.save(cuenta);
+		}
 	}
 }
