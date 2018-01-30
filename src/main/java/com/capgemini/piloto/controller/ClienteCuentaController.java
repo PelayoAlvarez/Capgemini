@@ -2,6 +2,7 @@ package com.capgemini.piloto.controller;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -124,4 +125,14 @@ public class ClienteCuentaController {
 		clienteCuentaRepository.save(cc);
 		return ResponseEntity.ok(new GestionTitularesCuentaDTO(cc));
 	}
+	
+	// Obtencion de una asociciacion entre una cuenta y un cliente
+		@GetMapping("/titulares/{cuenta}")
+		public ResponseEntity<GestionTitularesCuentaDTO> getTitularesByCuenta(@PathVariable(name = "cuenta") String numCuenta) {
+			List<ClienteCuenta> ccs = clienteCuentaRepository.findByNumeroCuenta(numCuenta);
+			if (ccs == null) {
+				return ResponseEntity.notFound().build();
+			}
+			return ResponseEntity.ok().body(new GestionTitularesCuentaDTO(ccs));
+		}
 }

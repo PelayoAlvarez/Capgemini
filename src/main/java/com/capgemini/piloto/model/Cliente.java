@@ -63,7 +63,7 @@ public class Cliente implements Serializable{
 	
 	@ManyToOne 
 	@JoinColumn(name = "id_sucursal")
-	public Sucursal sucursal;
+	private Sucursal sucursal;
 	
 	public Sucursal getSucursal() {
 		return sucursal;

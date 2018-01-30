@@ -1,6 +1,7 @@
 package com.capgemini.piloto.model.dto;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.capgemini.piloto.model.ClienteCuenta;
@@ -34,5 +35,9 @@ public class GestionTitularesCuentaDTO {
 	public GestionTitularesCuentaDTO(ClienteCuenta clienteCuenta) {
 		this.numeroCuenta = clienteCuenta.getCuenta().getNumeroCuenta();
 		this.dniTitulares.add(clienteCuenta.getCliente().getDni());
+	}
+	
+	public GestionTitularesCuentaDTO(List<ClienteCuenta> ccs) {
+		ccs.forEach(cc->dniTitulares.add(cc.getCliente().getDni()));
 	}
 }
