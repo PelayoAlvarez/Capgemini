@@ -22,11 +22,13 @@ import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Tarjeta;
 import com.capgemini.piloto.model.dto.CrearTarjetaDTO;
 import com.capgemini.piloto.model.dto.TarjetaDTO;
+import com.capgemini.piloto.model.historico.TarjetaH;
 import com.capgemini.piloto.model.types.ClienteCuentaKey;
 import com.capgemini.piloto.repository.ClienteCuentaRepository;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.TarjetaRepository;
+import com.capgemini.piloto.repository.historico.TarjetaHRepository;
 
 @RestController
 @RequestMapping("/tarjetas")
@@ -34,6 +36,8 @@ public class TarjetaController {
 	
 	@Autowired
 	private TarjetaRepository tarjetaRep;
+	@Autowired
+	private TarjetaHRepository tarjetaRepH;
 	@Autowired
 	private ClienteCuentaRepository clientCuentaRep;
 	@Autowired
@@ -66,9 +70,15 @@ public class TarjetaController {
 		return ResponseEntity.ok(tarjeta);
 	}
 	
-	@DeleteMapping()
-	public Tarjeta deleteTarjeta() {
-		return new Tarjeta();
+	@DeleteMapping("/{numeroTarjeta}")
+	public ResponseEntity<Tarjeta> deleteTarjeta(@PathVariable String numeroTarjeta) {
+		Tarjeta tarjeta = tarjetaRep.findByNumeroTarjeta(numeroTarjeta);
+		if(tarjeta == null)
+			return ResponseEntity.notFound().build();
+		tarjetaRepH.save(new TarjetaH(tarjeta, "User1"));
+		tarjeta.setMcaHabilitado(false);
+		tarjeta = tarjetaRep.save(tarjeta);
+		return ResponseEntity.ok(tarjeta);
 	}
 
 }
