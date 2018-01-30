@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -50,6 +49,9 @@ public class MovimientoH implements Serializable{
 
 	@Column(name = "Descripcion")
 	private String descripcion;
+	
+	@Column(name = "Usuario")
+	private String usuario;
 
 	@ManyToOne
 	@JoinColumn(name = "Numero_Cuenta", nullable = false)
@@ -74,7 +76,7 @@ public class MovimientoH implements Serializable{
 	
 
 	@Column(name = "Usuario_h")
-	private String Usuario;
+	private String Usuarioh;
 	
 
 	@Column(name = "Mca_habilitado")
@@ -85,16 +87,19 @@ public class MovimientoH implements Serializable{
 		//Solo para jpa
 	}
 
-	public MovimientoH(Movimiento m) {
+	public MovimientoH(Movimiento m, String usuario) {
 		super();
+		this.id = m.getId();
 		this.importe = m.getImporte();
 		this.tipo = m.getTipo();
 		this.fechahora = m.getFechahora();
 		this.descripcion = m.getDescripcion();
+		this.usuario = m.getUsuario();
 		this.cuentaAsociada = m.getCuentaAsociada();
 		this.fechaActua = m.getFechaActua();
+		this.fecAudit = new Date();
 		this.fechaCreacion = m.getFechaCreacion();
-		this.Usuario = m.getUsuario();
+		this.Usuarioh = usuario;
 		this.MCAHabilitado = m.getmCAHabilitado();
 	}
 
@@ -143,7 +148,7 @@ public class MovimientoH implements Serializable{
 	}
 
 	public String getUsuario() {
-		return Usuario;
+		return usuario;
 	}
 
 	//Getters y Setters de Auditoria
@@ -175,16 +180,17 @@ public class MovimientoH implements Serializable{
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
-
+	
+	public String getUsuarioH() {
+		return Usuarioh;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cuentaAsociada == null) ? 0 : cuentaAsociada.hashCode());
-		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-		result = prime * result + ((fechahora == null) ? 0 : fechahora.hashCode());
-		result = prime * result + ((importe == null) ? 0 : importe.hashCode());
-		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
+		result = prime * result + ((fecAudit == null) ? 0 : fecAudit.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -197,27 +203,15 @@ public class MovimientoH implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		MovimientoH other = (MovimientoH) obj;
-		if (cuentaAsociada == null) {
-			if (other.cuentaAsociada != null)
+		if (fecAudit == null) {
+			if (other.fecAudit != null)
 				return false;
-		} else if (!cuentaAsociada.equals(other.cuentaAsociada))
+		} else if (!fecAudit.equals(other.fecAudit))
 			return false;
-		if (descripcion == null) {
-			if (other.descripcion != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!descripcion.equals(other.descripcion))
-			return false;
-		if (fechahora == null) {
-			if (other.fechahora != null)
-				return false;
-		} else if (!fechahora.equals(other.fechahora))
-			return false;
-		if (importe == null) {
-			if (other.importe != null)
-				return false;
-		} else if (!importe.equals(other.importe))
-			return false;
-		if (tipo != other.tipo)
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
