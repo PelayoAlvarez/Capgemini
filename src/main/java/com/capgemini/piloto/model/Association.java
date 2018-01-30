@@ -19,13 +19,14 @@ public class Association {
 		
 		public static void unlink(ClienteCuenta titulo,Cuenta cuenta) {
 			titulo.setMcaHabilitado(false);
+			
+			//miramos si la cuenta linqueada al cliente que borramos es solo suya, si no lo es entonces habra que borrar la cuenta
 			for (ClienteCuenta titular : cuenta._getClienteCuenta()) {
 				if(titular.getMcaHabilitado())
 					return;
 			}
-			
-			//esto habra que pulirlo mas adelante
 			cuenta.setmCAHabilitado(false);
+			titulo.getTarjetas().forEach(tarjeta->tarjeta.setMcaHabilitado(false));
 		}
 	}
 
@@ -42,6 +43,7 @@ public class Association {
 		
 		public static void unlink(ClienteCuenta cc) {
 			cc.setMcaHabilitado(false);
+			cc.getTarjetas().forEach(tarjeta->tarjeta.setMcaHabilitado(false));
 		}
 	}
 }

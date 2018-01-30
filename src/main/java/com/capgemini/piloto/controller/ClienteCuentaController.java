@@ -49,6 +49,10 @@ public class ClienteCuentaController {
 			return ResponseEntity.notFound().build();
 		}
 
+		if (datos.getDniTitulares().isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+		
 		Set<Cliente> clientes = new HashSet<>();
 		for (String dniTitular : datos.getDniTitulares()) {
 			Cliente cliente = clienteRepository.findByDni(dniTitular);
