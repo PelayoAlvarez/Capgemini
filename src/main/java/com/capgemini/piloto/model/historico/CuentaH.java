@@ -93,6 +93,7 @@ public class CuentaH implements Serializable {
 		fecAudit = new Date();
 		importe = c.getImporte();
 		this.usuarioH = user;
+		this.importe = c.getImporte();
 	}
 	
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, 
