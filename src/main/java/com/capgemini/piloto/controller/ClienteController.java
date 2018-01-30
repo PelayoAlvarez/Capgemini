@@ -127,7 +127,7 @@ public class ClienteController {
 	
 	// Delete a cliente by its dni
 	@DeleteMapping("/cliente/{dni}")
-	public ResponseEntity<Cliente> deleteNote(@PathVariable(value = "dni") String dni) {
+	public ResponseEntity<ClienteDTO> deleteNote(@PathVariable(value = "dni") String dni) {
 		Cliente cliente = clienteRepository.findByDni(dni);
 		if(cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
@@ -144,8 +144,12 @@ public class ClienteController {
 		clienteRepository.save(cliente);
 		
 		logger.info("The client was successfully deleted");
+		ClienteDTO clienteDTO = new ClienteDTO(cliente);
+		if(clienteDTO == null){
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(clienteDTO);
 	}
 
 }
