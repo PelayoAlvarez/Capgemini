@@ -1,6 +1,7 @@
 package com.capgemini.piloto.controller;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Sucursal;
+import com.capgemini.piloto.model.dto.ClienteDTO;
 import com.capgemini.piloto.model.historico.ClienteH;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.SucursalRepository;
@@ -50,9 +52,14 @@ public class ClienteController {
 	
 	// Get every client
 	@GetMapping("/clientes")
-	public List<Cliente> getAllClientes(){
+	public List<ClienteDTO> getAllClientes(){
 		logger.info("Requested evey active client");
-		return clienteRepository.findMCA();	
+		List<Cliente> clientes = clienteRepository.findMCA();	
+		List<ClienteDTO> clientesDTO = new ArrayList<>();
+		for(Cliente cliente : clientes) {
+			clientesDTO.add(new ClienteDTO(cliente));
+		}
+		return clientesDTO;
 	}
 	
 	// Create a new client
