@@ -1,9 +1,7 @@
 package com.capgemini.piloto.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -68,6 +66,8 @@ public class ClienteCuentaController {
 					clienteCuentaHRepository.save(new ClienteCuentaH(cc, cc.getUsuario()));
 					cc.setMcaHabilitado(true);
 					cc.setFecActu(new Date());
+					log.info("PUT: Se crea la relación de titular entre la cuenta con nº[{}] y con el cliente con DNI[{}]",
+							datos.getNumeroCuenta(),cc.getCliente().getDni());
 					clienteCuentaRepository.save(cc);
 				}
 				clientes.remove(cc.getCliente());
@@ -76,12 +76,17 @@ public class ClienteCuentaController {
 				clienteCuentaHRepository.save(new ClienteCuentaH(cc, cc.getUsuario()));
 				cc.setMcaHabilitado(false);
 				cc.setFecActu(new Date());
+				log.info("PUT: Se borra la relación de titular entre la cuenta con nº[{}] y con el cliente con DNI[{}]",
+						datos.getNumeroCuenta(),cc.getCliente().getDni());
 				clienteCuentaRepository.save(cc);
 			}		
 		}
 
+		// Son clientes que nunca han tenido antes una relacion con la cuenta que recibimos
 		for (Cliente cliente : clientes) {
 			clienteCuentaRepository.save(new ClienteCuenta(cliente, cuenta));
+			log.info("PUT: Se crea la relación de titular entre la cuenta con nº[{}] y con el cliente con DNI[{}]",
+					datos.getNumeroCuenta(),cliente.getDni());
 		}
 
 		return ResponseEntity.ok().build();
