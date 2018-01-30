@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.capgemini.piloto.model.Empleado;
 
-public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
+public interface EmpleadoRepository extends JpaRepository<Empleado, String> {
 
 	@Query("SELECT e FROM Empleado e WHERE e.mcaHabilitado=true")
 	List<Empleado> findByMcaHabilitado();

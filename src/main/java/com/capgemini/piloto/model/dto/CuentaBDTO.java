@@ -23,6 +23,8 @@ public class CuentaBDTO implements Serializable {
 	private String numeroCuenta;
 
 	private String usuario;
+	
+	private Double importe;
 
 	private Set<Long> movimientos = new HashSet<>();
 
@@ -51,6 +53,7 @@ public class CuentaBDTO implements Serializable {
 		this.usuario=cuenta.getUsuario();
 		this.fecActu=new Date();
 		this.fecCreacion=new Date();
+		this.importe = cuenta.getImporte();
 		for(Transferencia t : cuenta.getTransferencias())
 			this.getTransferencias().add(t.getId());
 		for(Movimiento m : cuenta.getMovimientos())
@@ -159,5 +162,15 @@ public class CuentaBDTO implements Serializable {
 	public void setFecCreacion(Date fecCreacion) {
 		this.fecCreacion = fecCreacion;
 	}
+
+	public Double getImporte() {
+		return importe;
+	}
+
+	public void setImporte(Double importe) {
+		this.importe = importe;
+	}
+	
+	
 
 }
