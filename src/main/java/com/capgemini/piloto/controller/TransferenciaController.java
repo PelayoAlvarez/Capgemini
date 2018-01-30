@@ -29,9 +29,11 @@ import com.capgemini.piloto.model.dto.CuentaBDTO;
 import com.capgemini.piloto.model.dto.GenerarTransferenciaCuentaDTO;
 import com.capgemini.piloto.model.dto.GenerarTransferenciaDTO;
 import com.capgemini.piloto.model.dto.ListarTransferenciasNumeroCuentaDTO;
+import com.capgemini.piloto.model.historico.CuentaH;
 import com.capgemini.piloto.model.historico.TransferenciaH;
 import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.TransferenciaRepository;
+import com.capgemini.piloto.repository.historico.CuentaHRepository;
 import com.capgemini.piloto.repository.historico.TransferenciaHRepository;
 
 @RestController
@@ -49,6 +51,10 @@ public class TransferenciaController {
 	@Autowired
 	private CuentaRepository cuentaRepository;
 	
+	@Autowired
+	private CuentaHRepository cuentaHRepository;
+	
+	
 	//Get All Transfers
 		@GetMapping("/listarTransferenciasHabilitados")
 		public List<Transferencia> getAllTransferencias() {
@@ -59,7 +65,7 @@ public class TransferenciaController {
 		
 		//Create a new Transfer
 				@PostMapping("/transferencia")
-				public ResponseEntity<GenerarTransferenciaCuentaDTO> createTransfer(@RequestBody GenerarTransferenciaDTO transferencia) {
+				public ResponseEntity<GenerarTransferenciaCuentaDTO> createTransfer(@RequestBody GenerarTransferenciaDTO transferencia) throws InterruptedException {
 					if(transferencia == null){
 						return new ResponseEntity<GenerarTransferenciaCuentaDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 					}
@@ -70,6 +76,9 @@ public class TransferenciaController {
 						return new ResponseEntity<GenerarTransferenciaCuentaDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 					
+					CuentaH cOrigenH = new CuentaH(cOrigen,"pepe");
+					Thread.sleep(1000);
+					CuentaH cDestinoH = new CuentaH(cDestino,"pepe");
 					cOrigen.setImporte(cOrigen.getImporte()-transferencia.getImporte());
 					cOrigen.setFecActu(new Date());
 					cDestino.setImporte(cDestino.getImporte()+transferencia.getImporte());
@@ -79,6 +88,8 @@ public class TransferenciaController {
 					
 					cuentaRepository.save(cOrigen);
 					cuentaRepository.save(cDestino);
+					cuentaHRepository.save(cOrigenH);
+					cuentaHRepository.save(cDestinoH);
 					GenerarTransferenciaCuentaDTO cOrigeDto = new GenerarTransferenciaCuentaDTO(cOrigen);
 					if (transfe == null) {
 						return new ResponseEntity<GenerarTransferenciaCuentaDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,6 +104,9 @@ public class TransferenciaController {
 				return new ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
+			if(cuenta==null) {
+				return new ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 			List<Transferencia> listaTrasnfer = transferenciaRepository.findByCuenta(cuenta);
 			
 			List<ListarTransferenciasNumeroCuentaDTO> transfers = new ArrayList<>();
