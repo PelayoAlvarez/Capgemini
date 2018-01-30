@@ -78,13 +78,13 @@ public class SucursalController {
 			log.info("DELETE: No se ha encontrado la Sucursal con el id [{}]", id);
 			return ResponseEntity.notFound().build();
 		}
+		sucursal.setFecActu(new Date());
+		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
 		sucursal.getClientes().forEach(cliente -> cliente.setSucursal(null));
 		sucursal.setClientes(new HashSet<>());
 		sucursal.getEmpleados().forEach(empleado -> empleado.setSucursal(null));
 		sucursal.setEmpleados(new HashSet<>());
 		sucursal.setMcaHabilitado(false);
-		sucursal.setFecActu(new Date());
-		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
 		sucursalRep.save(sucursal);
 		//No se si barrar Empleados, Clientes y Cuentas en cascada
 		log.info("DELETE: Se borra la Sucursal con el id [{}]", sucursal.getId());
