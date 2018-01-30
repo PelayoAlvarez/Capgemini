@@ -15,6 +15,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.capgemini.piloto.model.dto.EmpleadoDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,16 +26,20 @@ public class Empleado implements Serializable {
 	private static final long serialVersionUID = -6798286537097547476L;
 
 	@Id
-	@Column(name = "Dni", nullable = false)
+	@NotBlank
+	@Column(name = "Dni")
 	public String dni;
 	
-	@Column(name = "Nombre", nullable = false)
+	@NotBlank
+	@Column(name = "Nombre")
 	public String nombre;
 	
-	@Column(name = "Apellidos", nullable = false)
+	@NotBlank
+	@Column(name = "Apellidos")
 	public String apellidos;
 	
-	@Column(name = "Direccion", nullable = false)
+	@NotBlank
+	@Column(name = "Direccion")
 	public String direccion;
 	
 	@Column(name = "Fijo")
@@ -53,7 +59,8 @@ public class Empleado implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
 	
-	@Column(name = "Usuario", nullable = false)
+	@NotBlank
+	@Column(name = "Usuario")
 	private String usuario;
 	
 	@Column(name = "Mca_habilitado", nullable = false)
@@ -62,7 +69,6 @@ public class Empleado implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy="empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
-	
 
 	@NotNull
 	@ManyToOne
@@ -241,7 +247,6 @@ public class Empleado implements Serializable {
 	public String toString() {
 		return "Empleado [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
 				+ ", fijo=" + fijo + ", movil=" + movil + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
-				+ fecCreacion + ", usuario=" + usuario + ", mcaHabilitado=" + mcaHabilitado + ", transferencias="
-				+ transferencias + ", surcusal=" + sucursal + "]";
+				+ fecCreacion + ", usuario=" + usuario + ", mcaHabilitado=" + mcaHabilitado + ", surcusal=" + sucursal + "]";
 	}
 }
