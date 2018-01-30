@@ -1,6 +1,7 @@
 package com.capgemini.piloto.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.dto.CuentaBDTO;
+import com.capgemini.piloto.model.dto.GenerarTransferenciaCuentaDTO;
 import com.capgemini.piloto.model.dto.GenerarTransferenciaDTO;
 import com.capgemini.piloto.model.dto.ListarTransferenciasNumeroCuentaDTO;
 import com.capgemini.piloto.model.historico.TransferenciaH;
@@ -57,29 +59,31 @@ public class TransferenciaController {
 		
 		//Create a new Transfer
 				@PostMapping("/transferencia")
-				public ResponseEntity<CuentaBDTO> createTransfer(@RequestBody GenerarTransferenciaDTO transferencia) {
+				public ResponseEntity<GenerarTransferenciaCuentaDTO> createTransfer(@RequestBody GenerarTransferenciaDTO transferencia) {
 					if(transferencia == null){
-						return new ResponseEntity<CuentaBDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+						return new ResponseEntity<GenerarTransferenciaCuentaDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 					Cuenta cOrigen = cuentaRepository.findOne(transferencia.getCuenta().toString());
 					Cuenta cDestino = cuentaRepository.findOne(transferencia.getIdDestino());
 					
 					if(cOrigen == null || cDestino ==  null){
-						return new ResponseEntity<CuentaBDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+						return new ResponseEntity<GenerarTransferenciaCuentaDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 					
 					cOrigen.setImporte(cOrigen.getImporte()-transferencia.getImporte());
+					cOrigen.setFecActu(new Date());
 					cDestino.setImporte(cDestino.getImporte()+transferencia.getImporte());
+					cDestino.setFecActu(new Date());
 					logger.info("Create new transfer");
 					Transferencia transfe = transferenciaRepository.save(new Transferencia(transferencia, cOrigen));
 					
 					cuentaRepository.save(cOrigen);
 					cuentaRepository.save(cDestino);
-					CuentaBDTO cOrigeDto = new CuentaBDTO(cOrigen);
+					GenerarTransferenciaCuentaDTO cOrigeDto = new GenerarTransferenciaCuentaDTO(cOrigen);
 					if (transfe == null) {
-						return new ResponseEntity<CuentaBDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+						return new ResponseEntity<GenerarTransferenciaCuentaDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 					}
-					return new ResponseEntity<CuentaBDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.OK);
+					return new ResponseEntity<GenerarTransferenciaCuentaDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.OK);
 				}	
 		
 		//Create a new Transfer

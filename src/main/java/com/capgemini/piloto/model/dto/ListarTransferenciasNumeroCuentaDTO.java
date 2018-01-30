@@ -19,6 +19,7 @@ public class ListarTransferenciasNumeroCuentaDTO implements Serializable{
 	private String idDestino;
 	private double importe;
 	private String cuenta;
+	private Date fechaRealizacion;
 	
 	public ListarTransferenciasNumeroCuentaDTO(){
 		
@@ -28,6 +29,7 @@ public class ListarTransferenciasNumeroCuentaDTO implements Serializable{
 		idDestino = t.getIdDestino();
 		cuenta = t.getCuenta().getNumeroCuenta();
 		importe = t.getImporte();
+		fechaRealizacion = t.getFechaCreacion();
 	}
 	
 	public String getIdDestino() {
@@ -54,6 +56,16 @@ public class ListarTransferenciasNumeroCuentaDTO implements Serializable{
 	public void setCuenta(String cuenta) {
 		this.cuenta = cuenta;
 	}
+
+	public Date getFechaRealizacion() {
+		return fechaRealizacion;
+	}
+
+	public void setFechaRealizacion(Date fechaRealizacion) {
+		this.fechaRealizacion = fechaRealizacion;
+	}
+	
+	
 
 
 	
