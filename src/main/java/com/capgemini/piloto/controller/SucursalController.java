@@ -80,10 +80,6 @@ public class SucursalController {
 		}
 		sucursal.setFecActu(new Date());
 		sucursalHRep.save(new SucursalH(sucursal, sucursal.getUsuario()));
-		sucursal.getClientes().forEach(cliente -> cliente.setSucursal(null));
-		sucursal.setClientes(new HashSet<>());
-		sucursal.getEmpleados().forEach(empleado -> empleado.setSucursal(null));
-		sucursal.setEmpleados(new HashSet<>());
 		sucursal.setMcaHabilitado(false);
 		sucursalRep.save(sucursal);
 		//No se si barrar Empleados, Clientes y Cuentas en cascada
