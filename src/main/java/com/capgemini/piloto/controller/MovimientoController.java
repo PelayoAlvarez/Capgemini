@@ -48,14 +48,14 @@ public class MovimientoController {
 	@PostMapping("/")
 	public ResponseEntity<Movimiento> addMovimiento(@RequestBody Movimiento movimiento,
 			@RequestParam String cuenta) {
-		Cuenta cu = cuentaRepository.findOne(cuenta);
+		Cuenta cu = cuentaRepository.findByNumeroCuenta(cuenta);
 		logger.info("Create new transaction");
 		movimiento = new Movimiento(movimiento, cu) ;
 		movimiento = movimientoRepository.save(movimiento);
 		if (movimiento == null) {
-			return new ResponseEntity<Movimiento>(movimiento, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Movimiento>(movimiento, new HttpHeaders(), HttpStatus.OK);
+		return ResponseEntity.ok().body(movimiento);
 	}
 	
 	@DeleteMapping("/{id}")

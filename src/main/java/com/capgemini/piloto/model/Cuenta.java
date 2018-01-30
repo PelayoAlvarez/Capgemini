@@ -124,7 +124,8 @@ public class Cuenta implements Serializable {
 	public Set<Movimiento> _getMovimientos() {
 		return new HashSet<>(movimientos);
 	}
-
+	
+	@JsonIgnore
 	public Set<Movimiento> getMovimientos() {
 		return movimientos;
 	}
