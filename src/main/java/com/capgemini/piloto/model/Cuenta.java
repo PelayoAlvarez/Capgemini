@@ -34,6 +34,8 @@ public class Cuenta implements Serializable {
 
 	@Column(name = "Usuario")
 	private String usuario;
+	
+	private Double importe;
 
 	@OneToMany(mappedBy="cuentaAsociada")
 	@JsonIgnore
@@ -188,5 +190,15 @@ public class Cuenta implements Serializable {
 	public void setFecCreacion(Date fecCreacion) {
 		this.fecCreacion = fecCreacion;
 	}
+
+	public Double getImporte() {
+		return importe;
+	}
+
+	public void setImporte(Double importe) {
+		this.importe = importe;
+	}
+	
+	
 
 }
