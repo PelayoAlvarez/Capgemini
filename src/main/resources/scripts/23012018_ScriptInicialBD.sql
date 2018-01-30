@@ -96,6 +96,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
+ Importe DOUBLE(15,2) NOT NULL,
  Mca_habilitado BOOLEAN NOT NULL,
  PRIMARY KEY (Numero_cuenta));
  
@@ -104,6 +105,7 @@ CREATE TABLE Banco.Sucursal
  Fec_actu DATETIME NOT NULL,
  Fec_creacion DATETIME NOT NULL,
  Usuario VARCHAR(20) NOT NULL,
+ Importe DOUBLE(15,2) NOT NULL,
  Mca_habilitado BOOLEAN NOT NULL,
  Fec_audit DATETIME NOT NULL,
  Usuario_h VARCHAR(20) NOT NULL,

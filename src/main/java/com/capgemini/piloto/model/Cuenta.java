@@ -36,6 +36,7 @@ public class Cuenta implements Serializable {
 	@Column(name = "Usuario")
 	private String usuario;
 	
+	@Column(name = "Importe")
 	private Double importe;
 
 	@OneToMany(mappedBy="cuentaAsociada")
@@ -67,6 +68,7 @@ public class Cuenta implements Serializable {
 	public Cuenta(CuentaDTO cuentadto) {
 		this.numeroCuenta=cuentadto.getNumeroCuenta();
 		this.usuario=cuentadto.getUsuario();
+		this.importe = cuentadto.getImporte();
 		this.fecActu=new Date();
 		this.fecCreacion=new Date();
 		this.mCAHabilitado=true;
@@ -121,11 +123,7 @@ public class Cuenta implements Serializable {
 	public Set<Movimiento> _getMovimientos() {
 		return new HashSet<>(movimientos);
 	}
-<<<<<<< HEAD
-
-=======
 	
->>>>>>> 957b5b7d11a8bf11b1b635c3c3663c5f2006b489
 	@JsonIgnore
 	public Set<Movimiento> getMovimientos() {
 		return movimientos;
