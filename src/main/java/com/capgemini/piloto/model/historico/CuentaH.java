@@ -91,7 +91,9 @@ public class CuentaH implements Serializable {
 		mCAHabilitado = c.getmCAHabilitado();
 		usuario = c.getUsuario();
 		fecAudit = new Date();
+		importe = c.getImporte();
 		this.usuarioH = user;
+		this.importe = c.getImporte();
 	}
 	
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, 
