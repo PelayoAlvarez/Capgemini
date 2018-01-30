@@ -16,7 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
+import com.capgemini.piloto.model.dto.GenerarTransferenciaDTO;
 import com.capgemini.piloto.model.types.TipoCanal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -121,6 +121,21 @@ public class Transferencia implements Serializable {
 		this.fechaCreacion = t.getFechaCreacion();
 		this.mCAHabilitado = true;
 		this.usuario = t.getUsuario();
+	}
+
+	public Transferencia(GenerarTransferenciaDTO t) {
+		super();
+		this.idDestino = t.getIdDestino();
+		this.fechaTransferencia = new Date();
+		this.fechaConsolidacion = new Date();
+		this.canal = TipoCanal.ONLINE;
+		this.importe = t.getImporte();
+		this.cuenta = t.getCuenta();
+		this.empleado = null;
+		this.fechaActua = new Date();
+		this.fechaCreacion = new Date();
+		this.mCAHabilitado = true;
+		this.usuario = "probador";
 	}
 
 	public String getIdDestino() {
