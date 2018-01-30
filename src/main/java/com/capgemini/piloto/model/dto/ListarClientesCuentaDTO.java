@@ -12,7 +12,8 @@ public class ListarClientesCuentaDTO {
 	
 	
 	public ListarClientesCuentaDTO(Cuenta cuenta) {
-		this.numeroCuenta = numeroCuenta;
+		this.numeroCuenta = cuenta.getNumeroCuenta();
+		this.importe = cuenta.getImporte();
 	}
 	public double getImporte() {
 		return importe;
