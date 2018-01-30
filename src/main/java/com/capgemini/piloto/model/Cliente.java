@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -56,6 +57,7 @@ public class Cliente implements Serializable{
 	private Boolean mCAHabilitado;
 	
 	@OneToMany(mappedBy="cliente")
+	@JsonIgnore
 	private Set<ClienteCuenta> clienteCuenta = new HashSet<ClienteCuenta>();
 
 	
@@ -218,10 +220,12 @@ public class Cliente implements Serializable{
 	@Override
 	public String toString() {
 		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
-				+ ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecha_Actua=" + fecActu
-				+ ", fecha_Creacion=" + fecCreacion + ", empleado=" + empleado + ", mCAHabilitado=" + mCAHabilitado
-				+ ", cuentas=" + clienteCuenta + ", sucursal=" + sucursal + "]";
+				+ ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
+				+ fecCreacion + ", empleado=" + empleado + ", mCAHabilitado=" + mCAHabilitado + ", sucursal=" + sucursal
+				+ "]";
 	}
+
+
 	
 
 	

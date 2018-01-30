@@ -20,6 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.capgemini.piloto.model.types.ClienteCuentaKey;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -63,6 +64,7 @@ public class ClienteCuenta implements Serializable{
 	private Boolean mcaHabilitado;	
 	
 	@OneToOne
+	@JsonIgnore
 	private Tarjeta tarjeta;
 	
 	

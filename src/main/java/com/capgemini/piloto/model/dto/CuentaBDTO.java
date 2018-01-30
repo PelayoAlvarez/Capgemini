@@ -7,13 +7,12 @@ import java.util.Set;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
 
 
-public class CuentaDTO implements Serializable {
+public class CuentaBDTO implements Serializable {
 
 	/**
 	 * 
@@ -22,8 +21,6 @@ public class CuentaDTO implements Serializable {
 
 	@NotBlank
 	private String numeroCuenta;
-
-	private Set<ClienteBDTO> clientes = new HashSet<>();
 
 	private String usuario;
 
@@ -44,12 +41,12 @@ public class CuentaDTO implements Serializable {
 
 	private Boolean mCAHabilitado;
 
-	CuentaDTO() {
+	CuentaBDTO() {
 		fecCreacion = new Date();
 		fecActu = new Date();
 	}
 	
-	public CuentaDTO(Cuenta cuenta) {
+	public CuentaBDTO(Cuenta cuenta) {
 		this.numeroCuenta=cuenta.getNumeroCuenta();
 		this.usuario=cuenta.getUsuario();
 		this.fecActu=new Date();
@@ -58,17 +55,14 @@ public class CuentaDTO implements Serializable {
 			this.getTransferencias().add(t.getId());
 		for(Movimiento m : cuenta.getMovimientos())
 			this.getMovimientos().add(m.getId());
-		for(ClienteCuenta cl : cuenta.getClienteCuenta())
-			this.getClientes().add(new ClienteBDTO(cl.getCliente()));
 	}
 
-	public CuentaDTO(String numeroCuenta, Set<Long> movimientos, Set<Long> transferencias,
-			Set<ClienteBDTO> clientes, Boolean mCAHabilitado, String usuario) {
+	public CuentaBDTO(String numeroCuenta, Set<Long> movimientos, Set<Long> transferencias,
+			Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.transferencias = transferencias;
-		this.clientes = clientes;
 		this.fecActu = new Date();
 		this.fecCreacion = new Date();
 		this.mCAHabilitado = mCAHabilitado;
@@ -91,7 +85,7 @@ public class CuentaDTO implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CuentaDTO other = (CuentaDTO) obj;
+		CuentaBDTO other = (CuentaBDTO) obj;
 		if (numeroCuenta == null) {
 			if (other.numeroCuenta != null)
 				return false;
@@ -130,18 +124,6 @@ public class CuentaDTO implements Serializable {
 
 	public void setTransferencias(Set<Long> transferencias) {
 		this.transferencias = transferencias;
-	}
-
-	public Set<ClienteBDTO> getClientes() {
-		return clientes;
-	}
-
-	public Set<ClienteBDTO> _getClientes() {
-		return new HashSet<>(clientes);
-	}
-
-	public void setClienteCuenta(Set<ClienteBDTO> clientecuenta) {
-		this.clientes = clientecuenta;
 	}
 
 	// Getters y Setters de Auditoria

@@ -30,6 +30,7 @@ public class Cuenta implements Serializable {
 	private String numeroCuenta;
 
 	@OneToMany(mappedBy = "cuenta")
+	@JsonIgnore
 	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
 
 	@Column(name = "Usuario")
@@ -42,14 +43,10 @@ public class Cuenta implements Serializable {
 	private Set<Movimiento> movimientos = new HashSet<>();
 
 	@OneToMany(mappedBy = "cuenta")
+	@JsonIgnore
 	private Set<Transferencia> transferencias = new HashSet<>();
 
 	// Campos de Auditoria
-	
-	@Override
-	public String toString() {
-		return "Cuenta [numeroCuenta=" + numeroCuenta;
-	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Fec_actu", nullable = false)
@@ -124,7 +121,12 @@ public class Cuenta implements Serializable {
 	public Set<Movimiento> _getMovimientos() {
 		return new HashSet<>(movimientos);
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 957b5b7d11a8bf11b1b635c3c3663c5f2006b489
+	@JsonIgnore
 	public Set<Movimiento> getMovimientos() {
 		return movimientos;
 	}
@@ -133,6 +135,7 @@ public class Cuenta implements Serializable {
 		this.movimientos = movimientos;
 	}
 	
+	@JsonIgnore
 	public Set<Transferencia> getTransferencias() {
 		return transferencias;
 	}
@@ -190,6 +193,13 @@ public class Cuenta implements Serializable {
 	public void setFecCreacion(Date fecCreacion) {
 		this.fecCreacion = fecCreacion;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "Cuenta [numeroCuenta=" + numeroCuenta;
+	}
+
 
 	public Double getImporte() {
 		return importe;
