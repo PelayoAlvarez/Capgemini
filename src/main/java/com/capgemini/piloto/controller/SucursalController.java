@@ -67,6 +67,7 @@ public class SucursalController {
 		}
 		sucursalHRep.save(new SucursalH(oldSucursal, oldSucursal.getNombre()));
 		Sucursal sucursal = sucursalRep.save(new Sucursal(sucursalDTO));
+		sucursalRep.save(sucursal);
 		log.info("UPDATE: Se actualiza la Sucursal con el id [{}]", sucursalDTO.getId());
 		return ResponseEntity.ok(sucursal);
 	}
