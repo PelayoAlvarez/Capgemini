@@ -45,11 +45,6 @@ public class Cuenta implements Serializable {
 	private Set<Transferencia> transferencias = new HashSet<>();
 
 	// Campos de Auditoria
-	
-	@Override
-	public String toString() {
-		return "Cuenta [numeroCuenta=" + numeroCuenta;
-	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Fec_actu", nullable = false)
@@ -190,5 +185,12 @@ public class Cuenta implements Serializable {
 	public void setFecCreacion(Date fecCreacion) {
 		this.fecCreacion = fecCreacion;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "Cuenta [numeroCuenta=" + numeroCuenta;
+	}
+
 
 }
