@@ -34,6 +34,9 @@ public class CuentaH implements Serializable {
 
 	@Column(name = "Usuario")
 	private String usuario;
+	
+	@Column(name = "Importe")
+	private Double importe;
 
 	@OneToMany(mappedBy="cuenta")
 	@JsonIgnore
@@ -174,6 +177,16 @@ public class CuentaH implements Serializable {
 
 	public void setUsuarioH(String usuarioH) {
 		this.usuarioH = usuarioH;
+	}
+	
+	
+
+	public Double getImporte() {
+		return importe;
+	}
+
+	public void setImporte(Double importe) {
+		this.importe = importe;
 	}
 
 	@Override

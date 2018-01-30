@@ -61,7 +61,7 @@ public class ClienteCuenta implements Serializable{
 	
 
 	@Column(name = "Mca_habilitado")
-	private Boolean mcaHabilitado;	
+	private boolean mcaHabilitado;	
 	
 	@OneToOne
 	@JsonIgnore
@@ -120,7 +120,7 @@ public class ClienteCuenta implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public Boolean getMcaHabilitado() {
+	public boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
@@ -140,14 +140,6 @@ public class ClienteCuenta implements Serializable{
 		this.tarjeta = tarjeta;
 	}
 	
-	
-//	public void link(Cliente cliente, Cuenta cuenta) {
-//		setCliente(cliente);
-//		setCuenta(cuenta);
-//		cliente._getClienteCuenta().add(this);
-//		cuenta._getClienteCuenta().add(this);
-//	}
-
 	public void unlinkCuenta() {
 		Association.TitularCuenta.unlink(this);
 	}
