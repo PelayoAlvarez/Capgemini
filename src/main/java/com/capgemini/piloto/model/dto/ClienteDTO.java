@@ -33,24 +33,10 @@ public class ClienteDTO implements Serializable{
 	
 	private String email;
 	
-	private Set<CuentaDTO> clienteCuenta = new HashSet<CuentaDTO>();
+	private Set<ListarClientesCuentaDTO> cuentas= new HashSet<ListarClientesCuentaDTO>();
 
 	@NotNull
 	public Long sucursal;
-
-	public ClienteDTO(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
-			String email, Set<CuentaDTO> clienteCuenta, Long sucursal) {
-		super();
-		this.dni = dni;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.direccion = direccion;
-		this.movil = movil;
-		this.fijo = fijo;
-		this.email = email;
-		this.clienteCuenta = clienteCuenta;
-		this.sucursal = sucursal;
-	}
 	
 	public ClienteDTO(Cliente c)
 	{
@@ -62,7 +48,7 @@ public class ClienteDTO implements Serializable{
 		this.fijo=c.getFijo();
 		this.email=c.getEmail();
 		for(ClienteCuenta cl : c.getClienteCuentas())
-			this.getClienteCuenta().add(new CuentaDTO(cl.getCuenta()));
+			this.getCuentas().add(new ListarClientesCuentaDTO(cl.getCuenta()));
 	}
 
 	public String getNombre() {
@@ -113,12 +99,12 @@ public class ClienteDTO implements Serializable{
 		this.email = email;
 	}
 
-	public Set<CuentaDTO> getClienteCuenta() {
-		return clienteCuenta;
+	public Set<ListarClientesCuentaDTO> getCuentas() {
+		return cuentas;
 	}
 
-	public void setClienteCuenta(Set<CuentaDTO> clienteCuenta) {
-		this.clienteCuenta = clienteCuenta;
+	public void setCuentas(Set<ListarClientesCuentaDTO> cuentas) {
+		this.cuentas = cuentas;
 	}
 
 	public Long getSucursal() {
