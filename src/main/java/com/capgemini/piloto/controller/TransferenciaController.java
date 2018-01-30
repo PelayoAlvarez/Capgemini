@@ -1,5 +1,7 @@
 package com.capgemini.piloto.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -24,7 +26,9 @@ import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.dto.CuentaBDTO;
+import com.capgemini.piloto.model.dto.GenerarTransferenciaCuentaDTO;
 import com.capgemini.piloto.model.dto.GenerarTransferenciaDTO;
+import com.capgemini.piloto.model.dto.ListarTransferenciasNumeroCuentaDTO;
 import com.capgemini.piloto.model.historico.TransferenciaH;
 import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.TransferenciaRepository;
@@ -46,111 +50,56 @@ public class TransferenciaController {
 	private CuentaRepository cuentaRepository;
 	
 	//Get All Transfers
-		@GetMapping("/transferencia")
+		@GetMapping("/listarTransferenciasHabilitados")
 		public List<Transferencia> getAllTransferencias() {
 			logger.info("Request every active transfers");
 			return transferenciaRepository.findMCA();
 		}
 		
-		/*//Create a new Transfer
-		@PostMapping("/transferencia")
-		public ResponseEntity<CuentaBDTO> createTransfer(@RequestBody GenerarTransferenciaDTO transferencia,
-				@RequestParam String cuentaOrigen, @RequestParam String cuentaDestino, @RequestParam double importe ) {
-			if(cuentaOrigen == null || cuentaDestino == null || importe <= 0 ){
-				return new ResponseEntity<CuentaBDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			Cuenta cOrigen = cuentaRepository.findOne(cuentaOrigen);
-			Cuenta cDestino = cuentaRepository.findOne(cuentaDestino);
-			
-			
-			Transferencia trans = new GenerarTransferenciaDTO(transferencia, cOrigen, cDestino, importe) ;
-			cOrigen.setImporte(cOrigen.getImporte()-importe);
-			cDestino.setImporte(cDestino.getImporte()+importe);
-			logger.info("Create new transfer");
-			trans = transferenciaRepository.save(trans);
-			cuentaRepository.save(cOrigen);
-			cuentaRepository.save(cDestino);
-			CuentaBDTO cOrigeDto = new CuentaBDTO(cOrigen);
-			if (trans == null) {
-				return new ResponseEntity<CuentaBDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			return new ResponseEntity<CuentaBDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.OK);
-		}	*/
 		
 		//Create a new Transfer
 				@PostMapping("/transferencia")
-				public ResponseEntity<CuentaBDTO> createTransfer(@RequestBody GenerarTransferenciaDTO transferencia) {
+				public ResponseEntity<GenerarTransferenciaCuentaDTO> createTransfer(@RequestBody GenerarTransferenciaDTO transferencia) {
 					if(transferencia == null){
-						return new ResponseEntity<CuentaBDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+						return new ResponseEntity<GenerarTransferenciaCuentaDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 					Cuenta cOrigen = cuentaRepository.findOne(transferencia.getCuenta().toString());
 					Cuenta cDestino = cuentaRepository.findOne(transferencia.getIdDestino());
 					
 					if(cOrigen == null || cDestino ==  null){
-						return new ResponseEntity<CuentaBDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+						return new ResponseEntity<GenerarTransferenciaCuentaDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 					
 					cOrigen.setImporte(cOrigen.getImporte()-transferencia.getImporte());
+					cOrigen.setFecActu(new Date());
 					cDestino.setImporte(cDestino.getImporte()+transferencia.getImporte());
+					cDestino.setFecActu(new Date());
 					logger.info("Create new transfer");
 					Transferencia transfe = transferenciaRepository.save(new Transferencia(transferencia, cOrigen));
 					
 					cuentaRepository.save(cOrigen);
 					cuentaRepository.save(cDestino);
-					CuentaBDTO cOrigeDto = new CuentaBDTO(cOrigen);
+					GenerarTransferenciaCuentaDTO cOrigeDto = new GenerarTransferenciaCuentaDTO(cOrigen);
 					if (transfe == null) {
-						return new ResponseEntity<CuentaBDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+						return new ResponseEntity<GenerarTransferenciaCuentaDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 					}
-					return new ResponseEntity<CuentaBDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.OK);
+					return new ResponseEntity<GenerarTransferenciaCuentaDTO>(cOrigeDto, new HttpHeaders(), HttpStatus.OK);
 				}	
 		
-		//Get a Single transfer
-		@GetMapping("/transferencia/{id}")
-		public ResponseEntity<Transferencia> getTransferenciaById(@PathVariable(value = "id") Long transferenciaId) {
-			Transferencia transferencia = transferenciaRepository.findOne(transferenciaId);
-			if(transferencia == null || !transferencia.getMcaHabilitado()) {
-				logger.info(NOT_FOUND);
-				return ResponseEntity.notFound().build();
+		//Create a new Transfer
+		@GetMapping("/listarTransferenciaId/{cuenta}")
+		public ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>> createTransfer(@PathVariable(value = "cuenta") String numeroCuenta) {
+			if(numeroCuenta == null){
+				return new ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			logger.info("The requested transfer was found");
-			return ResponseEntity.ok().body(transferencia);
-		}
-		
-		/*//Update a transfer
-		@PutMapping("/transferencia/{id}")
-		public ResponseEntity<Transferencia> updateTransferencia(@PathVariable(value = "id") Long transferenciaId,
-				@Valid @RequestBody Transferencia transferenciaDetails) {
-			Transferencia transferencia = transferenciaRepository.findOne(transferenciaId);
-			if(transferencia == null || !transferencia.getMcaHabilitado()) {
-				logger.info(NOT_FOUND);
-				return ResponseEntity.notFound().build();
-			}
-			transferenciaHRepository.save(new TransferenciaH(transferencia));
-			transferencia.setCanal(transferenciaDetails.getCanal());
-			transferencia.setFechaConsolidacion(transferenciaDetails.getFechaConsolidacion());
-			transferencia.setFechaTransferencia(transferenciaDetails.getFechaTransferencia());
-			transferencia.setIdDestino(transferencia.getIdDestino());
-			transferencia.setIdOrigen(transferencia.getIdOrigen());
-			transferencia.setImporte(transferencia.getImporte());
+			Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
+			List<Transferencia> listaTrasnfer = transferenciaRepository.findByCuenta(cuenta);
 			
-			Transferencia updateTransferencia = transferenciaRepository.save(transferencia);
-			logger.info("The transfer was succesfully updated");
-			return ResponseEntity.ok(updateTransferencia);
-		}
-		
-		// Delete a transfer
-		@DeleteMapping("/transferencia/{id}")
-		public ResponseEntity<Transferencia> deleteTransferencia(@PathVariable(value = "id") Long transferenciaId) {
-			Transferencia transferencia = transferenciaRepository.findOne(transferenciaId);
-			if(transferencia == null || !transferencia.getMcaHabilitado()) {
-				logger.info(NOT_FOUND);
-				return ResponseEntity.notFound().build();
+			List<ListarTransferenciasNumeroCuentaDTO> transfers = new ArrayList<>();
+			for (Transferencia transferencia : listaTrasnfer) {
+				transfers.add(new ListarTransferenciasNumeroCuentaDTO(transferencia));
 			}
-			transferenciaHRepository.save(new TransferenciaH(transferencia));
-			
-			transferencia.setMcaHabilitado(false);
-			transferenciaRepository.save(transferencia);
-			logger.info("The transfer was succesfully deleted");
-			return ResponseEntity.ok().build();
-		}*/
+			return new ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>>(transfers, new HttpHeaders(), HttpStatus.OK);
+		}	
+		
 }

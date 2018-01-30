@@ -2,6 +2,8 @@ package com.capgemini.piloto.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -63,9 +66,9 @@ public class ClienteCuenta implements Serializable{
 	@Column(name = "Mca_habilitado")
 	private boolean mcaHabilitado;	
 	
-	@OneToOne
+	@OneToMany(mappedBy = "clienteCuenta")
 	@JsonIgnore
-	private Tarjeta tarjeta;
+	private Set<Tarjeta> tarjetas = new HashSet<>();
 	
 	
 	ClienteCuenta() {		
@@ -128,18 +131,23 @@ public class ClienteCuenta implements Serializable{
 		this.mcaHabilitado = mcaHabilitado;
 	}
 
-	public Tarjeta _getTarjeta() {
-		return tarjeta;
+	
+	
+//	public void link(Cliente cliente, Cuenta cuenta) {
+//		setCliente(cliente);
+//		setCuenta(cuenta);
+//		cliente._getClienteCuenta().add(this);
+//		cuenta._getClienteCuenta().add(this);
+//	}
+
+	public Set<Tarjeta> getTarjetas() {
+		return tarjetas;
 	}
 
-	public Tarjeta getTarjeta() {
-		return tarjeta;
+	public void setTarjetas(Set<Tarjeta> tarjetas) {
+		this.tarjetas = tarjetas;
 	}
-	
-	public void setTarjeta(Tarjeta tarjeta) {
-		this.tarjeta = tarjeta;
-	}
-	
+
 	public void unlinkCuenta() {
 		Association.TitularCuenta.unlink(this);
 	}

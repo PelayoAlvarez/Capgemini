@@ -59,6 +59,8 @@ public class CuentaBDTO implements Serializable {
 		for(Movimiento m : cuenta.getMovimientos())
 			this.getMovimientos().add(m.getId());
 	}
+	
+	
 
 	public CuentaBDTO(String numeroCuenta, Set<Long> movimientos, Set<Long> transferencias,
 			Boolean mCAHabilitado, String usuario) {
