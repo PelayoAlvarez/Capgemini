@@ -108,13 +108,13 @@ public class Transferencia implements Serializable {
 		setMcaHabilitado(mCA_Habilitado);
 	}
 
-	public Transferencia(Transferencia t, Cuenta cOrigen, Cuenta cDestino) {
+	public Transferencia(Transferencia t, Cuenta cOrigen, Cuenta cDestino, double importe) {
 		super();
 		this.idDestino = cDestino.getNumeroCuenta();
 		this.fechaTransferencia = t.getFechaTransferencia();
 		this.fechaConsolidacion = t.getFechaConsolidacion();
 		this.canal = t.getCanal();
-		this.importe = t.getImporte();
+		this.importe = importe;
 		this.cuenta = cOrigen;
 		this.empleado = t.getEmpleado();
 		this.fechaActua = t.getFechaActua();

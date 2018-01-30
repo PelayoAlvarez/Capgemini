@@ -53,13 +53,15 @@ public class TransferenciaController {
 		//Create a new Transfer
 		@PostMapping("/transferencia")
 		public ResponseEntity<Transferencia> createTransfer(@RequestBody Transferencia transferencia,
-				@RequestParam String cuentaOrigen, @RequestParam String cuentaDestino ) {
-			System.out.println(transferencia.toString());
+				@RequestParam String cuentaOrigen, @RequestParam String cuentaDestino, @RequestParam double importe ) {
+			if(cuentaOrigen == null || cuentaDestino == null || importe <= 0 ){
+				return new ResponseEntity<Transferencia>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 			Cuenta cOrigen = cuentaRepository.findOne(cuentaOrigen);
 			Cuenta cDestino = cuentaRepository.findOne(cuentaDestino);
 			
-			Transferencia trans = new Transferencia(transferencia, cOrigen, cDestino) ;
-			System.out.println(trans.toString());
+			
+			Transferencia trans = new Transferencia(transferencia, cOrigen, cDestino, importe) ;
 			logger.info("Create new transfer");
 			trans = transferenciaRepository.save(trans);
 			if (trans == null) {
