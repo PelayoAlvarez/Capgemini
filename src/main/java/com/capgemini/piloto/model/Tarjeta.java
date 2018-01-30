@@ -6,10 +6,14 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,7 +23,7 @@ public class Tarjeta implements Serializable{
 	private static final long serialVersionUID = 2108862824305074349L;
 	
 	@Id
-	@NotNull
+	@NotBlank
 	@Column(name="Numero_tarjeta")
 	private String numeroTarjeta;
 	
@@ -37,21 +41,26 @@ public class Tarjeta implements Serializable{
 	
 	@OneToOne
 	@JsonIgnore
+	@JoinColumns({
+        @JoinColumn(name="Dni", referencedColumnName="Dni"),
+        @JoinColumn(name="Numero_cuenta", referencedColumnName="Numero_cuenta")
+    })
 	private ClienteCuenta clienteCuenta;
 	
-	@Column(name = "Fec_actu")
+	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
 	
-	@Column(name = "fec_creacion")
+	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
 	
+	@NotBlank
 	@Column(name = "Usuario")
 	private String usuario;
 	
-	@Column(name = "Mca_habilitado")
-	private Boolean mcaHabilitado;
+	@Column(name = "Mca_habilitado", nullable = false)
+	private boolean mcaHabilitado;
 	
 	public Tarjeta() {
 		//Just for JPA
@@ -132,11 +141,11 @@ public class Tarjeta implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public Boolean getMcaHabilitado() {
+	public boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(Boolean mcaHabilitado) {
+	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
 
@@ -170,7 +179,4 @@ public class Tarjeta implements Serializable{
 		return "Tarjeta [numeroTarjeta=" + numeroTarjeta + ", mesCaducidad=" + mesCaducidad + ", anyoCaducidad="
 				+ anyoCaducidad + "]";
 	}
-	
-	
-
 }
