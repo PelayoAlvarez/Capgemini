@@ -11,6 +11,10 @@ public class TarjetaDTO implements Serializable{
 	private String numeroCuenta;
 	private Double importe;
 	
+	public TarjetaDTO() {
+		
+	}
+	
 	public TarjetaDTO(Tarjeta tarjeta) {
 		this.numeroTarjeta = tarjeta.getNumeroTarjeta();
 		this.numeroCuenta = tarjeta.getClienteCuenta().getCuenta().getNumeroCuenta();

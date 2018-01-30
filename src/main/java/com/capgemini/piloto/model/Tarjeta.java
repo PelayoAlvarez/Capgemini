@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,7 +40,7 @@ public class Tarjeta implements Serializable{
 	@Column(name="Ccv")
 	private Integer ccv;
 	
-	@OneToOne
+	@ManyToOne
 	@JsonIgnore
 	@JoinColumns({
         @JoinColumn(name="Dni", referencedColumnName="Dni"),
@@ -75,6 +76,10 @@ public class Tarjeta implements Serializable{
 		this.ccv = ccv;
 		this.clienteCuenta = clienteCuenta;
 		this.usuario = usuario;
+		this.fecCreacion = new Date();
+		this.fecActu = new Date();
+		this.usuario = "User1";
+		this.mcaHabilitado = true;
 	}
 
 	public String getNumeroTarjeta() {
