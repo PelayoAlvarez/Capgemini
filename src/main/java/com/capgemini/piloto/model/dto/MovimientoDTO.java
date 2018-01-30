@@ -3,6 +3,7 @@ package com.capgemini.piloto.model.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
@@ -23,7 +24,7 @@ public class MovimientoDTO implements Serializable{
 
 	private String descripcion;
 
-	private String cuentaAsociada;
+	private Cuenta cuentaAsociada;
 
 	public MovimientoDTO(Movimiento m) {
 		super();
@@ -32,7 +33,7 @@ public class MovimientoDTO implements Serializable{
 		this.tipo = m.getTipo();
 		this.fechahora = m.getFechahora();
 		this.descripcion = m.getDescripcion();
-		this.cuentaAsociada = m.getCuentaAsociada().getNumeroCuenta();
+		this.cuentaAsociada = m.getCuentaAsociada();
 	}
 
 	public Long getId() {
@@ -75,11 +76,11 @@ public class MovimientoDTO implements Serializable{
 		this.descripcion = descripcion;
 	}
 
-	public String getCuentaAsociada() {
+	public Cuenta getCuentaAsociada() {
 		return cuentaAsociada;
 	}
 
-	public void setCuentaAsociada(String cuentaAsociada) {
+	public void setCuentaAsociada(Cuenta cuentaAsociada) {
 		this.cuentaAsociada = cuentaAsociada;
 	}
 }

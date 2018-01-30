@@ -18,6 +18,7 @@ import javax.persistence.TemporalType;
 
 
 import com.capgemini.piloto.model.types.TipoCanal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "transferencia")
@@ -162,6 +163,7 @@ public class Transferencia implements Serializable {
 		this.importe = importe;
 	}
 
+	@JsonIgnore
 	public Cuenta getCuenta() {
 		return cuenta;
 	}
@@ -170,6 +172,7 @@ public class Transferencia implements Serializable {
 		this.cuenta = cuenta;
 	}
 
+	@JsonIgnore
 	public Empleado getEmpleado() {
 		return empleado;
 	}

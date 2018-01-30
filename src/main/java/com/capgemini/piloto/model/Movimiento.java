@@ -20,6 +20,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.capgemini.piloto.model.types.TipoMovimiento;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "MOVIMIENTO")
@@ -169,7 +170,8 @@ public class Movimiento implements Serializable {
 	public Long getId() {
 		return id;
 	}
-
+	
+	@JsonIgnore
 	public Cuenta getCuentaAsociada() {
 		return cuentaAsociada;
 	}

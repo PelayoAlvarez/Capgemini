@@ -6,49 +6,68 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Tarjeta;
 
 @Entity
 @Table(name="Tarjeta_h")
-public class TarjetaH implements Serializable{
-
+public class TarjetaH implements Serializable {
 
 	private static final long serialVersionUID = 8218081642759854455L;
-	@NotNull
+	
+	@NotBlank
 	@Column(name="Numero_tarjeta")
 	private String numeroTarjeta;
+	
 	@NotNull
 	@Column(name="Mes_caducidad")
 	private Integer mesCaducidad;
+	
 	@NotNull
 	@Column(name="Anyo_caducidad")
 	private Integer anyoCaducidad;
+	
 	@NotNull
 	@Column(name="Ccv")
 	private Integer ccv;
+	
 	@OneToOne
+	@JoinColumns({
+        @JoinColumn(name="Dni", referencedColumnName="Dni"),
+        @JoinColumn(name="Numero_cuenta", referencedColumnName="Numero_cuenta")
+    })
 	private ClienteCuenta clienteCuenta;
-	@Column(name = "Fec_actu")
+	
+	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
-	@Column(name = "fec_creacion")
+	
+	@Column(name = "fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
-	@Column(name = "Usuario")
+	
+	@Column(name = "Usuario", nullable = false)
 	private String usuario;
-	@Column(name = "Mca_habilitado")
-	private Boolean mcaHabilitado;
+	
+	@Column(name = "Mca_habilitado", nullable = false)
+	private boolean mcaHabilitado;
+	
+	@Id
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Id
 	private Date fecAudit;
+	
+	@NotBlank
 	@Column(name = "Usuario_h")
 	private String usuarioH;
 	
@@ -56,14 +75,19 @@ public class TarjetaH implements Serializable{
 		//Just for JPA
 	}
 
-	public TarjetaH(Tarjeta tarjeta, String usuario) {
+	public TarjetaH(Tarjeta tarjeta, String usuarioH) {
 		super();
 		this.numeroTarjeta = tarjeta.getNumeroTarjeta();
 		this.mesCaducidad = tarjeta.getMesCaducidad();
 		this.anyoCaducidad = tarjeta.getAnyoCaducidad();
 		this.ccv = tarjeta.getCcv();
 		this.clienteCuenta = tarjeta.getClienteCuenta();
-		this.usuario = usuario;
+		this.fecActu = tarjeta.getFecActu();
+		this.fecCreacion = tarjeta.getFecCreacion();
+		this.usuario = tarjeta.getUsuario();
+		this.mcaHabilitado = tarjeta.getMcaHabilitado();
+		this.fecAudit = new Date();
+		this.usuarioH = usuarioH;
 	}
 
 	public String getNumeroTarjeta() {
@@ -130,14 +154,14 @@ public class TarjetaH implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public Boolean getMcaHabilitado() {
+	public boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
-	public void setMcaHabilitado(Boolean mcaHabilitado) {
+	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
-
+	
 	public Date getFecAudit() {
 		return fecAudit;
 	}
@@ -189,6 +213,4 @@ public class TarjetaH implements Serializable{
 	public String toString() {
 		return "TarjetaH [numeroTarjeta=" + numeroTarjeta + ", fecAudit=" + fecAudit + ", usuarioH=" + usuarioH + "]";
 	}
-
-
 }

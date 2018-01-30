@@ -14,14 +14,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
 import com.capgemini.piloto.model.Transferencia;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.capgemini.piloto.model.dto.EmpleadoDTO;
 
 @Entity
@@ -30,16 +28,20 @@ public class EmpleadoH implements Serializable {
 
 	private static final long serialVersionUID = -4428784972707162023L;
 
-	@Column(name = "Dni", nullable = false)
+	@NotBlank
+	@Column(name = "Dni")
 	public String dni;	
 	
-	@Column(name = "Nombre", nullable = false)
+	@NotBlank
+	@Column(name = "Nombre")
 	public String nombre;
 	
-	@Column(name = "Apellidos", nullable = false)
+	@NotBlank
+	@Column(name = "Apellidos")
 	public String apellidos;
 	
-	@Column(name = "Direccion", nullable = false)
+	@NotBlank
+	@Column(name = "Direccion")
 	public String direccion;
 	
 	@Column(name = "Fijo")
@@ -59,26 +61,26 @@ public class EmpleadoH implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
 	
-	@Column(name = "Usuario", nullable = false)
+	@NotBlank
+	@Column(name = "Usuario")
 	private String usuario;
 	
 	@Column(name = "Mca_habilitado", nullable = false)
 	private boolean mcaHabilitado;
 	
 	@OneToMany(mappedBy="empleado")
-	@JsonIgnore
 	private Set<Transferencia> transferencias = new HashSet<>();
 	
-	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "id_sucursal")
+	@JoinColumn(name = "id_sucursal", nullable = false)
 	public Sucursal sucursal;
 	
 	@Id
-	@Column(name = "Fec_audit")
+	@Column(name = "Fec_audit", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecAudit;
 	
+	@NotBlank
 	@Column(name = "Usuario_h")
 	private String usuarioH;
 
