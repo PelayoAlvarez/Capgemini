@@ -12,8 +12,6 @@ public interface TarjetaRepository extends JpaRepository<Tarjeta, String> {
 	@Query("SELECT t FROM Tarjeta t WHERE t.mcaHabilitado=true")
 	List<Tarjeta> findByMcaHabilitado();
 	
-	Tarjeta findById(String numeroTarjeta);
-	
 	@Query("select t from Tarjeta t where t.clienteCuenta.cliente.dni = ?1")
 	List<Tarjeta> getAllTarjetasByDni(String dni);
 

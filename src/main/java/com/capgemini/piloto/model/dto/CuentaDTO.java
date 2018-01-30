@@ -15,9 +15,6 @@ import com.capgemini.piloto.model.Transferencia;
 
 public class CuentaDTO implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7283533209815501984L;
 
 	@NotBlank
