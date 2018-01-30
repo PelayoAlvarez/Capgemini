@@ -51,7 +51,7 @@ public class ClienteController {
 	ClienteRepository clienteRepository;
 	
 	// Get every client
-	@GetMapping("/clientes")
+	@GetMapping("/listarClientes")
 	public List<ClienteDTO> getAllClientes(){
 		logger.info("Requested evey active client");
 		List<Cliente> clientes = clienteRepository.findMCA();	
@@ -85,15 +85,20 @@ public class ClienteController {
 	}
 	
 	// Find a client by its dni
-	@GetMapping("/clientes/{dni}")
-	public ResponseEntity<Cliente> getClientByDni(@PathVariable(value ="dni") String dni){
+	@GetMapping("/buscarCliente/{dni}")
+	public ResponseEntity<ClienteDTO> getClientByDni(@PathVariable(value ="dni") String dni){
 		Cliente cliente = clienteRepository.findByDni(dni);
 		if(cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
 		logger.info("The requested cliente vas found");
-		return ResponseEntity.ok().body(cliente);
+		ClienteDTO clienteDTO = new ClienteDTO(cliente);
+		if(clienteDTO == null){
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return ResponseEntity.ok().body(clienteDTO);
 	}
 	
 	// Update a client
@@ -122,7 +127,7 @@ public class ClienteController {
 	
 	// Delete a cliente by its dni
 	@DeleteMapping("/cliente/{dni}")
-	public ResponseEntity<Cliente> deleteNote(@PathVariable(value = "dni") String dni) {
+	public ResponseEntity<ClienteDTO> deleteNote(@PathVariable(value = "dni") String dni) {
 		Cliente cliente = clienteRepository.findByDni(dni);
 		if(cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
@@ -139,8 +144,12 @@ public class ClienteController {
 		clienteRepository.save(cliente);
 		
 		logger.info("The client was successfully deleted");
+		ClienteDTO clienteDTO = new ClienteDTO(cliente);
+		if(clienteDTO == null){
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(clienteDTO);
 	}
 
 }
