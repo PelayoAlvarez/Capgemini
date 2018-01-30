@@ -16,7 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
+import com.capgemini.piloto.model.dto.GenerarTransferenciaDTO;
+import com.capgemini.piloto.model.dto.ListarTransferenciasNumeroCuentaDTO;
 import com.capgemini.piloto.model.types.TipoCanal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -108,19 +109,49 @@ public class Transferencia implements Serializable {
 		setMcaHabilitado(mCA_Habilitado);
 	}
 
-	public Transferencia(Transferencia t, Cuenta cOrigen, Cuenta cDestino) {
+	public Transferencia(Transferencia t, Cuenta cOrigen, Cuenta cDestino, double importe) {
 		super();
 		this.idDestino = cDestino.getNumeroCuenta();
 		this.fechaTransferencia = t.getFechaTransferencia();
 		this.fechaConsolidacion = t.getFechaConsolidacion();
 		this.canal = t.getCanal();
-		this.importe = t.getImporte();
+		this.importe = importe;
 		this.cuenta = cOrigen;
 		this.empleado = t.getEmpleado();
 		this.fechaActua = t.getFechaActua();
 		this.fechaCreacion = t.getFechaCreacion();
 		this.mCAHabilitado = true;
 		this.usuario = t.getUsuario();
+	}
+
+	public Transferencia(GenerarTransferenciaDTO t, Cuenta cuenta) {
+		super();
+		this.idDestino = t.getIdDestino();
+		this.fechaTransferencia = new Date();
+		this.fechaConsolidacion = new Date();
+		this.canal = TipoCanal.ONLINE;
+		this.importe = t.getImporte();
+		this.cuenta = cuenta;
+		this.empleado = null;
+		this.fechaActua = new Date();
+		this.fechaCreacion = new Date();
+		this.mCAHabilitado = true;
+		this.usuario = "probador";
+	}
+	
+	public Transferencia(ListarTransferenciasNumeroCuentaDTO t, Cuenta cuenta) {
+		super();
+		this.idDestino = t.getIdDestino();
+		this.fechaTransferencia = new Date();
+		this.fechaConsolidacion = new Date();
+		this.canal = TipoCanal.ONLINE;
+		this.importe = t.getImporte();
+		this.cuenta = cuenta;
+		this.empleado = null;
+		this.fechaActua = new Date();
+		this.fechaCreacion = new Date();
+		this.mCAHabilitado = true;
+		this.usuario = "probador";
 	}
 
 	public String getIdDestino() {

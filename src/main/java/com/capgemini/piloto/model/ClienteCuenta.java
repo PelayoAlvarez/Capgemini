@@ -64,7 +64,7 @@ public class ClienteCuenta implements Serializable{
 	
 
 	@Column(name = "Mca_habilitado")
-	private Boolean mcaHabilitado;	
+	private boolean mcaHabilitado;	
 	
 	@OneToMany(mappedBy = "clienteCuenta")
 	@JsonIgnore
@@ -123,7 +123,7 @@ public class ClienteCuenta implements Serializable{
 		this.usuario = usuario;
 	}
 
-	public Boolean getMcaHabilitado() {
+	public boolean getMcaHabilitado() {
 		return mcaHabilitado;
 	}
 
@@ -131,7 +131,6 @@ public class ClienteCuenta implements Serializable{
 		this.mcaHabilitado = mcaHabilitado;
 	}
 
-	
 	
 	
 //	public void link(Cliente cliente, Cuenta cuenta) {

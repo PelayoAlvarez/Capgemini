@@ -19,6 +19,7 @@ import javax.persistence.TemporalType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.capgemini.piloto.model.dto.MovimientoDTO;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -89,7 +90,7 @@ public class Movimiento implements Serializable {
 		this.mCAHabilitado = true;
 	}
 
-	public Movimiento(Movimiento m, Cuenta cu) {
+	public Movimiento(MovimientoDTO m, Cuenta cu) {
 		super();
 		this.id = m.getId();
 		this.importe = m.getImporte();
@@ -97,10 +98,22 @@ public class Movimiento implements Serializable {
 		this.fechahora = m.getFechahora();
 		this.descripcion = m.getDescripcion();
 		this.cuentaAsociada = cu;
-		this.fechaActua = m.getFechaActua();
-		this.fechaCreacion = m.getFechaCreacion();
+		this.fechaActua = this.fechaCreacion = new Date();
 		this.usuario = m.getUsuario();
-		this.mCAHabilitado = m.getmCAHabilitado();
+		this.mCAHabilitado = true;
+	}
+	
+	public Movimiento(MovimientoDTO mdto) {
+		super();
+		this.id = mdto.getId();
+		this.importe = mdto.getImporte();
+		this.tipo = mdto.getTipo();
+		this.fechahora = mdto.getFechahora();
+		this.descripcion = mdto.getDescripcion();
+		this.cuentaAsociada = mdto.getCuentaAsociada();
+		this.usuario = mdto.getUsuario();
+		this.fechaActua = this.fechaCreacion = new Date();
+		this.mCAHabilitado = true;
 	}
 
 	public Double getImporte() {

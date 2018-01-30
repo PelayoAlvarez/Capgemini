@@ -13,7 +13,7 @@ public interface TarjetaRepository extends JpaRepository<Tarjeta, String> {
 	List<Tarjeta> findByMcaHabilitado();
 	
 	Tarjeta findByNumeroTarjeta(String numeroTarjeta);
-	
+
 	@Query("select t from Tarjeta t where t.clienteCuenta.cliente.dni = ?1")
 	List<Tarjeta> getAllTarjetasByDni(String dni);
 
