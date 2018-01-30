@@ -195,6 +195,7 @@ public class Empleado implements Serializable {
 		this.mcaHabilitado = mcaHabilitado;
 	}
 	
+	@JsonIgnore
 	public Set<Transferencia> getTransferencias() {
 		return new HashSet<>(transferencias);
 	}

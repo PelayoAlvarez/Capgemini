@@ -119,7 +119,12 @@ public class Cuenta implements Serializable {
 	public Set<Movimiento> _getMovimientos() {
 		return new HashSet<>(movimientos);
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 957b5b7d11a8bf11b1b635c3c3663c5f2006b489
+	@JsonIgnore
 	public Set<Movimiento> getMovimientos() {
 		return movimientos;
 	}
@@ -128,6 +133,7 @@ public class Cuenta implements Serializable {
 		this.movimientos = movimientos;
 	}
 	
+	@JsonIgnore
 	public Set<Transferencia> getTransferencias() {
 		return transferencias;
 	}

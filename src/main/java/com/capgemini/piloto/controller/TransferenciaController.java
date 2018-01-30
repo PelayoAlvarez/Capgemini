@@ -59,6 +59,7 @@ public class TransferenciaController {
 			Cuenta cDestino = cuentaRepository.findOne(cuentaDestino);
 			
 			Transferencia trans = new Transferencia(transferencia, cOrigen, cDestino) ;
+			System.out.println(trans.toString());
 			logger.info("Create new transfer");
 			trans = transferenciaRepository.save(trans);
 			if (trans == null) {
