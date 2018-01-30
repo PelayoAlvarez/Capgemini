@@ -1,5 +1,6 @@
 package com.capgemini.piloto.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
+import com.capgemini.piloto.model.dto.MisMovimientosDTO;
 import com.capgemini.piloto.model.dto.MovimientoDTO;
 import com.capgemini.piloto.model.historico.CuentaH;
 import com.capgemini.piloto.model.historico.MovimientoH;
@@ -131,6 +133,23 @@ public class MovimientoController {
 		return movimientoRepository.findAll();
 	}
 	
+	@GetMapping("/mismovimientos/{cuenta}")
+	public ResponseEntity<List<MisMovimientosDTO>> getMisMovimientos(@PathVariable(value = "cuenta") String numeroCuenta) {
+		if(numeroCuenta == null){
+			return new ResponseEntity<List<MisMovimientosDTO>>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
+		if(cuenta != null) {
+			List<Movimiento> listaMovs = movimientoRepository.findByCuentaAsociada(cuenta);
+			
+			List<MisMovimientosDTO> movimientos = new ArrayList<>();
+			for (Movimiento m : listaMovs) {
+				movimientos.add(new MisMovimientosDTO(m));
+			}
+			return new ResponseEntity<List<MisMovimientosDTO>>(movimientos, new HttpHeaders(), HttpStatus.OK);
+		}
+		return new ResponseEntity<List<MisMovimientosDTO>>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}	
 	
 	// ---------------------------------------------------------------------------------------------------------------
 	
