@@ -123,14 +123,14 @@ public class Transferencia implements Serializable {
 		this.usuario = t.getUsuario();
 	}
 
-	public Transferencia(GenerarTransferenciaDTO t) {
+	public Transferencia(GenerarTransferenciaDTO t, Cuenta cuenta) {
 		super();
 		this.idDestino = t.getIdDestino();
 		this.fechaTransferencia = new Date();
 		this.fechaConsolidacion = new Date();
 		this.canal = TipoCanal.ONLINE;
 		this.importe = t.getImporte();
-		this.cuenta = t.getCuenta();
+		this.cuenta = cuenta;
 		this.empleado = null;
 		this.fechaActua = new Date();
 		this.fechaCreacion = new Date();

@@ -80,15 +80,20 @@ public class TransferenciaController {
 		//Create a new Transfer
 				@PostMapping("/transferencia")
 				public ResponseEntity<CuentaBDTO> createTransfer(@RequestBody GenerarTransferenciaDTO transferencia) {
-					
+					if(transferencia == null){
+						return new ResponseEntity<CuentaBDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+					}
 					Cuenta cOrigen = cuentaRepository.findOne(transferencia.getCuenta().toString());
 					Cuenta cDestino = cuentaRepository.findOne(transferencia.getIdDestino());
 					
+					if(cOrigen == null || cDestino ==  null){
+						return new ResponseEntity<CuentaBDTO>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+					}
 					
 					cOrigen.setImporte(cOrigen.getImporte()-transferencia.getImporte());
 					cDestino.setImporte(cDestino.getImporte()+transferencia.getImporte());
 					logger.info("Create new transfer");
-					Transferencia transfe = transferenciaRepository.save(new Transferencia(transferencia));
+					Transferencia transfe = transferenciaRepository.save(new Transferencia(transferencia, cOrigen));
 					
 					cuentaRepository.save(cOrigen);
 					cuentaRepository.save(cDestino);

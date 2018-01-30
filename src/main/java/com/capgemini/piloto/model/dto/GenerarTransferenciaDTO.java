@@ -18,7 +18,7 @@ public class GenerarTransferenciaDTO implements Serializable{
 
 	private String idDestino;
 	private double importe;
-	private Cuenta cuenta;
+	private String cuenta;
 	
 	public GenerarTransferenciaDTO(){
 		
@@ -26,7 +26,7 @@ public class GenerarTransferenciaDTO implements Serializable{
 	
 	public GenerarTransferenciaDTO(Transferencia t) {
 		idDestino = t.getIdDestino();
-		cuenta = t.getCuenta();
+		cuenta = t.getCuenta().getNumeroCuenta();
 		importe = t.getImporte();
 	}
 	
@@ -47,11 +47,11 @@ public class GenerarTransferenciaDTO implements Serializable{
 		this.importe = importe;
 	}
 
-	public Cuenta getCuenta() {
+	public String getCuenta() {
 		return cuenta;
 	}
 
-	public void setCuenta(Cuenta cuenta) {
+	public void setCuenta(String cuenta) {
 		this.cuenta = cuenta;
 	}
 
