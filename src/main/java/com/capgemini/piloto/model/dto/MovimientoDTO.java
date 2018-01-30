@@ -25,6 +25,12 @@ public class MovimientoDTO implements Serializable{
 	private String descripcion;
 
 	private Cuenta cuentaAsociada;
+	
+	private String usuario;
+	
+	public MovimientoDTO() {
+		
+	}
 
 	public MovimientoDTO(Movimiento m) {
 		super();
@@ -34,6 +40,7 @@ public class MovimientoDTO implements Serializable{
 		this.fechahora = m.getFechahora();
 		this.descripcion = m.getDescripcion();
 		this.cuentaAsociada = m.getCuentaAsociada();
+		this.usuario = m.getUsuario();
 	}
 
 	public Long getId() {
@@ -82,5 +89,13 @@ public class MovimientoDTO implements Serializable{
 
 	public void setCuentaAsociada(Cuenta cuentaAsociada) {
 		this.cuentaAsociada = cuentaAsociada;
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 }
