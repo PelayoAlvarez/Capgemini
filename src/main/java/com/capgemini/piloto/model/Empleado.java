@@ -89,25 +89,6 @@ public class Empleado implements Serializable {
 		setMcaHabilitado(true);
 	}
 
-	public Empleado(String dni, String nombre, String apellidos, String direccion, String fijo, String movil,
-			String email, Date fecActu, Date fecCreacion, String usuario, Boolean mcaHabilitado,
-			Set<Transferencia> transferencias, Sucursal sucursal) {
-		super();
-		this.dni = dni;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.direccion = direccion;
-		this.fijo = fijo;
-		this.movil = movil;
-		this.email = email;
-		this.fecActu = fecActu;
-		this.fecCreacion = fecCreacion;
-		this.usuario = usuario;
-		setMcaHabilitado(mcaHabilitado);
-		this.transferencias = transferencias;
-		this.sucursal = sucursal;
-	}
-
 	public String getDni() {
 		return dni;
 	}

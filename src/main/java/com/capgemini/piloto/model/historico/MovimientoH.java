@@ -129,13 +129,6 @@ public class MovimientoH implements Serializable {
 		return id;
 	}
 
-<<<<<<< HEAD
-	public Date getFechaHora() {
-		return fechahora;
-	}
-
-=======
->>>>>>> 69001ec914c10225e2f6498765ca282055c7639a
 	public Cuenta getCuentaAsociada() {
 		return cuentaAsociada;
 	}
