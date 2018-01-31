@@ -1,7 +1,7 @@
 package com.capgemini.piloto.model;
 
 public class Validation {
-
+	
 	private Validation() {
 		
 	}

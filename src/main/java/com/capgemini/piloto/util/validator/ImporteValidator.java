@@ -7,13 +7,20 @@ import com.capgemini.piloto.errors.impl.ImporteFormatException;
 
 public class ImporteValidator {
 	
-	public static void main(String[] args) {
-		validateImporte("10");
+	private static ImporteValidator instance;
+	
+	private ImporteValidator() {}
+	
+	public static ImporteValidator getInstance() {
+		if(instance == null) {
+			instance = new ImporteValidator();
+		}
+		return instance;
 	}
 	
 	public static void validateImporte(String importe) {
 		Pattern importeRegex = 
-			    Pattern.compile("^[0-9]{1,15}(\\.?[0-9]{2})", 
+			    Pattern.compile("^([0-9]{1,15})(\\.[0-9]{1,2})?$", 
 			    		Pattern.CASE_INSENSITIVE);
 		
 		Matcher matcher = importeRegex.matcher(importe);
