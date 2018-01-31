@@ -55,13 +55,13 @@ public class CuentaController {
 	}
 
 	// Get every account and its owners with X dni
-	@GetMapping("/miscuentas")
-	public List<MisCuentasDTO> getMisCuentas(@RequestParam String dni) {
-		logger.info("Requested mis cuentas");
+	@GetMapping("/miscuentas/{dni}")
+	public ResponseEntity<List<MisCuentasDTO>> getMisCuentas(@PathVariable(value = "dni") String dni) {
+		logger.info("FIND: Se obtienen las cuentas del cliente con DNI [{}]", dni);
 		Cliente cliente = clienteRepository.findByDni(dni);
 		if (cliente == null) {
-			logger.info(NOT_FOUND);
-			return new ArrayList<>();
+			logger.info("GET: No se encuentra el cliente con el DNI [{}]", dni);
+			return ResponseEntity.notFound().build();
 		}
 		List<ClienteCuenta> cuentas = clienteCuentaRepository.findByDni(dni);
 		List<MisCuentasDTO> misCuentas = new ArrayList<>();
@@ -73,7 +73,7 @@ public class CuentaController {
 					.add(new ClienteTitularDTO(clienteRepository.findByDni(titular.getCliente().getDni()))));
 			misCuentas.add(new MisCuentasDTO(cuenta.getCuenta().getNumeroCuenta(), titulares));
 		}
-		return misCuentas;
+		return ResponseEntity.ok(misCuentas);
 	}
 
 	// Create a new account
