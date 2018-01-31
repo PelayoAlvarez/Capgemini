@@ -42,7 +42,7 @@ public class CuentaDTO implements Serializable {
 
 	private Boolean mCAHabilitado;
 
-	CuentaDTO() {
+	public CuentaDTO() {
 		fecCreacion = new Date();
 		fecActu = new Date();
 	}

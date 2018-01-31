@@ -64,7 +64,7 @@ public class Cuenta implements Serializable {
 		fecCreacion = new Date();
 		fecActu = new Date();
 	}
-
+	
 	public Cuenta(CuentaDTO cuentadto) {
 		this.numeroCuenta = cuentadto.getNumeroCuenta();
 		this.usuario = cuentadto.getUsuario();
