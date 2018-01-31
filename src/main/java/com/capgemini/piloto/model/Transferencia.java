@@ -88,22 +88,6 @@ public class Transferencia implements Serializable {
 		usuario = t.getUsuario();
 	}
 
-	public Transferencia(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
-			TipoCanal canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion,
-			Boolean mCA_Habilitado, Empleado empleado) {
-		super();
-		this.idDestino = id_destino;
-		this.fechaTransferencia = fecha_transferencia;
-		this.fechaConsolidacion = fecha_consolidacion;
-		this.canal = canal;
-		this.importe = importe;
-		this.cuenta = cuenta;
-		this.empleado = empleado;
-		this.fechaActua = fecha_Actua;
-		this.fechaCreacion = fecha_Creacion;
-		setMcaHabilitado(mCA_Habilitado);
-	}
-
 	public Transferencia(Transferencia t, Cuenta cOrigen, Cuenta cDestino, double importe) {
 		super();
 		this.idDestino = cDestino.getNumeroCuenta();

@@ -77,6 +77,28 @@ public class Cliente implements Serializable {
 		super();
 	}
 
+<<<<<<< HEAD
+=======
+	public Cliente(String dNI, String nombre, String apellidos, String direccion, String movil, String fijo,
+			Date fechaActua, Date fechaCreacion, Empleado empleado, Boolean mCAHabilitado, Set<ClienteCuenta> cuentas,
+			Sucursal sucursal, String email) {
+		super();
+		dni = dNI;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.direccion = direccion;
+		this.movil = movil;
+		this.fijo = fijo;
+		this.fecActu = fechaActua;
+		this.fecCreacion = fechaCreacion;
+		this.empleado = empleado.getNombre();
+		this.mCAHabilitado = mCAHabilitado;
+		this.clienteCuenta = cuentas;
+		this.sucursal = sucursal;
+		this.email = email;
+	}
+
+>>>>>>> b283b09231a0f48c64cfc2e513fa3a3d609e9254
 	public String getNombre() {
 		return nombre;
 	}
@@ -161,7 +183,11 @@ public class Cliente implements Serializable {
 		return new HashSet<>(clienteCuenta);
 	}
 
+<<<<<<< HEAD
 	Set<ClienteCuenta> getClienteCuentasProtegido() {
+=======
+	Set<ClienteCuenta> pgetClienteCuentas() {
+>>>>>>> b283b09231a0f48c64cfc2e513fa3a3d609e9254
 		return clienteCuenta;
 	}
 

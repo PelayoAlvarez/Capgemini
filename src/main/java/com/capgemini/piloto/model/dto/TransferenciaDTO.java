@@ -9,11 +9,12 @@ import com.capgemini.piloto.model.types.TipoCanal;
 
 public class TransferenciaDTO implements Serializable {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 8987903646563338861L;
+	
 	private String idDestino;
 	private Date fechaTransferencia;
 	private Date fechaConsolidacion;

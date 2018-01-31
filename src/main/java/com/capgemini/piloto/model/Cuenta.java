@@ -120,7 +120,7 @@ public class Cuenta implements Serializable {
 		this.numeroCuenta = numeroCuenta;
 	}
 
-	public Set<Movimiento> _getMovimientos() {
+	public Set<Movimiento> pgetMovimientos() {
 		return new HashSet<>(movimientos);
 	}
 
@@ -138,7 +138,7 @@ public class Cuenta implements Serializable {
 		return transferencias;
 	}
 
-	public Set<Transferencia> _getTransferencias() {
+	public Set<Transferencia> pgetTransferencias() {
 		return new HashSet<>(transferencias);
 	}
 
@@ -150,7 +150,7 @@ public class Cuenta implements Serializable {
 		return clientecuenta;
 	}
 
-	public Set<ClienteCuenta> _getClienteCuenta() {
+	public Set<ClienteCuenta> pgetClienteCuenta() {
 		return new HashSet<>(clientecuenta);
 	}
 

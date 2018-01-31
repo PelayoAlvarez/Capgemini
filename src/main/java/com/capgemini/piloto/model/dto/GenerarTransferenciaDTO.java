@@ -6,10 +6,10 @@ import com.capgemini.piloto.model.Transferencia;
 
 public class GenerarTransferenciaDTO implements Serializable {
 
+	private static final long serialVersionUID = 6645424667575102935L;
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	private String idDestino;
 	private double importe;

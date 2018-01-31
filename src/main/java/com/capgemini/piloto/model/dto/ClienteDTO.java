@@ -13,7 +13,11 @@ import com.capgemini.piloto.model.ClienteCuenta;
 
 public class ClienteDTO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -830997863021438446L;
 
 	@NotBlank
 	private String dni;
@@ -33,7 +37,10 @@ public class ClienteDTO implements Serializable {
 
 	private String email;
 
+<<<<<<< HEAD
 	
+=======
+>>>>>>> b283b09231a0f48c64cfc2e513fa3a3d609e9254
 	private Set<ListarClientesCuentaDTO> cuentas = new HashSet<>();
 
 	@NotNull
@@ -49,7 +56,11 @@ public class ClienteDTO implements Serializable {
 		this.email = c.getEmail();
 		for (ClienteCuenta cl : c.getClienteCuentas())
 			this.getCuentas().add(new ListarClientesCuentaDTO(cl.getCuenta()));
+<<<<<<< HEAD
 		this.sucursal = c.getSucursal().getId();
+=======
+		this.sucursal=c.getSucursal().getId();
+>>>>>>> b283b09231a0f48c64cfc2e513fa3a3d609e9254
 	}
 
 	public String getNombre() {
