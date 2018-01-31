@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
+import com.capgemini.piloto.model.Validation;
 import com.capgemini.piloto.model.dto.ClienteTitularDTO;
 import com.capgemini.piloto.model.dto.CuentaDTO;
 import com.capgemini.piloto.model.dto.MisCuentasDTO;
@@ -57,6 +58,10 @@ public class CuentaController {
 	// Get every account and its owners with X dni
 	@GetMapping("/miscuentas/{dni}")
 	public ResponseEntity<List<MisCuentasDTO>> getMisCuentas(@PathVariable(value = "dni") String dni) {
+		if(!Validation.dniValido(dni)){
+			logger.info("The value of dni was not valid");
+			return new ResponseEntity<>(new ArrayList<>(), new HttpHeaders(), HttpStatus.CONFLICT);
+		}
 		logger.info("FIND: Se obtienen las cuentas del cliente con DNI [{}]", dni);
 		Cliente cliente = clienteRepository.findByDni(dni);
 		if (cliente == null) {
@@ -79,6 +84,10 @@ public class CuentaController {
 	// Create a new account
 	@PostMapping("/cuenta")
 	public ResponseEntity<Cuenta> createCuenta(@RequestBody CuentaDTO cuentadto, @RequestParam String dni) {
+		if(!Validation.dniValido(dni)){
+			logger.info("The value of dni was not valid");
+			return new ResponseEntity<>(new Cuenta(cuentadto), new HttpHeaders(), HttpStatus.CONFLICT);
+		}
 		Cuenta aux1 = cuentaRepository.findByNumeroCuenta(cuentadto.getNumeroCuenta());
 		if (aux1 != null) {
 			logger.info("An account with the given numeroCuenta already existed", aux1.getNumeroCuenta());
