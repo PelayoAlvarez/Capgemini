@@ -85,9 +85,9 @@ public class TransferenciaController {
 		return new ResponseEntity<>(cOrigeDto, new HttpHeaders(), HttpStatus.OK);
 	}
 
-	// Create a new Transfer
+	// Listar transferencias para una cuenta
 	@GetMapping("/listarTransferenciaId/{cuenta}")
-	public ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>> createTransfer(
+	public ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>> listarTransfer(
 			@PathVariable(value = "cuenta") String numeroCuenta) {
 		if (numeroCuenta == null) {
 			return new ResponseEntity<>(null, new HttpHeaders(),
