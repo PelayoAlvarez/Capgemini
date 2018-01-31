@@ -46,10 +46,12 @@ public class ClienteCuentaController {
 	public ResponseEntity<GestionTitularesCuentaDTO> createNote(@RequestBody GestionTitularesCuentaDTO datos) {
 		Cuenta cuenta = cuentaRepository.findOne(datos.getNumeroCuenta());
 		if (cuenta == null) {
+			log.error("PUT: No existe la cuenta con nº de cuenta [{}]",	datos.getNumeroCuenta());
 			return ResponseEntity.notFound().build();
 		}
 
 		if (datos.getDniTitulares().isEmpty()) {
+			log.error("PUT: La cuenta con nº de cuenta [{}] no puede quedarse sin titulares", datos.getNumeroCuenta());
 			return ResponseEntity.noContent().build();
 		}
 
@@ -58,6 +60,7 @@ public class ClienteCuentaController {
 			Cliente cliente = clienteRepository.findByDni(dniTitular);
 			clientes.add(cliente);
 			if (cliente == null) {
+				log.error("PUT: No existe el ciente con DNI [{}]", dniTitular);
 				return ResponseEntity.notFound().build();
 			}
 		}
@@ -106,8 +109,12 @@ public class ClienteCuentaController {
 		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
 		ClienteCuenta cc = clienteCuentaRepository.findOne(ccK);
 		if (cc == null) {
+			log.error("GET: No existe relación entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
+					dni, numCuenta);
 			return ResponseEntity.notFound().build();
 		}
+		log.info("GET: Se obtiene la relación de titularidad entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
+				dni, numCuenta);
 		return ResponseEntity.ok().body(new GestionTitularesCuentaDTO(cc));
 	}
 
@@ -125,6 +132,8 @@ public class ClienteCuentaController {
 		cc.setMcaHabilitado(false);
 		cc.setFecActu(new Date());
 		clienteCuentaRepository.save(cc);
+		log.error("DELETE: Se elimina relación de titularidad entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
+				dni, numCuenta);
 		return ResponseEntity.ok(new GestionTitularesCuentaDTO(cc));
 	}
 
@@ -134,8 +143,10 @@ public class ClienteCuentaController {
 			@PathVariable(name = "cuenta") String numCuenta) {
 		List<ClienteCuenta> ccs = clienteCuentaRepository.findByNumeroCuenta(numCuenta);
 		if (ccs == null) {
+			log.error("GET: No existen titulares para la cuenta con nº de cuenta [{}]", numCuenta);
 			return ResponseEntity.notFound().build();
 		}
+		log.info("GET: Se obtienen todos los titulares de la cuenta con nº de cuenta [{}]", numCuenta);
 		return ResponseEntity.ok().body(new GestionTitularesCuentaDTO(ccs));
 	}
 }
