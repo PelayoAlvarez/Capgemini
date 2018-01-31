@@ -109,8 +109,12 @@ public class ClienteCuentaController {
 		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
 		ClienteCuenta cc = clienteCuentaRepository.findOne(ccK);
 		if (cc == null) {
+			log.error("GET: No existe relación entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
+					dni, numCuenta);
 			return ResponseEntity.notFound().build();
 		}
+		log.info("GET: Se obtiene la relación de titularidad entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
+				dni, numCuenta);
 		return ResponseEntity.ok().body(new GestionTitularesCuentaDTO(cc));
 	}
 
@@ -128,6 +132,8 @@ public class ClienteCuentaController {
 		cc.setMcaHabilitado(false);
 		cc.setFecActu(new Date());
 		clienteCuentaRepository.save(cc);
+		log.error("DELETE: Se elimina relación de titularidad entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
+				dni, numCuenta);
 		return ResponseEntity.ok(new GestionTitularesCuentaDTO(cc));
 	}
 
@@ -137,8 +143,10 @@ public class ClienteCuentaController {
 			@PathVariable(name = "cuenta") String numCuenta) {
 		List<ClienteCuenta> ccs = clienteCuentaRepository.findByNumeroCuenta(numCuenta);
 		if (ccs == null) {
+			log.error("GET: No existen titulares para la cuenta con nº de cuenta [{}]", numCuenta);
 			return ResponseEntity.notFound().build();
 		}
+		log.info("GET: Se obtienen todos los titulares de la cuenta con nº de cuenta [{}]", numCuenta);
 		return ResponseEntity.ok().body(new GestionTitularesCuentaDTO(ccs));
 	}
 }
