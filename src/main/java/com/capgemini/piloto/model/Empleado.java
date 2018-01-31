@@ -201,7 +201,7 @@ public class Empleado implements Serializable {
 		return new HashSet<>(transferencias);
 	}
 
-	protected Set<Transferencia> _getTransferencias() {
+	protected Set<Transferencia> pgetTransferencias() {
 		return transferencias;
 	}
 

@@ -97,15 +97,15 @@ public class CuentaH implements Serializable {
 	}
 
 	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, Set<Transferencia> transferencias,
-			Set<ClienteCuenta> clientecuenta, Date fecActu, Date fecCreacion, Boolean mCAHabilitado, String usuario) {
+			Set<ClienteCuenta> clientecuenta, Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
 		this.clientecuenta = clientecuenta;
 		this.transferencias = transferencias;
-		this.fecActu = fecActu;
+		this.fecActu = new Date();
 		fecAudit = new Date();
-		this.fecCreacion = fecCreacion;
+		this.fecCreacion = new Date();
 		this.mCAHabilitado = mCAHabilitado;
 		this.usuario = usuario;
 	}

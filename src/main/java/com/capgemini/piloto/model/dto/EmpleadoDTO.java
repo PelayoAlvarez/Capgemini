@@ -17,32 +17,33 @@ public class EmpleadoDTO implements Serializable {
 	private static final long serialVersionUID = 7180975093272384810L;
 
 	@NotBlank
-	public String dni;
+	private String dni;
 
 	@NotBlank
-	public String nombre;
+	private String nombre;
 
 	@NotBlank
-	public String apellidos;
+	private String apellidos;
 
 	@NotBlank
-	public String direccion;
+	private String direccion;
 
-	public String fijo;
+	private String fijo;
 
 	private String movil;
 
-	public String email;
+	private String email;
 
 	@NotBlank
-	public String usuario;
+	private String usuario;
 
 	private Set<Long> transferencias = new HashSet<>();
 
 	@NotNull
-	public Long sucursal;
+	private Long sucursal;
 
 	public EmpleadoDTO() {
+		this.sucursal=1L;
 	}
 
 	public EmpleadoDTO(Empleado empleado) {

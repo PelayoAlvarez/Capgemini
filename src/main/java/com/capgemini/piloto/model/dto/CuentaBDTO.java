@@ -104,7 +104,7 @@ public class CuentaBDTO implements Serializable {
 		this.numeroCuenta = numeroCuenta;
 	}
 
-	public Set<Long> _getMovimientos() {
+	public Set<Long> pgetMovimientos() {
 		return new HashSet<>(movimientos);
 	}
 
@@ -120,7 +120,7 @@ public class CuentaBDTO implements Serializable {
 		return transferencias;
 	}
 
-	public Set<Long> _getTransferencias() {
+	public Set<Long> pgetTransferencias() {
 		return new HashSet<>(transferencias);
 	}
 
