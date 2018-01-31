@@ -102,7 +102,7 @@ public class Movimiento implements Serializable {
 		this.usuario = m.getUsuario();
 		this.mCAHabilitado = true;
 	}
-	
+
 	public Movimiento(MovimientoDTO mdto) {
 		super();
 		this.id = mdto.getId();
@@ -183,7 +183,7 @@ public class Movimiento implements Serializable {
 	public Long getId() {
 		return id;
 	}
-	
+
 	@JsonIgnore
 	public Cuenta getCuentaAsociada() {
 		return cuentaAsociada;

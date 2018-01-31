@@ -18,48 +18,47 @@ import com.capgemini.piloto.model.dto.SucursalDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Sucursal implements Serializable{
+public class Sucursal implements Serializable {
 
 	private static final long serialVersionUID = 2511716031449738119L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "Id")
 	private Long id;
-	
+
 	@Column(name = "Nombre")
 	private String nombre;
-	
+
 	@Column(name = "Direccion")
 	private String direccion;
-	
+
 	@Column(name = "Fec_actu")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
-	
+
 	@Column(name = "fec_creacion")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
-	
+
 	@Column(name = "Usuario")
 	private String usuario;
-	
+
 	@Column(name = "Mca_habilitado")
 	private Boolean mcaHabilitado;
-	
+
 	@OneToMany(mappedBy = "sucursal")
 	@JsonIgnore
 	private Set<Empleado> empleados = new HashSet<>();
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "sucursal")
 	private Set<Cliente> clientes = new HashSet<>();
-	
+
 	public Sucursal() {
-		//Just for JPA
+		// Just for JPA
 	}
-	
-	
+
 	public Sucursal(Long id, String nombre, String direccion, String usuario) {
 		this.id = id;
 		this.nombre = nombre;
@@ -68,7 +67,7 @@ public class Sucursal implements Serializable{
 		this.fecActu = this.fecCreacion = new Date();
 		this.mcaHabilitado = true;
 	}
-	
+
 	public Sucursal(SucursalDTO dto) {
 		this.id = dto.getId();
 		this.nombre = dto.getNombre();
@@ -133,26 +132,22 @@ public class Sucursal implements Serializable{
 	public void setMcaHabilitado(Boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
-	
+
 	public Set<Empleado> getEmpleados() {
 		return empleados;
 	}
-
 
 	public void setEmpleados(Set<Empleado> empleados) {
 		this.empleados = empleados;
 	}
 
-
 	public Set<Cliente> getClientes() {
 		return clientes;
 	}
 
-
 	public void setClientes(Set<Cliente> clientes) {
 		this.clientes = clientes;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -189,7 +184,5 @@ public class Sucursal implements Serializable{
 	public String toString() {
 		return "Sucursal [id=" + id + ", nombre=" + nombre + ", direccion=" + direccion + "]";
 	}
-	
-	
 
 }

@@ -31,24 +31,24 @@ import com.capgemini.piloto.repository.historico.EmpleadoHRepository;
 @RestController
 @RequestMapping("/empleado")
 public class EmpleadoController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(EmpleadoController.class);
-	
+
 	@Autowired
 	private EmpleadoRepository empleadoRep;
-	
+
 	@Autowired
 	private EmpleadoHRepository empleadoHRep;
-	
+
 	@Autowired
 	private SucursalRepository sucursalRep;
-	
+
 	@GetMapping("/")
 	public List<Empleado> getAllEmpleados() {
 		logger.info("FINDALL: Se obtienen todos los empleados");
 		return empleadoRep.findByMcaHabilitado();
 	}
-	
+
 	@GetMapping("/{dni}")
 	public ResponseEntity<Empleado> getEmpleado(@PathVariable(value = "dni") String dni) {
 		logger.info("FIND: Se obtiene el empleado con DNI [{}]", dni);
@@ -59,7 +59,7 @@ public class EmpleadoController {
 		}
 		return ResponseEntity.ok(empleado);
 	}
-	
+
 	@PostMapping("/")
 	public ResponseEntity<Empleado> createEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDto) {
 		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
@@ -78,7 +78,7 @@ public class EmpleadoController {
 		logger.info("CREATE: Se ha creado el empleado con DNI [{}]", empleado.getDni());
 		return ResponseEntity.ok(empleado);
 	}
-	
+
 	@PutMapping("/{dni}")
 	public ResponseEntity<Empleado> updateEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDto) {
 		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
@@ -95,7 +95,7 @@ public class EmpleadoController {
 		logger.info("UPDATE: Se ha actualizado el empleado con DNI [{}]", empleado.getDni());
 		return ResponseEntity.ok(empleado);
 	}
-	
+
 	@DeleteMapping("/{dni}")
 	public ResponseEntity<Empleado> deleteEmpleado(@PathVariable(name = "dni") String dni) {
 		Empleado empleado = empleadoRep.findByDni(dni);

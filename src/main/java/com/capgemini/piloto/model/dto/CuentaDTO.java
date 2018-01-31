@@ -12,7 +12,6 @@ import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
 
-
 public class CuentaDTO implements Serializable {
 
 	private static final long serialVersionUID = -7283533209815501984L;
@@ -23,7 +22,7 @@ public class CuentaDTO implements Serializable {
 	private Set<ClienteBDTO> clientes = new HashSet<>();
 
 	private String usuario;
-	
+
 	private Double importe;
 
 	private Set<Long> movimientos = new HashSet<>();
@@ -47,22 +46,22 @@ public class CuentaDTO implements Serializable {
 		fecCreacion = new Date();
 		fecActu = new Date();
 	}
-	
+
 	public CuentaDTO(Cuenta cuenta) {
-		this.numeroCuenta=cuenta.getNumeroCuenta();
-		this.usuario=cuenta.getUsuario();
-		this.fecActu=new Date();
-		this.fecCreacion=new Date();
-		for(Transferencia t : cuenta.getTransferencias())
+		this.numeroCuenta = cuenta.getNumeroCuenta();
+		this.usuario = cuenta.getUsuario();
+		this.fecActu = new Date();
+		this.fecCreacion = new Date();
+		for (Transferencia t : cuenta.getTransferencias())
 			this.getTransferencias().add(t.getId());
-		for(Movimiento m : cuenta.getMovimientos())
+		for (Movimiento m : cuenta.getMovimientos())
 			this.getMovimientos().add(m.getId());
-		for(ClienteCuenta cl : cuenta.getClienteCuenta())
+		for (ClienteCuenta cl : cuenta.getClienteCuenta())
 			this.getClientes().add(new ClienteBDTO(cl.getCliente()));
 	}
 
-	public CuentaDTO(String numeroCuenta, Set<Long> movimientos, Set<Long> transferencias,
-			Set<ClienteBDTO> clientes, Boolean mCAHabilitado, String usuario) {
+	public CuentaDTO(String numeroCuenta, Set<Long> movimientos, Set<Long> transferencias, Set<ClienteBDTO> clientes,
+			Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
@@ -118,7 +117,7 @@ public class CuentaDTO implements Serializable {
 	protected void setMovimientos(Set<Long> movimientos) {
 		this.movimientos = movimientos;
 	}
-	
+
 	public Set<Long> getTransferencias() {
 		return transferencias;
 	}
@@ -184,7 +183,5 @@ public class CuentaDTO implements Serializable {
 	public void setImporte(Double importe) {
 		this.importe = importe;
 	}
-	
-	
 
 }

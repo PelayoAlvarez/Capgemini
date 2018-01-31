@@ -20,59 +20,57 @@ import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Tarjeta;
 
 @Entity
-@Table(name="Tarjeta_h")
+@Table(name = "Tarjeta_h")
 public class TarjetaH implements Serializable {
 
 	private static final long serialVersionUID = 8218081642759854455L;
-	
+
 	@NotBlank
-	@Column(name="Numero_tarjeta")
+	@Column(name = "Numero_tarjeta")
 	private String numeroTarjeta;
-	
+
 	@NotNull
-	@Column(name="Mes_caducidad")
+	@Column(name = "Mes_caducidad")
 	private Integer mesCaducidad;
-	
+
 	@NotNull
-	@Column(name="Anyo_caducidad")
+	@Column(name = "Anyo_caducidad")
 	private Integer anyoCaducidad;
-	
+
 	@NotNull
-	@Column(name="Ccv")
+	@Column(name = "Ccv")
 	private Integer ccv;
-	
+
 	@OneToOne
-	@JoinColumns({
-        @JoinColumn(name="Dni", referencedColumnName="Dni"),
-        @JoinColumn(name="Numero_cuenta", referencedColumnName="Numero_cuenta")
-    })
+	@JoinColumns({ @JoinColumn(name = "Dni", referencedColumnName = "Dni"),
+			@JoinColumn(name = "Numero_cuenta", referencedColumnName = "Numero_cuenta") })
 	private ClienteCuenta clienteCuenta;
-	
+
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
-	
+
 	@Column(name = "fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
-	
+
 	@Column(name = "Usuario", nullable = false)
 	private String usuario;
-	
+
 	@Column(name = "Mca_habilitado", nullable = false)
 	private boolean mcaHabilitado;
-	
+
 	@Id
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecAudit;
-	
+
 	@NotBlank
 	@Column(name = "Usuario_h")
 	private String usuarioH;
-	
+
 	public TarjetaH() {
-		//Just for JPA
+		// Just for JPA
 	}
 
 	public TarjetaH(Tarjeta tarjeta, String usuarioH) {
@@ -161,7 +159,7 @@ public class TarjetaH implements Serializable {
 	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
-	
+
 	public Date getFecAudit() {
 		return fecAudit;
 	}

@@ -28,53 +28,54 @@ public class Empleado implements Serializable {
 	@NotBlank
 	@Column(name = "Dni")
 	public String dni;
-	
+
 	@NotBlank
 	@Column(name = "Nombre")
 	public String nombre;
-	
+
 	@NotBlank
 	@Column(name = "Apellidos")
 	public String apellidos;
-	
+
 	@NotBlank
 	@Column(name = "Direccion")
 	public String direccion;
-	
+
 	@Column(name = "Fijo")
 	public String fijo;
-	
+
 	@Column(name = "Movil")
 	public String movil;
-	
+
 	@Column(name = "Email")
 	public String email;
-	
+
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
-	
+
 	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
-	
+
 	@NotBlank
 	@Column(name = "Usuario")
 	private String usuario;
-	
+
 	@Column(name = "Mca_habilitado", nullable = false)
 	private boolean mcaHabilitado;
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy="empleado")
+	@OneToMany(mappedBy = "empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
 
 	@ManyToOne
 	@JoinColumn(name = "id_sucursal", nullable = false)
 	public Sucursal sucursal;
 
-	public Empleado() { }
-	
+	public Empleado() {
+	}
+
 	public Empleado(EmpleadoDTO empleado) {
 		this.dni = empleado.getDni();
 		this.nombre = empleado.getNombre();
@@ -87,7 +88,7 @@ public class Empleado implements Serializable {
 		this.usuario = empleado.getUsuario();
 		setMcaHabilitado(true);
 	}
-	
+
 	public Empleado(String dni, String nombre, String apellidos, String direccion, String fijo, String movil,
 			String email, Date fecActu, Date fecCreacion, String usuario, Boolean mcaHabilitado,
 			Set<Transferencia> transferencias, Sucursal sucursal) {
@@ -154,7 +155,7 @@ public class Empleado implements Serializable {
 	public void setMovil(String movil) {
 		this.movil = movil;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -194,12 +195,12 @@ public class Empleado implements Serializable {
 	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
-	
+
 	@JsonIgnore
 	public Set<Transferencia> getTransferencias() {
 		return new HashSet<>(transferencias);
 	}
-	
+
 	protected Set<Transferencia> _getTransferencias() {
 		return transferencias;
 	}
@@ -207,7 +208,7 @@ public class Empleado implements Serializable {
 	protected void setTransferencias(Set<Transferencia> transferencias) {
 		this.transferencias = transferencias;
 	}
-	
+
 	public Sucursal getSucursal() {
 		return sucursal;
 	}
@@ -245,6 +246,7 @@ public class Empleado implements Serializable {
 	public String toString() {
 		return "Empleado [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
 				+ ", fijo=" + fijo + ", movil=" + movil + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
-				+ fecCreacion + ", usuario=" + usuario + ", mcaHabilitado=" + mcaHabilitado + ", surcusal=" + sucursal + "]";
+				+ fecCreacion + ", usuario=" + usuario + ", mcaHabilitado=" + mcaHabilitado + ", surcusal=" + sucursal
+				+ "]";
 	}
 }

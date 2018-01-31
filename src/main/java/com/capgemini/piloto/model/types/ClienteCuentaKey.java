@@ -11,17 +11,15 @@ public class ClienteCuentaKey implements Serializable {
 
 	String cliente;
 	String cuenta;
-	
-	
-	public ClienteCuentaKey() {		
+
+	public ClienteCuentaKey() {
 	}
-	
-	
+
 	public ClienteCuentaKey(String cliente, String cuenta) {
 		this.cliente = cliente;
 		this.cuenta = cuenta;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -30,6 +28,7 @@ public class ClienteCuentaKey implements Serializable {
 		result = prime * result + ((cuenta == null) ? 0 : cuenta.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -51,7 +50,5 @@ public class ClienteCuentaKey implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }

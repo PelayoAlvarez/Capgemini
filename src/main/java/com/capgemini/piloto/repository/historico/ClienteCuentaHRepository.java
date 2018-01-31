@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.capgemini.piloto.model.historico.ClienteCuentaH;
 
-
-public interface ClienteCuentaHRepository  extends JpaRepository<ClienteCuentaH,Date>{
+public interface ClienteCuentaHRepository extends JpaRepository<ClienteCuentaH, Date> {
 
 }

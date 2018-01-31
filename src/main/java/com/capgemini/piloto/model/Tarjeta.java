@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -19,52 +18,50 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Tarjeta implements Serializable{
+public class Tarjeta implements Serializable {
 
 	private static final long serialVersionUID = 2108862824305074349L;
-	
+
 	@Id
 	@NotBlank
-	@Column(name="Numero_tarjeta")
+	@Column(name = "Numero_tarjeta")
 	private String numeroTarjeta;
-	
+
 	@NotNull
-	@Column(name="Mes_caducidad")
+	@Column(name = "Mes_caducidad")
 	private Integer mesCaducidad;
-	
+
 	@NotNull
-	@Column(name="Anyo_caducidad")
+	@Column(name = "Anyo_caducidad")
 	private Integer anyoCaducidad;
-	
+
 	@NotNull
-	@Column(name="Ccv")
+	@Column(name = "Ccv")
 	private Integer ccv;
-	
+
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumns({
-        @JoinColumn(name="Dni", referencedColumnName="Dni"),
-        @JoinColumn(name="Numero_cuenta", referencedColumnName="Numero_cuenta")
-    })
+	@JoinColumns({ @JoinColumn(name = "Dni", referencedColumnName = "Dni"),
+			@JoinColumn(name = "Numero_cuenta", referencedColumnName = "Numero_cuenta") })
 	private ClienteCuenta clienteCuenta;
-	
+
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
-	
+
 	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
-	
+
 	@NotBlank
 	@Column(name = "Usuario")
 	private String usuario;
-	
+
 	@Column(name = "Mca_habilitado", nullable = false)
 	private boolean mcaHabilitado;
-	
+
 	public Tarjeta() {
-		//Just for JPA
+		// Just for JPA
 	}
 
 	public Tarjeta(String numeroTarjeta, Integer mesCaducidad, Integer anyoCaducidad, Integer ccv,

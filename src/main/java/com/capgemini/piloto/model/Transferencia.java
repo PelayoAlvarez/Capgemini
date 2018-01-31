@@ -35,7 +35,6 @@ public class Transferencia implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-
 	@Column(name = "Numero_cuenta_destino")
 	private String idDestino;
 
@@ -43,14 +42,11 @@ public class Transferencia implements Serializable {
 	@JoinColumn(name = "Numero_cuenta_origen")
 	private Cuenta cuenta;
 
-
 	@Column(name = "Fec_transferencia")
 	private Date fechaTransferencia;
 
-
 	@Column(name = "Fec_consolidacion")
 	private Date fechaConsolidacion;
-
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "Canal")
@@ -73,11 +69,10 @@ public class Transferencia implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaCreacion;
 
-
 	@Column(name = "Mca_habilitado", nullable = false)
 	private Boolean mCAHabilitado;
-	
-	@Column(name="Usuario", nullable = false)
+
+	@Column(name = "Usuario", nullable = false)
 	private String usuario;
 
 	public Transferencia() {
@@ -94,8 +89,8 @@ public class Transferencia implements Serializable {
 	}
 
 	public Transferencia(String id_destino, String id_origen, Date fecha_transferencia, Date fecha_consolidacion,
-			TipoCanal canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion, Boolean mCA_Habilitado,
-			Empleado empleado) {
+			TipoCanal canal, double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion,
+			Boolean mCA_Habilitado, Empleado empleado) {
 		super();
 		this.idDestino = id_destino;
 		this.fechaTransferencia = fecha_transferencia;
@@ -138,7 +133,7 @@ public class Transferencia implements Serializable {
 		this.mCAHabilitado = true;
 		this.usuario = "probador";
 	}
-	
+
 	public Transferencia(ListarTransferenciasNumeroCuentaDTO t, Cuenta cuenta) {
 		super();
 		this.idDestino = t.getIdDestino();
@@ -250,11 +245,10 @@ public class Transferencia implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Transferencia [id=" + id + ", id_destino=" + idDestino
-				+ ", fecha_transferencia=" + fechaTransferencia + ", fecha_consolidacion=" + fechaConsolidacion
-				+ ", canal=" + canal + ", importe=" + importe + ", cuenta=" + cuenta + ", empleado =" + empleado
-				+ ", fecha_Actua=" + fechaActua + ", fecha_Creacion=" + fechaCreacion + ", MCA_Habilitado="
-				+ mCAHabilitado + "]";
+		return "Transferencia [id=" + id + ", id_destino=" + idDestino + ", fecha_transferencia=" + fechaTransferencia
+				+ ", fecha_consolidacion=" + fechaConsolidacion + ", canal=" + canal + ", importe=" + importe
+				+ ", cuenta=" + cuenta + ", empleado =" + empleado + ", fecha_Actua=" + fechaActua + ", fecha_Creacion="
+				+ fechaCreacion + ", MCA_Habilitado=" + mCAHabilitado + "]";
 	}
 
 }

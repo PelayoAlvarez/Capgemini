@@ -11,7 +11,6 @@ import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.Transferencia;
 
-
 public class CuentaBDTO implements Serializable {
 
 	/**
@@ -23,7 +22,7 @@ public class CuentaBDTO implements Serializable {
 	private String numeroCuenta;
 
 	private String usuario;
-	
+
 	private Double importe;
 
 	private Set<Long> movimientos = new HashSet<>();
@@ -47,23 +46,21 @@ public class CuentaBDTO implements Serializable {
 		fecCreacion = new Date();
 		fecActu = new Date();
 	}
-	
+
 	public CuentaBDTO(Cuenta cuenta) {
-		this.numeroCuenta=cuenta.getNumeroCuenta();
-		this.usuario=cuenta.getUsuario();
-		this.fecActu=new Date();
-		this.fecCreacion=new Date();
+		this.numeroCuenta = cuenta.getNumeroCuenta();
+		this.usuario = cuenta.getUsuario();
+		this.fecActu = new Date();
+		this.fecCreacion = new Date();
 		this.importe = cuenta.getImporte();
-		for(Transferencia t : cuenta.getTransferencias())
+		for (Transferencia t : cuenta.getTransferencias())
 			this.getTransferencias().add(t.getId());
-		for(Movimiento m : cuenta.getMovimientos())
+		for (Movimiento m : cuenta.getMovimientos())
 			this.getMovimientos().add(m.getId());
 	}
-	
-	
 
-	public CuentaBDTO(String numeroCuenta, Set<Long> movimientos, Set<Long> transferencias,
-			Boolean mCAHabilitado, String usuario) {
+	public CuentaBDTO(String numeroCuenta, Set<Long> movimientos, Set<Long> transferencias, Boolean mCAHabilitado,
+			String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
@@ -118,7 +115,7 @@ public class CuentaBDTO implements Serializable {
 	protected void setMovimientos(Set<Long> movimientos) {
 		this.movimientos = movimientos;
 	}
-	
+
 	public Set<Long> getTransferencias() {
 		return transferencias;
 	}
@@ -172,7 +169,5 @@ public class CuentaBDTO implements Serializable {
 	public void setImporte(Double importe) {
 		this.importe = importe;
 	}
-	
-	
 
 }

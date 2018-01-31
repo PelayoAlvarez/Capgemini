@@ -11,19 +11,20 @@ import com.capgemini.piloto.model.Cuenta;
 public class MisCuentasDTO implements Serializable {
 
 	private static final long serialVersionUID = -2405890651955664095L;
-	
+
 	@NotBlank
 	private String numeroCuenta;
-	
+
 	private List<ClienteTitularDTO> titulares;
-	
-	public MisCuentasDTO() { }
+
+	public MisCuentasDTO() {
+	}
 
 	public MisCuentasDTO(String numeroCuenta, List<ClienteTitularDTO> titulares) {
 		this.numeroCuenta = numeroCuenta;
 		this.titulares = titulares;
 	}
-	
+
 	public MisCuentasDTO(Cuenta cuenta, List<Cliente> clientes) {
 		this.numeroCuenta = cuenta.getNumeroCuenta();
 		clientes.forEach(cliente -> this.titulares.add(new ClienteTitularDTO(cliente)));

@@ -34,15 +34,15 @@ public class CuentaH implements Serializable {
 
 	@Column(name = "Usuario")
 	private String usuario;
-	
+
 	@Column(name = "Importe")
 	private Double importe;
 
-	@OneToMany(mappedBy="cuenta")
+	@OneToMany(mappedBy = "cuenta")
 	@JsonIgnore
 	private Set<ClienteCuenta> clientecuenta = new HashSet<>();
 
-	@OneToMany(mappedBy="cuentaAsociada")
+	@OneToMany(mappedBy = "cuentaAsociada")
 	@JsonIgnore
 	private Set<Movimiento> movimientos = new HashSet<>();
 
@@ -84,24 +84,25 @@ public class CuentaH implements Serializable {
 	public CuentaH(Cuenta c, String user) {
 		numeroCuenta = c.getNumeroCuenta();
 		movimientos = c.getMovimientos();
-		transferencias= c.getTransferencias();
-		clientecuenta=c.getClienteCuenta();
+		transferencias = c.getTransferencias();
+		clientecuenta = c.getClienteCuenta();
 		fecActu = c.getFecActu();
 		fecCreacion = c.getFecCreacion();
 		mCAHabilitado = c.getmCAHabilitado();
 		usuario = c.getUsuario();
 		fecAudit = new Date();
+		importe = c.getImporte();
 		this.usuarioH = user;
+		this.importe = c.getImporte();
 	}
-	
-	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, 
-			Set<Transferencia> transferencias, Set<ClienteCuenta> clientecuenta, Date fecActu, Date fecCreacion,
-			Boolean mCAHabilitado, String usuario) {
+
+	public CuentaH(String numeroCuenta, Set<Movimiento> movimientos, Set<Transferencia> transferencias,
+			Set<ClienteCuenta> clientecuenta, Date fecActu, Date fecCreacion, Boolean mCAHabilitado, String usuario) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.movimientos = movimientos;
-		this.clientecuenta=clientecuenta;
-		this.transferencias=transferencias;
+		this.clientecuenta = clientecuenta;
+		this.transferencias = transferencias;
 		this.fecActu = fecActu;
 		fecAudit = new Date();
 		this.fecCreacion = fecCreacion;
@@ -178,8 +179,6 @@ public class CuentaH implements Serializable {
 	public void setUsuarioH(String usuarioH) {
 		this.usuarioH = usuarioH;
 	}
-	
-	
 
 	public Double getImporte() {
 		return importe;
@@ -239,7 +238,5 @@ public class CuentaH implements Serializable {
 	public void setFecCreacion(Date fecCreacion) {
 		this.fecCreacion = fecCreacion;
 	}
-	
-	
 
 }

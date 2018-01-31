@@ -23,69 +23,70 @@ import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.dto.EmpleadoDTO;
 
 @Entity
-@Table(name="Empleado_H")
+@Table(name = "Empleado_H")
 public class EmpleadoH implements Serializable {
 
 	private static final long serialVersionUID = -4428784972707162023L;
 
 	@NotBlank
 	@Column(name = "Dni")
-	public String dni;	
-	
+	public String dni;
+
 	@NotBlank
 	@Column(name = "Nombre")
 	public String nombre;
-	
+
 	@NotBlank
 	@Column(name = "Apellidos")
 	public String apellidos;
-	
+
 	@NotBlank
 	@Column(name = "Direccion")
 	public String direccion;
-	
+
 	@Column(name = "Fijo")
 	public String fijo;
-	
+
 	@Column(name = "Movil")
 	public String movil;
-	
+
 	@Column(name = "Email")
 	public String email;
-	
+
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecActu;
-	
+
 	@Column(name = "Fec_creacion", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecCreacion;
-	
+
 	@NotBlank
 	@Column(name = "Usuario")
 	private String usuario;
-	
+
 	@Column(name = "Mca_habilitado", nullable = false)
 	private boolean mcaHabilitado;
-	
-	@OneToMany(mappedBy="empleado")
+
+	@OneToMany(mappedBy = "empleado")
 	private Set<Transferencia> transferencias = new HashSet<>();
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_sucursal", nullable = false)
 	public Sucursal sucursal;
-	
+
 	@Id
 	@Column(name = "Fec_audit", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecAudit;
-	
+
 	@NotBlank
 	@Column(name = "Usuario_h")
 	private String usuarioH;
 
-	public EmpleadoH() { }
-	
+	public EmpleadoH() {
+	}
+
 	public EmpleadoH(Empleado empleado, String usuarioH) {
 		super();
 		this.dni = empleado.getDni();
@@ -103,7 +104,7 @@ public class EmpleadoH implements Serializable {
 		this.fecAudit = new Date();
 		this.usuarioH = usuarioH;
 	}
-	
+
 	public EmpleadoH(Empleado empleado, EmpleadoDTO empleadoDto, String usuarioH) {
 		super();
 		this.dni = empleado.getDni();
@@ -121,7 +122,7 @@ public class EmpleadoH implements Serializable {
 		this.fecAudit = new Date();
 		this.usuarioH = usuarioH;
 	}
-	
+
 	public String getDni() {
 		return dni;
 	}
@@ -169,7 +170,7 @@ public class EmpleadoH implements Serializable {
 	public void setMovil(String movil) {
 		this.movil = movil;
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -209,11 +210,11 @@ public class EmpleadoH implements Serializable {
 	public void setMcaHabilitado(boolean mcaHabilitado) {
 		this.mcaHabilitado = mcaHabilitado;
 	}
-	
+
 	public Set<Transferencia> getTransferencias() {
 		return new HashSet<>(transferencias);
 	}
-	
+
 	protected Set<Transferencia> _getTransferencias() {
 		return transferencias;
 	}
@@ -221,7 +222,7 @@ public class EmpleadoH implements Serializable {
 	protected void setTransferencias(Set<Transferencia> transferencias) {
 		this.transferencias = transferencias;
 	}
-	
+
 	public Sucursal getSucursal() {
 		return sucursal;
 	}

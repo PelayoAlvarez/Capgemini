@@ -1,6 +1,5 @@
 package com.capgemini.piloto.model;
 
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -16,14 +15,16 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table (name="CLIENTE")
-public class Cliente implements Serializable{
-	
+@Table(name = "CLIENTE")
+public class Cliente implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4393419578690740710L;
 	@Id
 	@Column(name = "Dni", nullable = false)
 	private String dni;
@@ -39,7 +40,7 @@ public class Cliente implements Serializable{
 	private String fijo;
 	@Column(name = "Email")
 	private String email;
-	
+
 	// Campos de Auditoria
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -52,19 +53,18 @@ public class Cliente implements Serializable{
 
 	@Column(name = "Usuario", nullable = false)
 	private String empleado;
-	
+
 	@Column(name = "Mca_habilitado", nullable = false)
 	private Boolean mCAHabilitado;
-	
-	@OneToMany(mappedBy="cliente")
+
+	@OneToMany(mappedBy = "cliente")
 	@JsonIgnore
 	private Set<ClienteCuenta> clienteCuenta = new HashSet<ClienteCuenta>();
 
-	
-	@ManyToOne 
+	@ManyToOne
 	@JoinColumn(name = "id_sucursal")
-	public Sucursal sucursal;
-	
+	private Sucursal sucursal;
+
 	public Sucursal getSucursal() {
 		return sucursal;
 	}
@@ -179,7 +179,7 @@ public class Cliente implements Serializable{
 	public Set<ClienteCuenta> getClienteCuentas() {
 		return new HashSet<ClienteCuenta>(clienteCuenta);
 	}
-	
+
 	Set<ClienteCuenta> _getClienteCuentas() {
 		return clienteCuenta;
 	}
@@ -225,10 +225,4 @@ public class Cliente implements Serializable{
 				+ "]";
 	}
 
-
-	
-
-	
-
-	
 }

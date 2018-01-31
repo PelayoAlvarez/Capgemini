@@ -35,11 +35,11 @@ public class Cuenta implements Serializable {
 
 	@Column(name = "Usuario")
 	private String usuario;
-	
+
 	@Column(name = "Importe")
 	private Double importe;
 
-	@OneToMany(mappedBy="cuentaAsociada")
+	@OneToMany(mappedBy = "cuentaAsociada")
 	@JsonIgnore
 	private Set<Movimiento> movimientos = new HashSet<>();
 
@@ -64,14 +64,14 @@ public class Cuenta implements Serializable {
 		fecCreacion = new Date();
 		fecActu = new Date();
 	}
-	
+
 	public Cuenta(CuentaDTO cuentadto) {
-		this.numeroCuenta=cuentadto.getNumeroCuenta();
-		this.usuario=cuentadto.getUsuario();
+		this.numeroCuenta = cuentadto.getNumeroCuenta();
+		this.usuario = cuentadto.getUsuario();
 		this.importe = cuentadto.getImporte();
-		this.fecActu=new Date();
-		this.fecCreacion=new Date();
-		this.mCAHabilitado=true;
+		this.fecActu = new Date();
+		this.fecCreacion = new Date();
+		this.mCAHabilitado = true;
 	}
 
 	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Set<Transferencia> transferencias,
@@ -132,7 +132,7 @@ public class Cuenta implements Serializable {
 	protected void setMovimientos(Set<Movimiento> movimientos) {
 		this.movimientos = movimientos;
 	}
-	
+
 	@JsonIgnore
 	public Set<Transferencia> getTransferencias() {
 		return transferencias;
@@ -191,13 +191,11 @@ public class Cuenta implements Serializable {
 	public void setFecCreacion(Date fecCreacion) {
 		this.fecCreacion = fecCreacion;
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		return "Cuenta [numeroCuenta=" + numeroCuenta;
 	}
-
 
 	public Double getImporte() {
 		return importe;
@@ -206,7 +204,5 @@ public class Cuenta implements Serializable {
 	public void setImporte(Double importe) {
 		this.importe = importe;
 	}
-	
-	
 
 }

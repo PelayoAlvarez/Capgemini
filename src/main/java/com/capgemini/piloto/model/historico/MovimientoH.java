@@ -24,19 +24,17 @@ import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.types.TipoMovimiento;
 
 @Entity
-@Table(name="MOVIMIENTO_H")
-public class MovimientoH implements Serializable{
+@Table(name = "MOVIMIENTO_H")
+public class MovimientoH implements Serializable {
 
 	private static final long serialVersionUID = -1129264172419492422L;
 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "Id")
 	private Long id;
-	
-	
+
 	@Column(name = "Importe")
 	private Double importe;
-	
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "Tipo")
@@ -45,11 +43,10 @@ public class MovimientoH implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "Fec_movimiento")
 	private Date fechahora;
-	
 
 	@Column(name = "Descripcion")
 	private String descripcion;
-	
+
 	@Column(name = "Usuario")
 	private String usuario;
 
@@ -58,12 +55,12 @@ public class MovimientoH implements Serializable{
 	private Cuenta cuentaAsociada;
 
 	// Campos de Auditoria
-	
+
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
 	private Date fechaActua;
-	
+
 	@Column(name = "Fec_creacion", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
@@ -73,18 +70,15 @@ public class MovimientoH implements Serializable{
 	@Column(name = "Fec_audit")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fecAudit;
-	
 
 	@Column(name = "Usuario_h")
 	private String Usuarioh;
-	
 
 	@Column(name = "Mca_habilitado")
 	private Boolean MCAHabilitado;
-	
-	
+
 	MovimientoH() {
-		//Solo para jpa
+		// Solo para jpa
 	}
 
 	public MovimientoH(Movimiento m, String usuario) {
@@ -138,7 +132,7 @@ public class MovimientoH implements Serializable{
 	public Long getId() {
 		return id;
 	}
-	
+
 	public Date getFecha_hora() {
 		return fechahora;
 	}
@@ -151,7 +145,7 @@ public class MovimientoH implements Serializable{
 		return usuario;
 	}
 
-	//Getters y Setters de Auditoria
+	// Getters y Setters de Auditoria
 
 	public Date getFecha_Actua() {
 		return fechaActua;
@@ -168,7 +162,7 @@ public class MovimientoH implements Serializable{
 	public void setFecAudit(Date fecAudit) {
 		this.fecAudit = fecAudit;
 	}
-	
+
 	public Boolean getMCAHabilitado() {
 		return MCAHabilitado;
 	}
@@ -180,11 +174,11 @@ public class MovimientoH implements Serializable{
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
-	
+
 	public String getUsuarioH() {
 		return Usuarioh;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -14,7 +14,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.capgemini.piloto.model.Cliente;
-import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -55,7 +54,7 @@ public class SucursalH implements Serializable {
 	private String usuarioH;
 
 	public SucursalH() {
-		//Just for JPA
+		// Just for JPA
 	}
 
 	public SucursalH(Sucursal sucursal, String usuarioH) {

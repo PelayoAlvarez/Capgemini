@@ -11,58 +11,43 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 
-public class ClienteDTO implements Serializable{
+public class ClienteDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@NotBlank
 	private String dni;
-	
+
 	@NotBlank
 	private String nombre;
-	
+
 	@NotBlank
 	private String apellidos;
 
 	@NotBlank
 	private String direccion;
-	
+
 	private String movil;
-	
+
 	private String fijo;
-	
+
 	private String email;
-	
-	private Set<CuentaDTO> clienteCuenta = new HashSet<CuentaDTO>();
+
+	private Set<ListarClientesCuentaDTO> cuentas = new HashSet<ListarClientesCuentaDTO>();
 
 	@NotNull
 	public Long sucursal;
 
-	public ClienteDTO(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
-			String email, Set<CuentaDTO> clienteCuenta, Long sucursal) {
-		super();
-		this.dni = dni;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.direccion = direccion;
-		this.movil = movil;
-		this.fijo = fijo;
-		this.email = email;
-		this.clienteCuenta = clienteCuenta;
-		this.sucursal = sucursal;
-	}
-	
-	public ClienteDTO(Cliente c)
-	{
-		this.dni=c.getDni();
-		this.nombre=c.getNombre();
-		this.apellidos=c.getApellidos();
-		this.direccion=c.getDireccion();
-		this.movil=c.getMovil();
-		this.fijo=c.getFijo();
-		this.email=c.getEmail();
-		for(ClienteCuenta cl : c.getClienteCuentas())
-			this.getClienteCuenta().add(new CuentaDTO(cl.getCuenta()));
+	public ClienteDTO(Cliente c) {
+		this.dni = c.getDni();
+		this.nombre = c.getNombre();
+		this.apellidos = c.getApellidos();
+		this.direccion = c.getDireccion();
+		this.movil = c.getMovil();
+		this.fijo = c.getFijo();
+		this.email = c.getEmail();
+		for (ClienteCuenta cl : c.getClienteCuentas())
+			this.getCuentas().add(new ListarClientesCuentaDTO(cl.getCuenta()));
 	}
 
 	public String getNombre() {
@@ -113,12 +98,12 @@ public class ClienteDTO implements Serializable{
 		this.email = email;
 	}
 
-	public Set<CuentaDTO> getClienteCuenta() {
-		return clienteCuenta;
+	public Set<ListarClientesCuentaDTO> getCuentas() {
+		return cuentas;
 	}
 
-	public void setClienteCuenta(Set<CuentaDTO> clienteCuenta) {
-		this.clienteCuenta = clienteCuenta;
+	public void setCuentas(Set<ListarClientesCuentaDTO> cuentas) {
+		this.cuentas = cuentas;
 	}
 
 	public Long getSucursal() {
@@ -132,7 +117,5 @@ public class ClienteDTO implements Serializable{
 	public String getDni() {
 		return dni;
 	}
-	
-	
-	
+
 }
