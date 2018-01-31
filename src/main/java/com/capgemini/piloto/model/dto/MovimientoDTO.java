@@ -9,10 +9,11 @@ import com.capgemini.piloto.model.types.TipoMovimiento;
 
 public class MovimientoDTO implements Serializable {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3440870604077614365L;
 
 	private Long id;
 

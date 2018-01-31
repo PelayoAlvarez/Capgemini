@@ -8,7 +8,11 @@ import com.capgemini.piloto.model.Cliente;
 
 public class ClienteBDTO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3440129384482107650L;
 
 	@NotBlank
 	private String dni;
