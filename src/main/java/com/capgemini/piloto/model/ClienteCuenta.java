@@ -130,15 +130,6 @@ public class ClienteCuenta implements Serializable{
 		this.mcaHabilitado = mcaHabilitado;
 	}
 
-	
-	
-//	public void link(Cliente cliente, Cuenta cuenta) {
-//		setCliente(cliente);
-//		setCuenta(cuenta);
-//		cliente._getClienteCuenta().add(this);
-//		cuenta._getClienteCuenta().add(this);
-//	}
-
 	public Set<Tarjeta> getTarjetas() {
 		return tarjetas;
 	}

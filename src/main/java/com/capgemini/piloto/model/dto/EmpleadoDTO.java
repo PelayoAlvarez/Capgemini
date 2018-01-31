@@ -30,7 +30,7 @@ public class EmpleadoDTO implements Serializable {
 
 	public String fijo;
 
-	public String movil;
+	private String movil;
 
 	public String email;
 

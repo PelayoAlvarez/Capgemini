@@ -7,10 +7,11 @@ import com.capgemini.piloto.model.types.TipoMovimiento;
 
 public class MisMovimientosDTO implements Serializable {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 8990419489418238745L;
 
 	private double importe;
 
