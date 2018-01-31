@@ -15,9 +15,9 @@ public class Validation {
 		if (!str.matches(nifRexp) && !str.matches(nieRexp)) return false;
 		
 		String nie = str
-		      .replace("/^[X]/", "0")
-		      .replace("/^[Y]/", "1")
-		      .replace("/^[Z]/", "2");
+		      .replaceAll("^[X]", "0")
+		      .replaceAll("^[Y]", "1")
+		      .replaceAll("^[Z]", "2");
 		
 		char letter = str.charAt(str.length() - 1);
 		int charIndex = Integer.parseInt(nie.substring(0, 8)) % 23;
