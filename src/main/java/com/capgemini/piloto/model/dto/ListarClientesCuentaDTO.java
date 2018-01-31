@@ -1,9 +1,12 @@
 package com.capgemini.piloto.model.dto;
 
+import java.io.Serializable;
+
 import com.capgemini.piloto.model.Cuenta;
 
-public class ListarClientesCuentaDTO {
+public class ListarClientesCuentaDTO implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private double importe;
 	private String numeroCuenta;
 

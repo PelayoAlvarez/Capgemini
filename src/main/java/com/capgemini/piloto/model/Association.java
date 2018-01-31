@@ -13,8 +13,10 @@ public class Association {
 		public static void link(Cliente cliente, ClienteCuenta titulo, Cuenta cuenta) {
 			titulo.setCliente(cliente);
 			titulo.setCuenta(cuenta);
-			cliente._getClienteCuentas().add(titulo);
-			cuenta._getClienteCuenta().add(titulo);
+
+			cliente.pgetClienteCuentas().add(titulo);
+			cuenta.pgetClienteCuenta().add(titulo);
+
 		}
 
 		public static void unlink(ClienteCuenta titulo, Cuenta cuenta) {
@@ -22,7 +24,7 @@ public class Association {
 
 			// miramos si la cuenta linqueada al cliente que borramos es solo suya, si no lo
 			// es entonces habra que borrar la cuenta
-			for (ClienteCuenta titular : cuenta._getClienteCuenta()) {
+			for (ClienteCuenta titular : cuenta.pgetClienteCuenta()) {
 				if (titular.getMcaHabilitado())
 					return;
 			}
@@ -39,8 +41,9 @@ public class Association {
 		public static void link(Cliente cliente, ClienteCuenta titulo, Cuenta cuenta) {
 			titulo.setCliente(cliente);
 			titulo.setCuenta(cuenta);
-			cliente._getClienteCuentas().add(titulo);
-			cuenta._getClienteCuenta().add(titulo);
+
+			cliente.pgetClienteCuentas().add(titulo);
+			cuenta.pgetClienteCuenta().add(titulo);
 		}
 
 		public static void unlink(ClienteCuenta cc) {

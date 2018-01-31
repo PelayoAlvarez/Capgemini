@@ -93,44 +93,28 @@ public class TransferenciaH implements Serializable {
 		importe = t.getImporte();
 	}
 
-	public TransferenciaH(String id_destino, Date fecha_transferencia, Date fecha_consolidacion, TipoCanal canal,
-			double importe, Cuenta cuenta, Date fecha_Actua, Date fecha_Creacion, Boolean mCA_Habilitado,
-			Empleado empleado) {
-		super();
-		this.idDestino = id_destino;
-		this.fechaTransferencia = fecha_transferencia;
-		this.fechaConsolidacion = fecha_consolidacion;
-		this.canal = canal;
-		this.importe = importe;
-		this.cuenta = cuenta;
-		this.empleado = empleado;
-		this.fechaActua = fecha_Actua;
-		this.fechaConsolidacion = fecha_Creacion;
-		setMCA_Habilitado(mCA_Habilitado);
-	}
-
-	public String getId_destino() {
+	public String getIddestino() {
 		return idDestino;
 	}
 
-	public void setId_destino(String id_destino) {
-		this.idDestino = id_destino;
+	public void setIddestino(String iddestino) {
+		this.idDestino = iddestino;
 	}
 
-	public Date getFecha_transferencia() {
+	public Date getFechatransferencia() {
 		return fechaTransferencia;
 	}
 
-	public void setFecha_transferencia(Date fecha_transferencia) {
-		this.fechaTransferencia = fecha_transferencia;
+	public void setFechatransferencia(Date fechatransferencia) {
+		this.fechaTransferencia = fechatransferencia;
 	}
 
-	public Date getFecha_consolidacion() {
+	public Date getFechaconsolidacion() {
 		return fechaConsolidacion;
 	}
 
-	public void setFecha_consolidacion(Date fecha_consolidacion) {
-		this.fechaConsolidacion = fecha_consolidacion;
+	public void setFechaconsolidacion(Date fechaconsolidacion) {
+		this.fechaConsolidacion = fechaconsolidacion;
 	}
 
 	public TipoCanal getCanal() {
@@ -153,20 +137,20 @@ public class TransferenciaH implements Serializable {
 		return id;
 	}
 
-	public Date getFecha_Actua() {
+	public Date getFechaActua() {
 		return fechaActua;
 	}
 
-	public void setFecha_Actua(Date fecha_Actua) {
-		this.fechaActua = fecha_Actua;
+	public void setFechaActua(Date fechaActua) {
+		this.fechaActua = fechaActua;
 	}
 
-	public Date getFecha_Creacion() {
-		return fechaConsolidacion;
+	public Date getFechaCreacion() {
+		return fechaCreacion;
 	}
 
-	public void setFecha_Creacion(Date fecha_Creacion) {
-		this.fechaConsolidacion = fecha_Creacion;
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
 
 	public Date getFecAudit() {
@@ -177,12 +161,12 @@ public class TransferenciaH implements Serializable {
 		this.fecAudit = fecAudit;
 	}
 
-	public Boolean getMCA_Habilitado() {
-		return getMCA_Habilitado();
+	public Boolean getMCAHabilitado() {
+		return getMCAHabilitado();
 	}
 
-	public void setMCA_Habilitado(Boolean mCA_Habilitado) {
-		mcaHabilitado = mCA_Habilitado;
+	public void setMCAHabilitado(Boolean mCAHabilitado) {
+		mcaHabilitado = mCAHabilitado;
 	}
 
 	@Override

@@ -9,8 +9,8 @@ public class ListarTransferenciasNumeroCuentaDTO implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 3338402964058449170L;
+	
 	private String idDestino;
 	private double importe;
 	private String cuenta;

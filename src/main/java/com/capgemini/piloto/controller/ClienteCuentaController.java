@@ -62,7 +62,7 @@ public class ClienteCuentaController {
 			}
 		}
 
-		Set<ClienteCuenta> clientesCuentas = cuenta._getClienteCuenta();
+		Set<ClienteCuenta> clientesCuentas = cuenta.pgetClienteCuenta();
 		for (ClienteCuenta cc : clientesCuentas) {
 			if (clientes.contains(cc.getCliente())) {
 				if (!cc.getMcaHabilitado()) {

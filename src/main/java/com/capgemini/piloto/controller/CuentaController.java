@@ -85,7 +85,8 @@ public class CuentaController {
 			return new ResponseEntity<>(aux1, new HttpHeaders(), HttpStatus.CONFLICT);
 		}
 		Cuenta cuenta = new Cuenta(cuentadto);
-		logger.info("Created a new account");
+		logger.info("Created a new account with numeroCuenta = " 
+				+ cuenta.getNumeroCuenta());
 		Cliente aux = clienteRepository.findByDni(dni);
 		if (aux != null) {
 			cuenta.setFecCreacion(new Date());
@@ -98,19 +99,7 @@ public class CuentaController {
 		return ResponseEntity.notFound().build();
 	}
 
-	// Find an account by its id
-	@GetMapping("/cuenta/{id}")
-	public ResponseEntity<Cuenta> getCuentaById(@PathVariable(value = "id") String numeroCuenta) {
-		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
-		if (cuenta == null || !cuenta.getmCAHabilitado()) {
-			logger.info(NOT_FOUND);
-			return ResponseEntity.notFound().build();
-		}
-		logger.info("The requested account was found");
-		return ResponseEntity.ok().body(cuenta);
-	}
-
-	// Delete an account by its id
+	// Delete an account by its numeroCuenta
 	@DeleteMapping("/cuenta/{id}")
 	public ResponseEntity<Cuenta> deleteCuenta(@PathVariable(value = "id") String numeroCuenta) {
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
