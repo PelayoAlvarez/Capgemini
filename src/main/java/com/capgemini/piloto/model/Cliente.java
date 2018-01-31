@@ -59,7 +59,7 @@ public class Cliente implements Serializable {
 
 	@OneToMany(mappedBy = "cliente")
 	@JsonIgnore
-	private Set<ClienteCuenta> clienteCuenta = new HashSet<ClienteCuenta>();
+	private Set<ClienteCuenta> clienteCuenta = new HashSet<>();
 
 	@ManyToOne
 	@JoinColumn(name = "id_sucursal")
@@ -75,25 +75,6 @@ public class Cliente implements Serializable {
 
 	public Cliente() {
 		super();
-	}
-
-	public Cliente(String dNI, String nombre, String apellidos, String direccion, String movil, String fijo,
-			Date fecha_Actua, Date fecha_Creacion, Empleado empleado, Boolean mCAHabilitado, Set<ClienteCuenta> cuentas,
-			Sucursal sucursal, String email) {
-		super();
-		dni = dNI;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.direccion = direccion;
-		this.movil = movil;
-		this.fijo = fijo;
-		this.fecActu = fecha_Actua;
-		this.fecCreacion = fecha_Creacion;
-		this.empleado = empleado.getNombre();
-		this.mCAHabilitado = mCAHabilitado;
-		this.clienteCuenta = cuentas;
-		this.sucursal = sucursal;
-		this.email = email;
 	}
 
 	public String getNombre() {
@@ -148,16 +129,16 @@ public class Cliente implements Serializable {
 		return fecActu;
 	}
 
-	public void setFecActu(Date fecha_Actua) {
-		this.fecActu = fecha_Actua;
+	public void setFecActu(Date fechaActua) {
+		this.fecActu = fechaActua;
 	}
 
 	public Date getFecCreacion() {
 		return fecCreacion;
 	}
 
-	public void setFecCreacion(Date fecha_Creacion) {
-		this.fecCreacion = fecha_Creacion;
+	public void setFecCreacion(Date fechaCreacion) {
+		this.fecCreacion = fechaCreacion;
 	}
 
 	public String getEmpleado() {
@@ -177,10 +158,10 @@ public class Cliente implements Serializable {
 	}
 
 	public Set<ClienteCuenta> getClienteCuentas() {
-		return new HashSet<ClienteCuenta>(clienteCuenta);
+		return new HashSet<>(clienteCuenta);
 	}
 
-	Set<ClienteCuenta> _getClienteCuentas() {
+	Set<ClienteCuenta> getClienteCuentasProtegido() {
 		return clienteCuenta;
 	}
 

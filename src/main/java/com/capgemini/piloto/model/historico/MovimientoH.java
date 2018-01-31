@@ -72,10 +72,10 @@ public class MovimientoH implements Serializable {
 	private Date fecAudit;
 
 	@Column(name = "Usuario_h")
-	private String Usuarioh;
+	private String usuarioh;
 
 	@Column(name = "Mca_habilitado")
-	private Boolean MCAHabilitado;
+	private Boolean mCAHabilitado;
 
 	MovimientoH() {
 		// Solo para jpa
@@ -93,8 +93,8 @@ public class MovimientoH implements Serializable {
 		this.fechaActua = m.getFechaActua();
 		this.fecAudit = new Date();
 		this.fechaCreacion = m.getFechaCreacion();
-		this.Usuarioh = usuario;
-		this.MCAHabilitado = m.getmCAHabilitado();
+		this.usuarioh = usuario;
+		this.mCAHabilitado = m.getmCAHabilitado();
 	}
 
 	public TipoMovimiento getTipo() {
@@ -113,10 +113,6 @@ public class MovimientoH implements Serializable {
 		this.importe = importe;
 	}
 
-	public Date getFecha() {
-		return fechahora;
-	}
-
 	public void setFecha(Date fecha) {
 		this.fechahora = fecha;
 	}
@@ -133,7 +129,7 @@ public class MovimientoH implements Serializable {
 		return id;
 	}
 
-	public Date getFecha_hora() {
+	public Date getFechaHora() {
 		return fechahora;
 	}
 
@@ -147,12 +143,12 @@ public class MovimientoH implements Serializable {
 
 	// Getters y Setters de Auditoria
 
-	public Date getFecha_Actua() {
+	public Date getFechaActua() {
 		return fechaActua;
 	}
 
-	public void setFechaActua(Date fecha_Actua) {
-		this.fechaActua = fecha_Actua;
+	public void setFechaActua(Date fechaActua) {
+		this.fechaActua = fechaActua;
 	}
 
 	public Date getFecAudit() {
@@ -164,11 +160,11 @@ public class MovimientoH implements Serializable {
 	}
 
 	public Boolean getMCAHabilitado() {
-		return MCAHabilitado;
+		return mCAHabilitado;
 	}
 
-	public void setMCAHabilitado(Boolean mCA_Habilitado) {
-		MCAHabilitado = mCA_Habilitado;
+	public void setMCAHabilitado(Boolean mCAHabilitado) {
+		this.mCAHabilitado = mCAHabilitado;
 	}
 
 	public Date getFechaCreacion() {
@@ -176,7 +172,7 @@ public class MovimientoH implements Serializable {
 	}
 
 	public String getUsuarioH() {
-		return Usuarioh;
+		return usuarioh;
 	}
 
 	@Override

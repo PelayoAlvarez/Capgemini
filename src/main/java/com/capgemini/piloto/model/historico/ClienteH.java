@@ -67,7 +67,7 @@ public class ClienteH implements Serializable {
 
 	@OneToMany(mappedBy = "cliente")
 	@JsonIgnore
-	private Set<ClienteCuenta> cuentas = new HashSet<ClienteCuenta>();
+	private Set<ClienteCuenta> cuentas = new HashSet<>();
 
 	@JoinColumn(name = "id_sucursal")
 	@ManyToOne
@@ -77,26 +77,6 @@ public class ClienteH implements Serializable {
 		super();
 	}
 
-	public ClienteH(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
-			String email, Date fecha_Actua, Date fechaCreacion, String empleado, Boolean mCAHabilitado, String usuarioH,
-			Date fecAudit, Set<ClienteCuenta> cuentas, Sucursal surcusal) {
-		super();
-		this.dni = dni;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.direccion = direccion;
-		this.movil = movil;
-		this.fijo = fijo;
-		this.email = email;
-		this.fecActu = fecha_Actua;
-		this.fecCreacion = fechaCreacion;
-		this.empleado = empleado;
-		this.mCAHabilitado = mCAHabilitado;
-		this.usuarioH = usuarioH;
-		this.fecAudit = fecAudit;
-		this.cuentas = cuentas;
-		this.surcusal = surcusal;
-	}
 
 	public ClienteH(Cliente cliente, String empleado) {
 		this.dni = cliente.getDni();

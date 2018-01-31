@@ -13,7 +13,7 @@ public class Association {
 		public static void link(Cliente cliente, ClienteCuenta titulo, Cuenta cuenta) {
 			titulo.setCliente(cliente);
 			titulo.setCuenta(cuenta);
-			cliente._getClienteCuentas().add(titulo);
+			cliente.getClienteCuentasProtegido().add(titulo);
 			cuenta._getClienteCuenta().add(titulo);
 		}
 
@@ -39,7 +39,7 @@ public class Association {
 		public static void link(Cliente cliente, ClienteCuenta titulo, Cuenta cuenta) {
 			titulo.setCliente(cliente);
 			titulo.setCuenta(cuenta);
-			cliente._getClienteCuentas().add(titulo);
+			cliente.getClienteCuentasProtegido().add(titulo);
 			cuenta._getClienteCuenta().add(titulo);
 		}
 

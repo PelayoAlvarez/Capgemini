@@ -78,7 +78,7 @@ public class Movimiento implements Serializable {
 	}
 
 	public Movimiento(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, Cuenta cuentaAsociada,
-			String usuario, Boolean habilitado) {
+			String usuario) {
 		super();
 		this.importe = importe;
 		this.tipo = tipo;

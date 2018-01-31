@@ -33,7 +33,8 @@ public class ClienteDTO implements Serializable {
 
 	private String email;
 
-	private Set<ListarClientesCuentaDTO> cuentas = new HashSet<ListarClientesCuentaDTO>();
+	
+	private Set<ListarClientesCuentaDTO> cuentas = new HashSet<>();
 
 	@NotNull
 	public Long sucursal;
@@ -48,6 +49,7 @@ public class ClienteDTO implements Serializable {
 		this.email = c.getEmail();
 		for (ClienteCuenta cl : c.getClienteCuentas())
 			this.getCuentas().add(new ListarClientesCuentaDTO(cl.getCuenta()));
+		this.sucursal = c.getSucursal().getId();
 	}
 
 	public String getNombre() {

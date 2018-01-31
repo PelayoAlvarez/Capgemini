@@ -94,7 +94,7 @@ public class MovimientoController {
 			@RequestBody MovimientoDTO movimientoDetails) {
 		Movimiento movimiento = movimientoRepository.findMovimientoById(id);
 		Cuenta cuenta = cuentaRepository.findByNumeroCuenta(movimiento.getCuentaAsociada().getNumeroCuenta());
-		if (movimiento == null || !movimiento.getmCAHabilitado()) {
+		if (!movimiento.getmCAHabilitado()) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
 		}
@@ -136,7 +136,7 @@ public class MovimientoController {
 	public ResponseEntity<List<MisMovimientosDTO>> getMisMovimientos(
 			@PathVariable(value = "cuenta") String numeroCuenta) {
 		if (numeroCuenta == null) {
-			return new ResponseEntity<List<MisMovimientosDTO>>(null, new HttpHeaders(),
+			return new ResponseEntity<>(null, new HttpHeaders(),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
@@ -147,9 +147,9 @@ public class MovimientoController {
 			for (Movimiento m : listaMovs) {
 				movimientos.add(new MisMovimientosDTO(m));
 			}
-			return new ResponseEntity<List<MisMovimientosDTO>>(movimientos, new HttpHeaders(), HttpStatus.OK);
+			return new ResponseEntity<>(movimientos, new HttpHeaders(), HttpStatus.OK);
 		}
-		return new ResponseEntity<List<MisMovimientosDTO>>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------
@@ -166,26 +166,30 @@ public class MovimientoController {
 				}
 			}
 		} else {
-			double valor = 0;
-			if (movimiento.getImporte() != movimientoDetails.getImporte()) {
-				valor = movimiento.getImporte() + movimientoDetails.getImporte();
-				if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
-					cuenta.setImporte(cuenta.getImporte() + valor);
-				} else {
-					cuenta.setImporte(cuenta.getImporte() - valor);
-				}
-			} else {
-				if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
-					cuenta.setImporte(cuenta.getImporte() + 2 * movimientoDetails.getImporte());
-				} else {
-					cuenta.setImporte(cuenta.getImporte() - 2 * movimientoDetails.getImporte());
-				}
-			}
+			calculoAlternativoImporte(saldo,cuenta, movimiento, movimientoDetails);
 		}
 
-		actualizarCuenta(saldo, cuenta);
+		
 	}
 
+	private void calculoAlternativoImporte(double saldo, Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
+		double valor = 0;
+		if (movimiento.getImporte() != movimientoDetails.getImporte()) {
+			valor = movimiento.getImporte() + movimientoDetails.getImporte();
+			if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
+				cuenta.setImporte(cuenta.getImporte() + valor);
+			} else {
+				cuenta.setImporte(cuenta.getImporte() - valor);
+			}
+		} else {
+			if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
+				cuenta.setImporte(cuenta.getImporte() + 2 * movimientoDetails.getImporte());
+			} else {
+				cuenta.setImporte(cuenta.getImporte() - 2 * movimientoDetails.getImporte());
+			}
+		}
+		actualizarCuenta(saldo, cuenta);
+	}
 	private void actualizarCuenta(double saldo, Cuenta cuenta) {
 		if (saldo != cuenta.getImporte()) {
 			CuentaH ch = new CuentaH(cuenta, cuenta.getUsuario());
