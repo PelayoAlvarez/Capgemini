@@ -46,10 +46,12 @@ public class ClienteCuentaController {
 	public ResponseEntity<GestionTitularesCuentaDTO> createNote(@RequestBody GestionTitularesCuentaDTO datos) {
 		Cuenta cuenta = cuentaRepository.findOne(datos.getNumeroCuenta());
 		if (cuenta == null) {
+			log.error("PUT: No existe la cuenta con nº de cuenta [{}]",	datos.getNumeroCuenta());
 			return ResponseEntity.notFound().build();
 		}
 
 		if (datos.getDniTitulares().isEmpty()) {
+			log.error("PUT: La cuenta con nº de cuenta [{}] no puede quedarse sin titulares", datos.getNumeroCuenta());
 			return ResponseEntity.noContent().build();
 		}
 
@@ -58,6 +60,7 @@ public class ClienteCuentaController {
 			Cliente cliente = clienteRepository.findByDni(dniTitular);
 			clientes.add(cliente);
 			if (cliente == null) {
+				log.error("PUT: No existe el ciente con DNI [{}]", dniTitular);
 				return ResponseEntity.notFound().build();
 			}
 		}
