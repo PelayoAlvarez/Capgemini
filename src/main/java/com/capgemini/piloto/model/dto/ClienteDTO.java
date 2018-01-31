@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -36,11 +37,16 @@ public class ClienteDTO implements Serializable {
 	private String fijo;
 
 	private String email;
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 	
 =======
 >>>>>>> b283b09231a0f48c64cfc2e513fa3a3d609e9254
+=======
+	
+	@Transient
+>>>>>>> 69001ec914c10225e2f6498765ca282055c7639a
 	private Set<ListarClientesCuentaDTO> cuentas = new HashSet<>();
 
 	@NotNull
