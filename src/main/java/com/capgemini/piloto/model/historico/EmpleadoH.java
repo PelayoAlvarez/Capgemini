@@ -30,28 +30,28 @@ public class EmpleadoH implements Serializable {
 
 	@NotBlank
 	@Column(name = "Dni")
-	public String dni;
+	private String dni;
 
 	@NotBlank
 	@Column(name = "Nombre")
-	public String nombre;
+	private String nombre;
 
 	@NotBlank
 	@Column(name = "Apellidos")
-	public String apellidos;
+	private String apellidos;
 
 	@NotBlank
 	@Column(name = "Direccion")
-	public String direccion;
+	private String direccion;
 
 	@Column(name = "Fijo")
-	public String fijo;
+	private String fijo;
 
 	@Column(name = "Movil")
-	public String movil;
+	private String movil;
 
 	@Column(name = "Email")
-	public String email;
+	private String email;
 
 	@Column(name = "Fec_actu", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -73,7 +73,7 @@ public class EmpleadoH implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "id_sucursal", nullable = false)
-	public Sucursal sucursal;
+	private Sucursal sucursal;
 
 	@Id
 	@Column(name = "Fec_audit", nullable = false)

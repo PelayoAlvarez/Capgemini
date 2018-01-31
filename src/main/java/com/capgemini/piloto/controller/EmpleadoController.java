@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.xml.bind.ValidationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
+import com.capgemini.piloto.model.Validation;
 import com.capgemini.piloto.model.dto.EmpleadoDTO;
 import com.capgemini.piloto.model.historico.EmpleadoH;
 import com.capgemini.piloto.repository.EmpleadoRepository;
@@ -50,7 +52,9 @@ public class EmpleadoController {
 	}
 
 	@GetMapping("/{dni}")
-	public ResponseEntity<Empleado> getEmpleado(@PathVariable(value = "dni") String dni) {
+	public ResponseEntity<Empleado> getEmpleado(@PathVariable(value = "dni") String dni) throws ValidationException {		
+		if (!Validation.dniValido(dni))
+			throw new ValidationException("El DNI no cumple con el formato correcto");		
 		logger.info("FIND: Se obtiene el empleado con DNI [{}]", dni);
 		Empleado empleado = empleadoRep.findByDni(dni);
 		if (empleado == null || !empleado.getMcaHabilitado()) {
