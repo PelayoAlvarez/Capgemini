@@ -29,7 +29,8 @@ import com.capgemini.piloto.repository.SucursalRepository;
 import com.capgemini.piloto.repository.historico.EmpleadoHRepository;
 import com.capgemini.piloto.util.validator.ComunValidator;
 import com.capgemini.piloto.util.validator.PersonValidator;
-import com.capgemini.piloto.errors.Error;
+import com.capgemini.piloto.errors.impl.DniFormatException;
+import com.capgemini.piloto.errors.impl.TextoFormatException;
 
 @RestController
 @RequestMapping("/empleado")
@@ -57,8 +58,8 @@ public class EmpleadoController {
 		try {
 			PersonValidator.validateDni(dni);
 		}
-		catch (Error e) {
-			logger.error(e.getMessageError());
+		catch (DniFormatException e) {
+			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("FIND: El DNI [{}] es válido", dni);
@@ -76,10 +77,15 @@ public class EmpleadoController {
 		try {
 			validarEmpleado(empleadoDto);
 		}
-		catch (Error e) {
-			logger.error(e.getMessageError());
+		catch (DniFormatException e) {
+			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		catch (TextoFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 		logger.info("CREATE: Los datos del empleado son válidos");
 		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
 		if (empleado != null && empleado.getMcaHabilitado()) {
@@ -110,10 +116,15 @@ public class EmpleadoController {
 		try {
 			validarEmpleado(empleadoDto);
 		}
-		catch (Error e) {
-			logger.error(e.getMessageError());
+		catch (DniFormatException e) {
+			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		catch (TextoFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 		logger.info("UPDATE: Los datos del empleado son válidos");
 		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
 		if (empleado == null || !empleado.getMcaHabilitado()) {
@@ -147,8 +158,8 @@ public class EmpleadoController {
 		try {
 			PersonValidator.validateDni(dni);
 		}
-		catch (Error e) {
-			logger.error(e.getMessageError());
+		catch (DniFormatException e) {
+			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("FIND: El DNI [{}] es válido", dni);
