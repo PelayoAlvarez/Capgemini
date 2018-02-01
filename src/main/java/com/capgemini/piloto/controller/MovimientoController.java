@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.errors.Error;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.dto.MisMovimientosDTO;
@@ -31,6 +32,9 @@ import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.MovimientoRepository;
 import com.capgemini.piloto.repository.historico.CuentaHRepository;
 import com.capgemini.piloto.repository.historico.MovimientoHRepository;
+import com.capgemini.piloto.util.validator.ComunValidator;
+import com.capgemini.piloto.util.validator.CuentaValidator;
+import com.capgemini.piloto.util.validator.ImporteValidator;
 
 @RestController
 @RequestMapping(path = "/movimiento")
@@ -55,6 +59,18 @@ public class MovimientoController {
 	@PostMapping("/")
 	public ResponseEntity<Movimiento> addMovimiento(@RequestBody MovimientoDTO movimientoDto,
 			@RequestParam String cuenta) {
+		
+		try {
+			CuentaValidator.validateCuenta(cuenta);
+			ImporteValidator.validateImporte(String.valueOf(movimientoDto.getImporte()));
+			ComunValidator.validateTexto(movimientoDto.getDescripcion(), "descripción", 60);
+			ComunValidator.validateTexto(movimientoDto.getUsuario(), "usuario", 20);
+		}
+		catch(Error e) {
+			logger.error(e.getMessageError());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 		Cuenta cu = cuentaRepository.findByNumeroCuenta(cuenta);
 		Movimiento movimiento = new Movimiento(movimientoDto, cu);
 		movimiento = movimientoRepository.save(movimiento);
@@ -92,6 +108,22 @@ public class MovimientoController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Movimiento> updateMovimeinto(@PathVariable(value = "id") Long id,
 			@RequestBody MovimientoDTO movimientoDetails) {
+		
+		if(movimientoDetails.getCuentaAsociada()==null) {
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		try {
+			ImporteValidator.validateImporte(String.valueOf(movimientoDetails.getImporte()));
+			ComunValidator.validateTexto(movimientoDetails.getDescripcion(), "descripción", 60);
+			CuentaValidator.validateCuenta(movimientoDetails.getCuentaAsociada().getNumeroCuenta());
+			ComunValidator.validateTexto(movimientoDetails.getUsuario(), "usuario", 20);
+		}
+		catch(Error e) {
+			logger.error(e.getMessageError());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 		Movimiento movimiento = movimientoRepository.findMovimientoById(id);
 		Cuenta cuenta = cuentaRepository.findByNumeroCuenta(movimiento.getCuentaAsociada().getNumeroCuenta());
 		if (!movimiento.getmCAHabilitado()) {
@@ -135,10 +167,16 @@ public class MovimientoController {
 	@GetMapping("/mismovimientos/{cuenta}")
 	public ResponseEntity<List<MisMovimientosDTO>> getMisMovimientos(
 			@PathVariable(value = "cuenta") String numeroCuenta) {
-		if (numeroCuenta == null) {
+		
+		try {
+			CuentaValidator.validateCuenta(numeroCuenta);
+		}
+		catch(Error e) {
+			logger.error(e.getMessageError());
 			return new ResponseEntity<>(null, new HttpHeaders(),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta != null) {
 			List<Movimiento> listaMovs = movimientoRepository.findByCuentaAsociada(cuenta);

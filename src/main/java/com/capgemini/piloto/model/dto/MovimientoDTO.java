@@ -3,6 +3,8 @@ package com.capgemini.piloto.model.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.types.TipoMovimiento;
@@ -14,19 +16,26 @@ public class MovimientoDTO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3440870604077614365L;
-
+	
+	@NotBlank
 	private Long id;
-
+	
+	@NotBlank
 	private Double importe;
-
+	
+	@NotBlank
 	private TipoMovimiento tipo;
-
+	
+	@NotBlank
 	private Date fechahora;
-
+	
+	@NotBlank
 	private String descripcion;
-
+	
+	@NotBlank
 	private Cuenta cuentaAsociada;
-
+	
+	@NotBlank
 	private String usuario;
 
 	public MovimientoDTO() {
