@@ -7,23 +7,19 @@ import com.capgemini.piloto.errors.impl.DniFormatException;
 import com.capgemini.piloto.errors.impl.EmailFormatException;
 import com.capgemini.piloto.errors.impl.TelefonoFormatException;
 
-public class ClienteValidator {
+public class PersonValidator {
 	
-	public static void main(String[] args) {
-		validateDni("71736256S");
+	private static PersonValidator instance;
+	
+	private PersonValidator() {}
+	
+	public static PersonValidator getInstance() {
+		if(instance == null) {
+			instance = new PersonValidator();
+		}
+		return instance;
 	}
-	
-	private static ClienteValidator instance;
-	
-	 private ClienteValidator() {}
-	
-	 public static ClienteValidator getInstance() {
-	 if(instance == null) {
-	 instance = new ClienteValidator();
-	 }
-	 return instance;
-	 }
-	
+	 
 	public static void validateDni(String dni) {		
 		String validChars = "TRWAGMYFPDXBNJZSQVHLCKET";
 		String nifRexp = "^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]$";
@@ -34,10 +30,10 @@ public class ClienteValidator {
 			throw new DniFormatException();
 		
 		String nie = str
-		      .replace("/^[X]/", "0")
-		      .replace("/^[Y]/", "1")
-		      .replace("/^[Z]/", "2");
-		
+		      .replaceAll("^[X]", "0")
+		      .replaceAll("^[Y]", "1")
+		      .replaceAll("^[Z]", "2");
+
 		char letter = str.charAt(str.length() - 1);
 		int charIndex = Integer.parseInt(nie.substring(0, 8)) % 23;
 		
@@ -57,9 +53,20 @@ public class ClienteValidator {
 			throw new EmailFormatException();
 	}
 	
-	public static void validateTelefono(String fijo) {
+	public static void validateTelefonoFijo(String fijo) {
 		Pattern fijoRegex = 
-			    Pattern.compile("^(\\+34|0034|34)?[6|7|9][0-9]{8}$", 
+			    Pattern.compile("^(\\+34|0034|34)?[8|9][0-9]{8}$", 
+			    		Pattern.CASE_INSENSITIVE);
+		
+		Matcher matcher = fijoRegex.matcher(fijo);
+		
+		if (!matcher.find())
+			throw new TelefonoFormatException();
+	}
+	
+	public static void validateTelefonoMovil(String fijo) {
+		Pattern fijoRegex = 
+			    Pattern.compile("^(\\+34|0034|34)?[6|7][0-9]{8}$", 
 			    		Pattern.CASE_INSENSITIVE);
 		
 		Matcher matcher = fijoRegex.matcher(fijo);

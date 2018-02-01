@@ -77,12 +77,12 @@ public class Movimiento implements Serializable {
 		// Solo para jpa
 	}
 
-	public Movimiento(Double importe, TipoMovimiento tipo, Date fecha, String descripcion, Cuenta cuentaAsociada,
+	public Movimiento(Double importe, TipoMovimiento tipo, String descripcion, Cuenta cuentaAsociada,
 			String usuario) {
 		super();
 		this.importe = importe;
 		this.tipo = tipo;
-		this.fechahora = fecha;
+		this.fechahora = new Date();
 		this.descripcion = descripcion;
 		this.cuentaAsociada = cuentaAsociada;
 		this.fechaActua = this.fechaCreacion = new Date();
