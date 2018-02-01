@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+import javax.xml.bind.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Tarjeta;
+import com.capgemini.piloto.model.Validation;
 import com.capgemini.piloto.model.dto.CrearTarjetaDTO;
 import com.capgemini.piloto.model.dto.TarjetaDTO;
 import com.capgemini.piloto.model.historico.TarjetaH;
@@ -39,7 +42,9 @@ public class TarjetaController {
 	private ClienteCuentaRepository clientCuentaRep;
 
 	@GetMapping("/{dni}")
-	public List<TarjetaDTO> getTarjetaByDni(@PathVariable String dni) {
+	public List<TarjetaDTO> getTarjetaByDni(@PathVariable String dni) throws ValidationException {
+		if (!Validation.dniValido(dni))
+			throw new ValidationException("El DNI no cumple con el formato correcto");		
 		List<Tarjeta> tarjetas = tarjetaRep.getAllTarjetasByDni(dni);
 		List<TarjetaDTO> tarjetasDto = new ArrayList<>();
 		tarjetas.forEach(tarjeta -> tarjetasDto.add(new TarjetaDTO(tarjeta)));
@@ -47,7 +52,9 @@ public class TarjetaController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<Tarjeta> createTarjeta(@RequestBody CrearTarjetaDTO dto) {
+	public ResponseEntity<Tarjeta> createTarjeta(@RequestBody CrearTarjetaDTO dto) throws ValidationException {
+		if (!Validation.dniValido(dto.getDni()))
+			throw new ValidationException("El DNI no cumple con el formato correcto");		
 		ClienteCuenta clienteCuenta = clientCuentaRep
 				.findOne(new ClienteCuentaKey(dto.getDni(), dto.getNumeroCuenta()));
 		if (clienteCuenta == null)
