@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capgemini.piloto.errors.Error;
+import com.capgemini.piloto.errors.impl.ImporteFormatException;
+import com.capgemini.piloto.errors.impl.NumeroCuentaFormatException;
+import com.capgemini.piloto.errors.impl.TextoFormatException;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.dto.MisMovimientosDTO;
@@ -66,8 +68,16 @@ public class MovimientoController {
 			ComunValidator.validateTexto(movimientoDto.getDescripcion(), "descripción", 60);
 			ComunValidator.validateTexto(movimientoDto.getUsuario(), "usuario", 20);
 		}
-		catch(Error e) {
-			logger.error(e.getMessageError());
+		catch(NumeroCuentaFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch(ImporteFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (TextoFormatException e) {
+			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -119,8 +129,16 @@ public class MovimientoController {
 			CuentaValidator.validateCuenta(movimientoDetails.getCuentaAsociada().getNumeroCuenta());
 			ComunValidator.validateTexto(movimientoDetails.getUsuario(), "usuario", 20);
 		}
-		catch(Error e) {
-			logger.error(e.getMessageError());
+		catch(ImporteFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch(TextoFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch(NumeroCuentaFormatException e) {
+			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -171,8 +189,8 @@ public class MovimientoController {
 		try {
 			CuentaValidator.validateCuenta(numeroCuenta);
 		}
-		catch(Error e) {
-			logger.error(e.getMessageError());
+		catch(NumeroCuentaFormatException e) {
+			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
