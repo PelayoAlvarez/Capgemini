@@ -3,6 +3,7 @@ package com.capgemini.piloto.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -73,7 +74,16 @@ public class Cuenta implements Serializable {
 		this.fecCreacion = new Date();
 		this.mCAHabilitado = true;
 	}
-
+	
+	public Cuenta(double importe) {
+		this.importe=importe;
+		this.usuario="test";
+		this.fecActu=new Date();
+		this.fecCreacion=new Date();
+		this.mCAHabilitado=true;
+		this.numeroCuenta=generarNumero();
+	}
+	
 	public Cuenta(String numeroCuenta, Set<Movimiento> movimientos, Set<Transferencia> transferencias,
 			Set<ClienteCuenta> clientecuenta, Boolean mCAHabilitado, String usuario) {
 		super();
@@ -114,6 +124,13 @@ public class Cuenta implements Serializable {
 
 	public String getNumeroCuenta() {
 		return numeroCuenta;
+	}
+	
+	public String generarNumero() {
+		Random rng = new Random();
+		return (rng.nextInt(900000000)+100000000)+""
+				+(rng.nextInt(900000000)+100000000)+
+				(rng.nextInt(9000000)+1000000);
 	}
 
 	public void setNumeroCuenta(String numeroCuenta) {
