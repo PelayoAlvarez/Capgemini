@@ -7,16 +7,7 @@ import com.capgemini.piloto.errors.impl.ImporteFormatException;
 
 public class ImporteValidator {
 	
-	private static ImporteValidator instance;
-	
-	private ImporteValidator() {}
-	
-	public static ImporteValidator getInstance() {
-		if(instance == null) {
-			instance = new ImporteValidator();
-		}
-		return instance;
-	}
+	private ImporteValidator() { }
 	
 	public static void validateImporte(String importe) {
 		Pattern importeRegex = 

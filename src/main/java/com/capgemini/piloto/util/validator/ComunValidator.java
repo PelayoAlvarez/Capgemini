@@ -7,16 +7,7 @@ import com.capgemini.piloto.errors.impl.TextoFormatException;
 
 public class ComunValidator {
 	
-	private static ComunValidator instance;
-	
-	private ComunValidator() {}
-	
-	public static ComunValidator getInstance() {
-		if(instance == null) {
-			instance = new ComunValidator();
-		}
-		return instance;
-	}
+	private ComunValidator() { }
 	
 	public static void validateTexto(String texto, String tipo, int longitud) {
 		Pattern textoRegex = 
