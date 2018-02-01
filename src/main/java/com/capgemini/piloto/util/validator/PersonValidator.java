@@ -9,16 +9,7 @@ import com.capgemini.piloto.errors.impl.TelefonoFormatException;
 
 public class PersonValidator {
 	
-	private static PersonValidator instance;
-	
-	private PersonValidator() {}
-	
-	public static PersonValidator getInstance() {
-		if(instance == null) {
-			instance = new PersonValidator();
-		}
-		return instance;
-	}
+	private PersonValidator() { }
 	 
 	public static void validateDni(String dni) {		
 		String validChars = "TRWAGMYFPDXBNJZSQVHLCKET";
