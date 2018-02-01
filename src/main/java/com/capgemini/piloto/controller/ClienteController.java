@@ -22,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.errors.impl.DniFormatException;
+import com.capgemini.piloto.errors.impl.EmailFormatException;
+import com.capgemini.piloto.errors.impl.TelefonoFormatException;
+import com.capgemini.piloto.errors.impl.TextoFormatException;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Sucursal;
@@ -67,30 +71,39 @@ public class ClienteController {
 	public ResponseEntity<ClienteDTO> createClient(@Valid @RequestBody ClienteDTO clienteDTO, @RequestParam Long sucursalId) {
 		try {
 			validarCliente(clienteDTO);
-		}catch(Exception e) {
-			logger.error(e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		Cliente cliente1 = clienteRepository.findByDni(clienteDTO.getDni());
-		if (cliente1 != null && cliente1.getmCAHabilitado()) {
-				logger.error("The client is already created");
+			Cliente cliente1 = clienteRepository.findByDni(clienteDTO.getDni());
+			if (cliente1 != null && cliente1.getmCAHabilitado()) {
+					logger.error("The client is already created");
+					return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
+			}
+			Sucursal sucursal = sucursalRepository.findById(sucursalId);
+			if (sucursal == null || !sucursal.getMcaHabilitado()) {
+				logger.error("The sucursl was nor created");
 				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
 		}
-		Sucursal sucursal = sucursalRepository.findById(sucursalId);
-		if (sucursal == null || !sucursal.getMcaHabilitado()) {
-			logger.error("The sucursl was nor created");
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
-	}
-		clienteDTO.setSucursal(sucursalId);
-		Cliente c2 = clienteRepository.save(new Cliente(clienteDTO, sucursal));
-		if (c2 == null) {
-			logger.error("The client was not created");
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			clienteDTO.setSucursal(sucursalId);
+			Cliente c2 = clienteRepository.save(new Cliente(clienteDTO, sucursal));
+			if (c2 == null) {
+				logger.error("The client was not created");
+				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			logger.info("Create a new client");
+			return ResponseEntity.ok().body(new ClienteDTO(c2));	
+		}catch(DniFormatException e) {
+			logger.error(e.getMessage());
 		}
-		logger.info("Create a new client");
-		return ResponseEntity.ok().body(new ClienteDTO(c2));
-
+		catch(EmailFormatException e) {
+			logger.error(e.getMessage());
+		}
+		catch(TelefonoFormatException e) {
+			logger.error(e.getMessage());
+		}
+		catch(TextoFormatException e) {
+			logger.error(e.getMessage());
+		}
+		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+		
 
 	
 	// Find a client by its dni
@@ -98,7 +111,7 @@ public class ClienteController {
 	public ResponseEntity<ClienteDTO> getClientByDni(@PathVariable(value = "dni") String dni) {
 		try {
 			PersonValidator.validateDni(dni);
-		}catch(Exception e) {
+		}catch(DniFormatException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -118,26 +131,36 @@ public class ClienteController {
 			@Valid @RequestBody ClienteDTO detailsClient) {
 		try {
 			validarCliente(detailsClient);
-		}catch(Exception e) {
+			Cliente cliente = clienteRepository.findByDni(dni);
+			if (cliente == null || !cliente.getmCAHabilitado()) {
+				logger.error(NOT_FOUND);
+				return ResponseEntity.notFound().build();
+			}
+
+			// Cogemos como prueba el usuario de la entidad
+			clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
+			Sucursal sucursal = sucursalRepository.findById(detailsClient.getSucursal());
+			cliente.setSucursal(sucursal);
+			cliente.setFecActu(new Date());
+
+			Cliente updateClient = clienteRepository.save(cliente);
+			
+			logger.info("The client was successfully updated");
+			return ResponseEntity.ok(new ClienteDTO(updateClient));
+		}catch(DniFormatException e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		Cliente cliente = clienteRepository.findByDni(dni);
-		if (cliente == null || !cliente.getmCAHabilitado()) {
-			logger.error(NOT_FOUND);
-			return ResponseEntity.notFound().build();
+		catch(EmailFormatException e) {
+			logger.error(e.getMessage());
 		}
-
-		// Cogemos como prueba el usuario de la entidad
-		clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
-		Sucursal sucursal = sucursalRepository.findById(detailsClient.getSucursal());
-		cliente.setSucursal(sucursal);
-		cliente.setFecActu(new Date());
-
-		Cliente updateClient = clienteRepository.save(cliente);
-		
-		logger.info("The client was successfully updated");
-		return ResponseEntity.ok(new ClienteDTO(updateClient));
+		catch(TelefonoFormatException e) {
+			logger.error(e.getMessage());
+		}
+		catch(TextoFormatException e) {
+			logger.error(e.getMessage());
+		}
+		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	
 	}
 
 	// Delete a cliente by its dni
@@ -145,7 +168,7 @@ public class ClienteController {
 	public ResponseEntity<ClienteDTO> deleteCliente(@Valid @PathVariable(value = "dni") String dni) {
 		try {
 			PersonValidator.validateDni(dni);
-		}catch(Exception e) {
+		}catch(DniFormatException e) {
 			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
