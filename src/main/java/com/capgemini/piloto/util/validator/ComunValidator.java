@@ -7,6 +7,8 @@ import com.capgemini.piloto.errors.impl.TextoFormatException;
 
 public class ComunValidator {
 	
+	private ComunValidator() { }
+	
 	public static void validateTexto(String texto, String tipo, int longitud) {
 		Pattern textoRegex = 
 			    Pattern.compile("^[a-zA-Z]+$", 

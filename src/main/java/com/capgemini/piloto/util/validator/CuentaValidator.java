@@ -7,6 +7,8 @@ import com.capgemini.piloto.errors.impl.NumeroCuentaFormatException;
 
 public class CuentaValidator {
 
+	private CuentaValidator() {	}
+
 	public static void validateCuenta(String numCuenta) {
 		if(numCuenta==null)
 			throw new NumeroCuentaFormatException();
