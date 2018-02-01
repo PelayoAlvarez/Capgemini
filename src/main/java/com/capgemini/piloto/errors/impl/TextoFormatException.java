@@ -1,8 +1,6 @@
 package com.capgemini.piloto.errors.impl;
 
-import com.capgemini.piloto.errors.Error;
-
-public class TextoFormatException extends Error {
+public class TextoFormatException extends RuntimeException {
 
 	/**
 	 * 
@@ -16,12 +14,7 @@ public class TextoFormatException extends Error {
 	}
 
 	@Override
-	public String getJSONError() {
-		return "{\"reason\": \"Formato de " + tipo + " es incorrecto\"}";
-	}
-
-	@Override
-	public String getMessageError() {
+	public String getMessage() {
 		return "Formato de texto " + tipo + " es incorrecto";
 	}
 

@@ -1,8 +1,7 @@
 package com.capgemini.piloto.errors.impl;
 
-import com.capgemini.piloto.errors.Error;
 
-public class DniFormatException extends Error {
+public class DniFormatException extends RuntimeException {
 
 	/**
 	 * 
@@ -10,12 +9,7 @@ public class DniFormatException extends Error {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public String getJSONError() {
-		return "{\"reason\": \"Formato de Dni incorrecto\"}";
-	}
-
-	@Override
-	public String getMessageError() {
+	public String getMessage() {
 		return "Formato de Dni incorrecto";
 	}
 

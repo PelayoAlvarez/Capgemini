@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.xml.bind.ValidationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
-import com.capgemini.piloto.model.Validation;
 import com.capgemini.piloto.model.dto.EmpleadoDTO;
 import com.capgemini.piloto.model.historico.EmpleadoH;
 import com.capgemini.piloto.repository.EmpleadoRepository;
 import com.capgemini.piloto.repository.SucursalRepository;
 import com.capgemini.piloto.repository.historico.EmpleadoHRepository;
+import com.capgemini.piloto.util.validator.ComunValidator;
+import com.capgemini.piloto.util.validator.PersonValidator;
+import com.capgemini.piloto.errors.Error;
 
 @RestController
 @RequestMapping("/empleado")
@@ -52,13 +53,19 @@ public class EmpleadoController {
 	}
 
 	@GetMapping("/{dni}")
-	public ResponseEntity<Empleado> getEmpleado(@PathVariable(value = "dni") String dni) throws ValidationException {		
-		if (!Validation.dniValido(dni))
-			throw new ValidationException("El DNI no cumple con el formato correcto");		
-		logger.info("FIND: Se obtiene el empleado con DNI [{}]", dni);
+	public ResponseEntity<Empleado> getEmpleado(@PathVariable(value = "dni") String dni) {
+		try {
+			PersonValidator.validateDni(dni);
+		}
+		catch (Error e) {
+			logger.error(e.getMessageError());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		logger.info("FIND: El DNI [{}] es válido", dni);
 		Empleado empleado = empleadoRep.findByDni(dni);
+		logger.info("FIND: Se obtiene el empleado con DNI [{}]", dni);
 		if (empleado == null || !empleado.getMcaHabilitado()) {
-			logger.info("GET: No se encuentra el empleado con el DNI [{}]", dni);
+			logger.error("FIND: No se encuentra el empleado con DNI [{}]", dni);
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(empleado);
@@ -66,18 +73,33 @@ public class EmpleadoController {
 
 	@PostMapping("/")
 	public ResponseEntity<Empleado> createEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDto) {
+		try {
+			validarEmpleado(empleadoDto);
+		}
+		catch (Error e) {
+			logger.error(e.getMessageError());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		logger.info("CREATE: Los datos del empleado son válidos");
 		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
-		if (empleado != null) {
-			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}] porque ya existe", empleado.getDni());
-			return new ResponseEntity<>(empleado, new HttpHeaders(), HttpStatus.CONFLICT);
+		if (empleado != null && empleado.getMcaHabilitado()) {
+			logger.error("CREATE: No se ha podido crear al empleado con DNI [{}] porque ya existe", empleado.getDni());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
+		} else if (empleado != null && !empleado.getMcaHabilitado()) { 
+			empleado.setMcaHabilitado(true);
+			logger.info("CREATE: El empleado con DNI [{}] ha sido habilitado porque ya existía pero estaba deshabilitado", empleado.getDni());
 		}
 		Sucursal sucursal = sucursalRep.findById(empleadoDto.getSucursal());
+		if (sucursal == null || !sucursal.getMcaHabilitado()) {
+			logger.error("CREATE: La sucursal de ID [{}] no existe", empleadoDto.getSucursal());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
+		}
 		empleado = new Empleado(empleadoDto);
 		empleado.setSucursal(sucursal);
 		empleado = empleadoRep.save(empleado);
 		if (empleado == null) {
-			logger.info("CREATE: No se ha podido crear al empleado con DNI [{}]", empleadoDto.getDni());
-			return new ResponseEntity<>(empleado, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			logger.error("CREATE: No se ha podido crear al empleado con DNI [{}]", empleadoDto.getDni());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("CREATE: Se ha creado el empleado con DNI [{}]", empleado.getDni());
 		return ResponseEntity.ok(empleado);
@@ -85,32 +107,79 @@ public class EmpleadoController {
 
 	@PutMapping("/{dni}")
 	public ResponseEntity<Empleado> updateEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDto) {
+		try {
+			validarEmpleado(empleadoDto);
+		}
+		catch (Error e) {
+			logger.error(e.getMessageError());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		logger.info("UPDATE: Los datos del empleado son válidos");
 		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
 		if (empleado == null || !empleado.getMcaHabilitado()) {
-			logger.info("UPDATE: No se ha encontrado el empleado con DNI [{}]", empleadoDto.getDni());
+			logger.error("UPDATE: El empleado con DNI [{}] no existe", empleadoDto.getDni());
 			return ResponseEntity.notFound().build();
 		}
 		EmpleadoH empleadoH = new EmpleadoH(empleado, empleadoDto, empleado.getUsuario());
 		Sucursal sucursal = sucursalRep.findById(empleadoDto.getSucursal());
-		empleadoHRep.save(empleadoH);
+		if (sucursal == null || !sucursal.getMcaHabilitado()) {
+			logger.error("UPDATE: La sucursal de ID [{}] no existe", empleadoDto.getSucursal());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
+		}
+		empleadoH = empleadoHRep.save(empleadoH);
+		if (empleadoH == null) {
+			logger.error("UPDATE: No se ha podido guardar la operación en la tabla histórica");
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		empleado.setSucursal(sucursal);
 		empleado.setFecActu(new Date());
-		empleadoRep.save(empleado);
+		empleado = empleadoRep.save(empleado);
+		if (empleado == null) {
+			logger.error("UPDATE: No se ha podido actualizar al empleado con DNI [{}]", empleadoDto.getDni());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		logger.info("UPDATE: Se ha actualizado el empleado con DNI [{}]", empleado.getDni());
 		return ResponseEntity.ok(empleado);
 	}
 
 	@DeleteMapping("/{dni}")
 	public ResponseEntity<Empleado> deleteEmpleado(@PathVariable(name = "dni") String dni) {
+		try {
+			PersonValidator.validateDni(dni);
+		}
+		catch (Error e) {
+			logger.error(e.getMessageError());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		logger.info("FIND: El DNI [{}] es válido", dni);
 		Empleado empleado = empleadoRep.findByDni(dni);
 		if (empleado == null || !empleado.getMcaHabilitado()) {
-			logger.info("DELETE: No se ha encontrado el empleado con DNI [{}]", dni);
+			logger.error("DELETE: No se ha encontrado el empleado con DNI [{}]", dni);
 			return ResponseEntity.notFound().build();
 		}
-		empleadoHRep.save(new EmpleadoH(empleado, empleado.getUsuario()));
+		EmpleadoH empleadoH = new EmpleadoH(empleado, empleado.getUsuario());
+		empleadoH = empleadoHRep.save(empleadoH);
+		if (empleadoH == null) {
+			logger.error("UPDATE: No se ha podido guardar la operación en la tabla histórica");
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		empleado.setMcaHabilitado(false);
-		empleadoRep.save(empleado);
+		empleado = empleadoRep.save(empleado);
+		if (empleado == null) {
+			logger.error("DELETE: No se ha podido eliminar al empleado con DNI [{}]", dni);
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		logger.info("DELETE: Se ha eliminado el empleado con DNI [{}]", empleado.getDni());
 		return ResponseEntity.ok(empleado);
+	}
+	
+	private void validarEmpleado(EmpleadoDTO empleado) {
+		PersonValidator.validateDni(empleado.getDni());
+		ComunValidator.validateTexto(empleado.getNombre(), "nombre", 15);
+		ComunValidator.validateTexto(empleado.getApellidos(), "apellidos", 30);
+		ComunValidator.validateTexto(empleado.getDireccion(), "dirección", 50);
+		if (empleado.getFijo() != null) PersonValidator.validateTelefonoFijo(empleado.getFijo());
+		if (empleado.getMovil() != null) PersonValidator.validateTelefonoMovil(empleado.getMovil());
+		if (empleado.getEmail() != null) PersonValidator.validateEmail(empleado.getEmail());
 	}
 }
