@@ -10,6 +10,9 @@ public class ImporteValidator {
 	private ImporteValidator() { }
 	
 	public static void validateImporte(String importe) {
+		if(importe==null)
+			throw new ImporteFormatException();
+		
 		Pattern importeRegex = 
 			    Pattern.compile("^([0-9]{1,15})(\\.[0-9]{1,2})?$", 
 			    		Pattern.CASE_INSENSITIVE);
