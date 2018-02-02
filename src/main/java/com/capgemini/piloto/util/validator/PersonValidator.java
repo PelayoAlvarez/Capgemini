@@ -52,17 +52,17 @@ public class PersonValidator {
 		Matcher matcher = fijoRegex.matcher(fijo);
 		
 		if (!matcher.find())
-			throw new TelefonoFormatException();
+			throw new TelefonoFormatException("fijo");
 	}
 	
-	public static void validateTelefonoMovil(String fijo) {
-		Pattern fijoRegex = 
+	public static void validateTelefonoMovil(String movil) {
+		Pattern movilRegex = 
 			    Pattern.compile("^(\\+34|0034|34)?[6|7][0-9]{8}$", 
 			    		Pattern.CASE_INSENSITIVE);
 		
-		Matcher matcher = fijoRegex.matcher(fijo);
+		Matcher matcher = movilRegex.matcher(movil);
 		
 		if (!matcher.find())
-			throw new TelefonoFormatException();
+			throw new TelefonoFormatException("movil");
 	}
 }

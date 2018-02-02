@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +40,7 @@ import com.capgemini.piloto.util.validator.PersonValidator;
 
 @RestController
 @RequestMapping("/clientes")
+@CrossOrigin
 public class ClienteController {
 
 	private static final String NOT_FOUND = "The requested client was not found";
