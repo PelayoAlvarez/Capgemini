@@ -90,17 +90,17 @@ public class ClienteController {
 			logger.info("Create a new client");
 			return ResponseEntity.ok().body(new ClienteDTO(c2));	
 		}catch(DniFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("CheckDNI: "+e.getMessage());
 		}
 		catch(EmailFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("CheckEmail: "+e.getMessage());
 		}
 		catch(TelefonoFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("CheckTelefonoFijo: "+e.getMessage());
 		}
 		catch(TextoFormatException e) {
-			logger.error(e.getMessage());
-		}
+			logger.error("CheckTelefonoMovil: "+e.getMessage());
+		} 
 		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 		
@@ -148,17 +148,17 @@ public class ClienteController {
 			logger.info("The client was successfully updated");
 			return ResponseEntity.ok(new ClienteDTO(updateClient));
 		}catch(DniFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("CheckDNI: "+e.getMessage());
 		}
 		catch(EmailFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("CheckEmail: "+e.getMessage());
 		}
 		catch(TelefonoFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("CheckTelefonoFijo: "+e.getMessage());
 		}
 		catch(TextoFormatException e) {
-			logger.error(e.getMessage());
-		}
+			logger.error("CheckTelefonoMovil: "+e.getMessage());
+		} 
 		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	
 	}
