@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,7 @@ import com.capgemini.piloto.util.validator.PersonValidator;
 
 @RestController
 @RequestMapping(path = "/cuenta")
+@CrossOrigin
 public class CuentaController {
 
 	private static final String NOT_FOUND = "The requested account was not found";
@@ -57,7 +59,7 @@ public class CuentaController {
 	}
 
 	// Get every account and its owners with X dni
-	@GetMapping("/miscuentas/{dni}")
+	@GetMapping("/miscuentas")
 	public ResponseEntity<List<MisCuentasDTO>> getMisCuentas(@RequestParam(value = "dni") String dni) {
 		try {
 			PersonValidator.validateDni(dni);
@@ -72,6 +74,8 @@ public class CuentaController {
 			return ResponseEntity.notFound().build();
 		}
 		List<ClienteCuenta> cuentas = clienteCuentaRepository.findByDni(dni);
+		for(ClienteCuenta c : cuentas)
+			logger.info(c.getCliente().getDni());
 		List<MisCuentasDTO> misCuentas = new ArrayList<>();
 		for (ClienteCuenta cuenta : cuentas) {
 			List<ClienteTitularDTO> titulares = new ArrayList<>();
