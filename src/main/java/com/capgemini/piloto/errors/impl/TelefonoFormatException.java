@@ -7,9 +7,15 @@ public class TelefonoFormatException extends RuntimeException {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private String tipo;
+	
+	public TelefonoFormatException(String tipo) {
+		this.tipo = tipo;
+	}
 
 	@Override
 	public String getMessage() {
-		return "Formato de teléfono incorrecto";
+		return "Formato de teléfono " + tipo + " incorrecto";
 	}
 }
