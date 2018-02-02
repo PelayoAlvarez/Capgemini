@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.errors.impl.DniFormatException;
+import com.capgemini.piloto.errors.impl.EmailFormatException;
+import com.capgemini.piloto.errors.impl.TelefonoFormatException;
+import com.capgemini.piloto.errors.impl.TextoFormatException;
 import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
 import com.capgemini.piloto.model.dto.EmpleadoDTO;
@@ -29,11 +34,10 @@ import com.capgemini.piloto.repository.SucursalRepository;
 import com.capgemini.piloto.repository.historico.EmpleadoHRepository;
 import com.capgemini.piloto.util.validator.ComunValidator;
 import com.capgemini.piloto.util.validator.PersonValidator;
-import com.capgemini.piloto.errors.impl.DniFormatException;
-import com.capgemini.piloto.errors.impl.TextoFormatException;
 
 @RestController
 @RequestMapping("/empleado")
+@CrossOrigin
 public class EmpleadoController {
 
 	private static final Logger logger = LoggerFactory.getLogger(EmpleadoController.class);
@@ -59,7 +63,7 @@ public class EmpleadoController {
 			PersonValidator.validateDni(dni);
 		}
 		catch (DniFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("DNI incorrecto: " + e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("FIND: El DNI [{}] es válido", dni);
@@ -78,11 +82,19 @@ public class EmpleadoController {
 			validarEmpleado(empleadoDto);
 		}
 		catch (DniFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("DNI incorrecto: " + e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TextoFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("Texto incorrecto: " + e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (TelefonoFormatException e) {
+			logger.error("Teléfono incorrecto: " + e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (EmailFormatException e) {
+			logger.error("Email incorrecto: " + e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -117,11 +129,19 @@ public class EmpleadoController {
 			validarEmpleado(empleadoDto);
 		}
 		catch (DniFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("DNI incorrecto: " + e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TextoFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("Texto incorrecto: " + e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (TelefonoFormatException e) {
+			logger.error("Teléfono incorrecto: " + e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (EmailFormatException e) {
+			logger.error("Email incorrecto: " + e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -159,7 +179,7 @@ public class EmpleadoController {
 			PersonValidator.validateDni(dni);
 		}
 		catch (DniFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("DNI incorrecto: " + e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("FIND: El DNI [{}] es válido", dni);
