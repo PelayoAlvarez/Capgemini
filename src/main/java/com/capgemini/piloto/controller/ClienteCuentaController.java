@@ -15,6 +15,7 @@ import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.dto.GestionTitularesCuentaDTO;
+import com.capgemini.piloto.model.dto.TitularDTO;
 import com.capgemini.piloto.model.historico.ClienteCuentaH;
 import com.capgemini.piloto.model.types.ClienteCuentaKey;
 import com.capgemini.piloto.repository.ClienteCuentaRepository;
@@ -24,6 +25,7 @@ import com.capgemini.piloto.repository.historico.ClienteCuentaHRepository;
 
 @RestController
 @RequestMapping("/cliente_cuenta")
+@CrossOrigin
 public class ClienteCuentaController {
 
 	// Logger
@@ -40,11 +42,34 @@ public class ClienteCuentaController {
 	// Repositorios de historicos
 	@Autowired
 	ClienteCuentaHRepository clienteCuentaHRepository;
+	
+	
+    //Creacion de una nueva asociacion entre una cuenta y un cliente.
+    @PostMapping("/new/{cuenta}")
+    public ResponseEntity<TitularDTO> createTitular(@PathVariable(name = "cuenta") String numCuenta,
+			@RequestBody TitularDTO datos) {
+        Cuenta cuenta = cuentaRepository.findOne(numCuenta);
+        if(cuenta == null) {
+			log.error("PUT: No existe la cuenta con nº de cuenta [{}]",	numCuenta);
+            return ResponseEntity.notFound().build();    
+        }
+        Cliente cliente = clienteRepository.findByDni(datos.getDniTitular());
+        if(cliente == null) {
+			log.error("PUT: No existe el cliente con DNI [{}]",	datos.getDniTitular());
+            return ResponseEntity.notFound().build();
+        }
+        
+        ClienteCuenta cc = new ClienteCuenta(cliente, cuenta);
+        cc = clienteCuentaRepository.save(cc);
+        return ResponseEntity.ok(new TitularDTO(cliente.getDni(), cliente.getNombre(), cliente.getApellidos()));    
+    }
+
 
 	// Creacion de una nueva asociacion entre una cuenta y un cliente.
-	@PutMapping("/asociar")
-	public ResponseEntity<GestionTitularesCuentaDTO> createNote(@RequestBody GestionTitularesCuentaDTO datos) {
-		Cuenta cuenta = cuentaRepository.findOne(datos.getNumeroCuenta());
+	@PutMapping("/asociar/{cuenta}")
+	public ResponseEntity<GestionTitularesCuentaDTO> createNote(@PathVariable(name = "cuenta") String numCuenta,
+			@RequestBody GestionTitularesCuentaDTO datos) {
+		Cuenta cuenta = cuentaRepository.findOne(numCuenta);
 		if (cuenta == null) {
 			log.error("PUT: No existe la cuenta con nº de cuenta [{}]",	datos.getNumeroCuenta());
 			return ResponseEntity.notFound().build();
@@ -139,7 +164,7 @@ public class ClienteCuentaController {
 
 	// Obtencion de una asociciacion entre una cuenta y un cliente
 	@GetMapping("/titulares/{cuenta}")
-	public ResponseEntity<GestionTitularesCuentaDTO> getTitularesByCuenta(
+	public ResponseEntity<Set<TitularDTO>> getTitularesByCuenta(
 			@PathVariable(name = "cuenta") String numCuenta) {
 		List<ClienteCuenta> ccs = clienteCuentaRepository.findByNumeroCuenta(numCuenta);
 		if (ccs == null) {
@@ -147,6 +172,14 @@ public class ClienteCuentaController {
 			return ResponseEntity.notFound().build();
 		}
 		log.info("GET: Se obtienen todos los titulares de la cuenta con nº de cuenta [{}]", numCuenta);
-		return ResponseEntity.ok().body(new GestionTitularesCuentaDTO(ccs));
+		
+		Set<TitularDTO> titulares = new HashSet<>();
+		
+		ccs.forEach(cc -> {
+			Cliente cliente = cc.getCliente();
+			titulares.add(new TitularDTO(cliente.getDni(), cliente.getNombre(), cliente.getApellidos()));
+		});
+		
+		return ResponseEntity.ok().body(titulares);
 	}
 }
