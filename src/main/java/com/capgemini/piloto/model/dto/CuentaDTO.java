@@ -3,6 +3,7 @@ package com.capgemini.piloto.model.dto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -46,7 +47,16 @@ public class CuentaDTO implements Serializable {
 		fecCreacion = new Date();
 		fecActu = new Date();
 	}
-
+	
+	public CuentaDTO(double importe)
+	{
+		this.importe=importe;
+		this.usuario="test";
+		this.fecActu=new Date();
+		this.fecCreacion=new Date();
+		this.mCAHabilitado=true;
+		this.numeroCuenta=generarNumero();
+	}
 	public CuentaDTO(Cuenta cuenta) {
 		this.numeroCuenta = cuenta.getNumeroCuenta();
 		this.usuario = cuenta.getUsuario();
@@ -71,6 +81,13 @@ public class CuentaDTO implements Serializable {
 		this.fecCreacion = new Date();
 		this.mCAHabilitado = mCAHabilitado;
 		this.usuario = usuario;
+	}
+	
+	public String generarNumero() {
+		Random rng = new Random();
+		return (rng.nextInt(900000000)+100000000)+""
+				+(rng.nextInt(900000000)+100000000)+
+				(rng.nextInt(9000000)+1000000);
 	}
 
 	@Override

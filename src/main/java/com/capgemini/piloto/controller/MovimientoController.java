@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.errors.impl.ImporteFormatException;
+import com.capgemini.piloto.errors.impl.NumeroCuentaFormatException;
+import com.capgemini.piloto.errors.impl.TextoFormatException;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Movimiento;
 import com.capgemini.piloto.model.dto.MisMovimientosDTO;
@@ -31,9 +35,13 @@ import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.MovimientoRepository;
 import com.capgemini.piloto.repository.historico.CuentaHRepository;
 import com.capgemini.piloto.repository.historico.MovimientoHRepository;
+import com.capgemini.piloto.util.validator.ComunValidator;
+import com.capgemini.piloto.util.validator.CuentaValidator;
+import com.capgemini.piloto.util.validator.ImporteValidator;
 
 @RestController
 @RequestMapping(path = "/movimiento")
+@CrossOrigin
 public class MovimientoController {
 
 	private static final String NOT_FOUND = "The requested transaction was not found";
@@ -55,6 +63,26 @@ public class MovimientoController {
 	@PostMapping("/")
 	public ResponseEntity<Movimiento> addMovimiento(@RequestBody MovimientoDTO movimientoDto,
 			@RequestParam String cuenta) {
+		
+		try {
+			CuentaValidator.validateCuenta(cuenta);
+			ImporteValidator.validateImporte(String.valueOf(movimientoDto.getImporte()));
+			ComunValidator.validateTexto(movimientoDto.getDescripcion(), "descripción", 60);
+			ComunValidator.validateTexto(movimientoDto.getUsuario(), "usuario", 20);
+		}
+		catch(NumeroCuentaFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch(ImporteFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (TextoFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 		Cuenta cu = cuentaRepository.findByNumeroCuenta(cuenta);
 		Movimiento movimiento = new Movimiento(movimientoDto, cu);
 		movimiento = movimientoRepository.save(movimiento);
@@ -92,6 +120,30 @@ public class MovimientoController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Movimiento> updateMovimeinto(@PathVariable(value = "id") Long id,
 			@RequestBody MovimientoDTO movimientoDetails) {
+		
+		if(movimientoDetails.getCuentaAsociada()==null) {
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		try {
+			ImporteValidator.validateImporte(String.valueOf(movimientoDetails.getImporte()));
+			ComunValidator.validateTexto(movimientoDetails.getDescripcion(), "descripción", 60);
+			CuentaValidator.validateCuenta(movimientoDetails.getCuentaAsociada().getNumeroCuenta());
+			ComunValidator.validateTexto(movimientoDetails.getUsuario(), "usuario", 20);
+		}
+		catch(ImporteFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch(TextoFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch(NumeroCuentaFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 		Movimiento movimiento = movimientoRepository.findMovimientoById(id);
 		Cuenta cuenta = cuentaRepository.findByNumeroCuenta(movimiento.getCuentaAsociada().getNumeroCuenta());
 		if (!movimiento.getmCAHabilitado()) {
@@ -135,10 +187,16 @@ public class MovimientoController {
 	@GetMapping("/mismovimientos/{cuenta}")
 	public ResponseEntity<List<MisMovimientosDTO>> getMisMovimientos(
 			@PathVariable(value = "cuenta") String numeroCuenta) {
-		if (numeroCuenta == null) {
+		
+		try {
+			CuentaValidator.validateCuenta(numeroCuenta);
+		}
+		catch(NumeroCuentaFormatException e) {
+			logger.error(e.getMessage());
 			return new ResponseEntity<>(null, new HttpHeaders(),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta != null) {
 			List<Movimiento> listaMovs = movimientoRepository.findByCuentaAsociada(cuenta);

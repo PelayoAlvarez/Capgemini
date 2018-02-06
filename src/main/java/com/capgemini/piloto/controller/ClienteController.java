@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.errors.impl.DniFormatException;
+import com.capgemini.piloto.errors.impl.EmailFormatException;
+import com.capgemini.piloto.errors.impl.TelefonoFormatException;
+import com.capgemini.piloto.errors.impl.TextoFormatException;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Sucursal;
@@ -30,9 +35,12 @@ import com.capgemini.piloto.model.historico.ClienteH;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.SucursalRepository;
 import com.capgemini.piloto.repository.historico.ClienteHRepository;
+import com.capgemini.piloto.util.validator.ComunValidator;
+import com.capgemini.piloto.util.validator.PersonValidator;
 
 @RestController
 @RequestMapping("/clientes")
+@CrossOrigin
 public class ClienteController {
 
 	private static final String NOT_FOUND = "The requested client was not found";
@@ -62,29 +70,53 @@ public class ClienteController {
 
 	// Create a new client
 	@PostMapping("/clientes")
-	public ResponseEntity<Cliente> createClient(@RequestBody Cliente cliente, @RequestParam Long sucursalId) {
-		Cliente cliente1 = clienteRepository.findByDni(cliente.getDni());
-		if (cliente1 != null) {
-			logger.error("The client is already created");
-			return new ResponseEntity<>(cliente1, new HttpHeaders(), HttpStatus.CONFLICT);
-
+	public ResponseEntity<ClienteDTO> createClient(@Valid @RequestBody ClienteDTO clienteDTO, @RequestParam Long sucursalId) {
+		try {
+			validarCliente(clienteDTO);
+			Cliente cliente1 = clienteRepository.findByDni(clienteDTO.getDni());
+			if (cliente1 != null && cliente1.getmCAHabilitado()) {
+					logger.error("The client is already created");
+					return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
+			}
+			Sucursal sucursal = sucursalRepository.findById(sucursalId);
+			if (sucursal == null || !sucursal.getMcaHabilitado()) {
+				logger.error("The sucursl was nor created");
+				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
 		}
-		Sucursal aux = sucursalRepository.findById(sucursalId);
-		cliente.setSucursal(aux);
-		aux.getClientes().add(cliente);
-		Cliente c2 = clienteRepository.save(cliente);
-		if (c2 == null) {
-			logger.error("The client was not created");
-			return new ResponseEntity<>(c2, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			clienteDTO.setSucursal(sucursalId);
+			Cliente c2 = clienteRepository.save(new Cliente(clienteDTO, sucursal));
+			if (c2 == null) {
+				logger.error("The client was not created");
+				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			logger.info("Create a new client");
+			return ResponseEntity.ok().body(new ClienteDTO(c2));	
+		}catch(DniFormatException e) {
+			logger.error("CheckDNI: "+e.getMessage());
 		}
-		logger.info("Create a new client");
-		return ResponseEntity.ok().body(c2);
-
+		catch(EmailFormatException e) {
+			logger.error("CheckEmail: "+e.getMessage());
+		}
+		catch(TelefonoFormatException e) {
+			logger.error("CheckTelefonoFijo: "+e.getMessage());
+		}
+		catch(TextoFormatException e) {
+			logger.error("CheckTelefonoMovil: "+e.getMessage());
+		} 
+		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+		
 
+	
 	// Find a client by its dni
 	@GetMapping("/buscarCliente/{dni}")
 	public ResponseEntity<ClienteDTO> getClientByDni(@PathVariable(value = "dni") String dni) {
+		try {
+			PersonValidator.validateDni(dni);
+		}catch(DniFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		Cliente cliente = clienteRepository.findByDni(dni);
 		if (cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
@@ -92,37 +124,56 @@ public class ClienteController {
 		}
 		logger.info("The requested cliente vas found");
 		ClienteDTO clienteDTO = new ClienteDTO(cliente);
-
 		return ResponseEntity.ok().body(clienteDTO);
 	}
 
 	// Update a client
 	@PutMapping("/cliente/{dni}")
-	public ResponseEntity<Cliente> updateNote(@PathVariable(value = "dni") String dni,
-			@Valid @RequestBody Cliente detailsClient) {
-		Cliente cliente = clienteRepository.findByDni(dni);
-		if (cliente == null || !cliente.getmCAHabilitado()) {
-			logger.error(NOT_FOUND);
-			return ResponseEntity.notFound().build();
+	public ResponseEntity<ClienteDTO> updateCliente(@PathVariable(value = "dni") String dni,
+			@Valid @RequestBody ClienteDTO detailsClient) {
+		try {
+			validarCliente(detailsClient);
+			Cliente cliente = clienteRepository.findByDni(dni);
+			if (cliente == null || !cliente.getmCAHabilitado()) {
+				logger.error(NOT_FOUND);
+				return ResponseEntity.notFound().build();
+			}
+
+			// Cogemos como prueba el usuario de la entidad
+			clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
+			Sucursal sucursal = sucursalRepository.findById(detailsClient.getSucursal());
+			cliente.setSucursal(sucursal);
+			cliente.setFecActu(new Date());
+
+			Cliente updateClient = clienteRepository.save(cliente);
+			
+			logger.info("The client was successfully updated");
+			return ResponseEntity.ok(new ClienteDTO(updateClient));
+		}catch(DniFormatException e) {
+			logger.error("CheckDNI: "+e.getMessage());
 		}
-
-		// Cogemos como prueba el usuario de la entidad
-		clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
-		cliente.setNombre(detailsClient.getNombre());
-		cliente.setApellidos(detailsClient.getApellidos());
-		cliente.setDireccion(detailsClient.getDireccion());
-		cliente.setMovil(detailsClient.getMovil());
-		cliente.setFijo(detailsClient.getFijo());
-		cliente.setFecActu(new Date());
-
-		Cliente updateClient = clienteRepository.save(cliente);
-		logger.info("The client was successfully updated");
-		return ResponseEntity.ok(updateClient);
+		catch(EmailFormatException e) {
+			logger.error("CheckEmail: "+e.getMessage());
+		}
+		catch(TelefonoFormatException e) {
+			logger.error("CheckTelefonoFijo: "+e.getMessage());
+		}
+		catch(TextoFormatException e) {
+			logger.error("CheckTelefonoMovil: "+e.getMessage());
+		} 
+		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+	
 	}
 
 	// Delete a cliente by its dni
 	@DeleteMapping("/cliente/{dni}")
-	public ResponseEntity<ClienteDTO> deleteNote(@PathVariable(value = "dni") String dni) {
+	public ResponseEntity<ClienteDTO> deleteCliente(@Valid @PathVariable(value = "dni") String dni) {
+		try {
+			PersonValidator.validateDni(dni);
+		}catch(DniFormatException e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		Cliente cliente = clienteRepository.findByDni(dni);
 		if (cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
@@ -140,6 +191,20 @@ public class ClienteController {
 		ClienteDTO clienteDTO = new ClienteDTO(cliente);
 
 		return ResponseEntity.ok().body(clienteDTO);
+	}
+//---------------------------------------------------------------------------------------------------
+	//Validar los campos del cliente
+	private void validarCliente(ClienteDTO clienteDTO){
+			PersonValidator.validateDni(clienteDTO.getDni());
+			PersonValidator.validateEmail(clienteDTO.getEmail());
+			ComunValidator.validateTexto(clienteDTO.getNombre(), "Nombre", 15);
+			ComunValidator.validateTexto(clienteDTO.getApellidos(), "Apellidos",30);
+			if(!clienteDTO.getFijo().equals(""))
+				PersonValidator.validateTelefonoFijo(clienteDTO.getFijo());
+			if(!clienteDTO.getMovil().equals(""))
+				PersonValidator.validateTelefonoMovil(clienteDTO.getMovil());
+			if(!clienteDTO.getDireccion().equals(""))
+				ComunValidator.validateTexto(clienteDTO.getDireccion(), "Direccion", 50);
 	}
 
 }

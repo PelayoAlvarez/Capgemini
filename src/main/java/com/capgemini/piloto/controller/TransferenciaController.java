@@ -27,6 +27,8 @@ import com.capgemini.piloto.model.historico.CuentaH;
 import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.TransferenciaRepository;
 import com.capgemini.piloto.repository.historico.CuentaHRepository;
+import com.capgemini.piloto.util.validator.CuentaValidator;
+import com.capgemini.piloto.util.validator.ImporteValidator;
 
 @RestController
 @CrossOrigin()
@@ -57,8 +59,15 @@ public class TransferenciaController {
 		if (transferencia == null) {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
+		//Validacion de los datos de la transferencia
+		CuentaValidator.validateCuenta(transferencia.getCuenta());
+		CuentaValidator.validateCuenta(transferencia.getIdDestino());
+		ImporteValidator.validateImporte(String.valueOf(transferencia.getImporte()));
+		
 		Cuenta cOrigen = cuentaRepository.findOne(transferencia.getCuenta());
 		Cuenta cDestino = cuentaRepository.findOne(transferencia.getIdDestino());
+		
 
 		if (cOrigen == null || cDestino == null) {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,10 +98,14 @@ public class TransferenciaController {
 	@GetMapping("/listarTransferenciaId/{cuenta}")
 	public ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>> listarTransfer(
 			@PathVariable(value = "cuenta") String numeroCuenta) {
-		if (numeroCuenta == null) {
+		if (numeroCuenta == null ) {
 			return new ResponseEntity<>(null, new HttpHeaders(),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
+		//Validacion cuenta
+		CuentaValidator.validateCuenta(numeroCuenta);
+		
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta == null) {
 			return new ResponseEntity<>(null, new HttpHeaders(),

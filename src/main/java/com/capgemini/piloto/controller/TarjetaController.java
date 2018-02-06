@@ -25,6 +25,7 @@ import com.capgemini.piloto.model.types.ClienteCuentaKey;
 import com.capgemini.piloto.repository.ClienteCuentaRepository;
 import com.capgemini.piloto.repository.TarjetaRepository;
 import com.capgemini.piloto.repository.historico.TarjetaHRepository;
+import com.capgemini.piloto.util.validator.PersonValidator;
 
 @RestController
 @RequestMapping("/tarjetas")
@@ -40,6 +41,7 @@ public class TarjetaController {
 
 	@GetMapping("/{dni}")
 	public List<TarjetaDTO> getTarjetaByDni(@PathVariable String dni) {
+		PersonValidator.validateDni(dni);
 		List<Tarjeta> tarjetas = tarjetaRep.getAllTarjetasByDni(dni);
 		List<TarjetaDTO> tarjetasDto = new ArrayList<>();
 		tarjetas.forEach(tarjeta -> tarjetasDto.add(new TarjetaDTO(tarjeta)));
@@ -48,6 +50,7 @@ public class TarjetaController {
 
 	@PostMapping("")
 	public ResponseEntity<Tarjeta> createTarjeta(@RequestBody CrearTarjetaDTO dto) {
+		PersonValidator.validateDni(dto.getDni());
 		ClienteCuenta clienteCuenta = clientCuentaRep
 				.findOne(new ClienteCuentaKey(dto.getDni(), dto.getNumeroCuenta()));
 		if (clienteCuenta == null)

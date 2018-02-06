@@ -12,5 +12,6 @@ public interface CuentaRepository extends JpaRepository<Cuenta, String> {
 	@Query("SELECT c FROM Cuenta c WHERE c.mCAHabilitado=true")
 	List<Cuenta> findMCA();
 
+	@Query("SELECT c FROM Cuenta c WHERE c.mCAHabilitado=true AND c.numeroCuenta=?1")
 	Cuenta findByNumeroCuenta(String numeroCuenta);
 }

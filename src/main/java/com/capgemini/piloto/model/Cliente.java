@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.capgemini.piloto.model.dto.ClienteDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -75,6 +76,26 @@ public class Cliente implements Serializable {
 
 	public Cliente() {
 		super();
+	}
+
+	public Cliente(ClienteDTO cliente, Sucursal sucursal) {
+		super();
+		this.dni = cliente.getDni();
+		this.nombre = cliente.getNombre();
+		this.apellidos = cliente.getApellidos();
+		this.direccion = cliente.getDireccion();
+		this.movil = cliente.getMovil();
+		this.fijo = cliente.getFijo();
+		this.email = cliente.getEmail();
+		this.fecActu = new Date();
+		this.fecCreacion = new Date();
+		this.empleado = "Pepe";
+		this.mCAHabilitado = true;
+		this.sucursal = sucursal;
+	}
+
+	public Cliente(ClienteDTO clienteDTO) {
+		
 	}
 
 	public String getNombre() {

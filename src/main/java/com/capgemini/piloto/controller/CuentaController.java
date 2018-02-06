@@ -10,28 +10,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.errors.impl.DniFormatException;
+import com.capgemini.piloto.errors.impl.NumeroCuentaFormatException;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Cuenta;
-import com.capgemini.piloto.model.Validation;
 import com.capgemini.piloto.model.dto.ClienteTitularDTO;
 import com.capgemini.piloto.model.dto.CuentaDTO;
 import com.capgemini.piloto.model.dto.MisCuentasDTO;
 import com.capgemini.piloto.repository.ClienteCuentaRepository;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.CuentaRepository;
+import com.capgemini.piloto.util.validator.CuentaValidator;
+import com.capgemini.piloto.util.validator.PersonValidator;
 
 @RestController
 @RequestMapping(path = "/cuenta")
+@CrossOrigin
 public class CuentaController {
 
 	private static final String NOT_FOUND = "The requested account was not found";
@@ -56,11 +59,13 @@ public class CuentaController {
 	}
 
 	// Get every account and its owners with X dni
-	@GetMapping("/miscuentas/{dni}")
-	public ResponseEntity<List<MisCuentasDTO>> getMisCuentas(@PathVariable(value = "dni") String dni) {
-		if(!Validation.dniValido(dni)){
-			logger.info("The value of dni was not valid");
-			return new ResponseEntity<>(new ArrayList<>(), new HttpHeaders(), HttpStatus.CONFLICT);
+	@GetMapping("/miscuentas")
+	public ResponseEntity<List<MisCuentasDTO>> getMisCuentas(@RequestParam(value = "dni") String dni) {
+		try {
+			PersonValidator.validateDni(dni);
+		} catch (DniFormatException e) {
+			logger.info(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("FIND: Se obtienen las cuentas del cliente con DNI [{}]", dni);
 		Cliente cliente = clienteRepository.findByDni(dni);
@@ -69,6 +74,8 @@ public class CuentaController {
 			return ResponseEntity.notFound().build();
 		}
 		List<ClienteCuenta> cuentas = clienteCuentaRepository.findByDni(dni);
+		for(ClienteCuenta c : cuentas)
+			logger.info(c.getCliente().getDni());
 		List<MisCuentasDTO> misCuentas = new ArrayList<>();
 		for (ClienteCuenta cuenta : cuentas) {
 			List<ClienteTitularDTO> titulares = new ArrayList<>();
@@ -83,19 +90,28 @@ public class CuentaController {
 
 	// Create a new account
 	@PostMapping("/cuenta")
-	public ResponseEntity<Cuenta> createCuenta(@RequestBody CuentaDTO cuentadto, @RequestParam String dni) {
-		if(!Validation.dniValido(dni)){
-			logger.info("The value of dni was not valid");
-			return new ResponseEntity<>(new Cuenta(cuentadto), new HttpHeaders(), HttpStatus.CONFLICT);
+	public ResponseEntity<Cuenta> createCuenta(@RequestParam double importe, @RequestParam String dni) {
+		try {
+			PersonValidator.validateDni(dni);
+		} catch (DniFormatException e) {
+			logger.info(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		Cuenta aux1 = cuentaRepository.findByNumeroCuenta(cuentadto.getNumeroCuenta());
-		if (aux1 != null) {
-			logger.info("An account with the given numeroCuenta already existed", aux1.getNumeroCuenta());
-			return new ResponseEntity<>(aux1, new HttpHeaders(), HttpStatus.CONFLICT);
+
+		CuentaDTO aux1 = new CuentaDTO(importe);
+		Cuenta aux2 = cuentaRepository.findByNumeroCuenta(aux1.getNumeroCuenta());
+		while (aux2 != null) {
+			aux1 = new CuentaDTO(importe);
+			aux2 = cuentaRepository.findByNumeroCuenta(aux1.getNumeroCuenta());
 		}
-		Cuenta cuenta = new Cuenta(cuentadto);
-		logger.info("Created a new account with numeroCuenta = " 
-				+ cuenta.getNumeroCuenta());
+		try {
+			CuentaValidator.validateCuenta(aux1.getNumeroCuenta());
+		} catch (NumeroCuentaFormatException e) {
+			logger.info(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		Cuenta cuenta = new Cuenta(aux1);
+		logger.info("Created a new account with numeroCuenta = " + cuenta.getNumeroCuenta());
 		Cliente aux = clienteRepository.findByDni(dni);
 		if (aux != null) {
 			cuenta.setFecCreacion(new Date());
@@ -110,7 +126,13 @@ public class CuentaController {
 
 	// Delete an account by its numeroCuenta
 	@DeleteMapping("/cuenta/{id}")
-	public ResponseEntity<Cuenta> deleteCuenta(@PathVariable(value = "id") String numeroCuenta) {
+	public ResponseEntity<Cuenta> deleteCuenta(@RequestParam String numeroCuenta) {
+		try {
+			CuentaValidator.validateCuenta(numeroCuenta);
+		} catch (NumeroCuentaFormatException e) {
+			logger.info(e.getMessage());
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta == null || !cuenta.getmCAHabilitado()) {
 			logger.info(NOT_FOUND);

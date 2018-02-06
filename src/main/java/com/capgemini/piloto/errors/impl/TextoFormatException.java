@@ -1,7 +1,6 @@
 package com.capgemini.piloto.errors.impl;
 
-
-public class TelefonoFormatException extends RuntimeException {
+public class TextoFormatException extends RuntimeException {
 
 	/**
 	 * 
@@ -10,12 +9,13 @@ public class TelefonoFormatException extends RuntimeException {
 	
 	private String tipo;
 	
-	public TelefonoFormatException(String tipo) {
+	public TextoFormatException(String tipo) {
 		this.tipo = tipo;
 	}
 
 	@Override
 	public String getMessage() {
-		return "Formato de teléfono " + tipo + " incorrecto";
+		return "Formato de texto " + tipo + " es incorrecto";
 	}
+
 }
