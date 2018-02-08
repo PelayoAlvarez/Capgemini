@@ -95,7 +95,7 @@ public class Movimiento implements Serializable {
 		this.id = m.getId();
 		this.importe = m.getImporte();
 		this.tipo = m.getTipo();
-		this.fechahora = m.getFechahora();
+		this.fechahora = new Date();
 		this.descripcion = m.getDescripcion();
 		this.cuentaAsociada = cu;
 		this.fechaActua = this.fechaCreacion = new Date();
@@ -108,7 +108,7 @@ public class Movimiento implements Serializable {
 		this.id = mdto.getId();
 		this.importe = mdto.getImporte();
 		this.tipo = mdto.getTipo();
-		this.fechahora = mdto.getFechahora();
+		this.fechahora = new Date();
 		this.descripcion = mdto.getDescripcion();
 		this.cuentaAsociada = mdto.getCuentaAsociada();
 		this.usuario = mdto.getUsuario();

@@ -42,8 +42,8 @@ public class EmpleadoDTO implements Serializable {
 	@NotNull
 	private Long sucursal;
 
-	public EmpleadoDTO() {
-		this.sucursal=1L;
+	public EmpleadoDTO() {	
+		this.sucursal = 1L;
 	}
 
 	public EmpleadoDTO(Empleado empleado) {
