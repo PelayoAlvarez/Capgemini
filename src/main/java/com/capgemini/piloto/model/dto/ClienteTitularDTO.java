@@ -15,6 +15,9 @@ public class ClienteTitularDTO implements Serializable {
 
 	@NotBlank
 	private String apellidos;
+	
+	@NotBlank
+	private String dni;
 
 	public ClienteTitularDTO() {
 	}
@@ -27,6 +30,7 @@ public class ClienteTitularDTO implements Serializable {
 	public ClienteTitularDTO(Cliente c) {
 		this.nombre = c.getNombre();
 		this.apellidos = c.getApellidos();
+		this.dni = c.getDni();
 	}
 
 	public String getNombre() {
@@ -44,7 +48,15 @@ public class ClienteTitularDTO implements Serializable {
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
 	}
+	
+	public String getDni() {
+		return dni;
+	}
 
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -47,7 +47,7 @@ public class MovimientoDTO implements Serializable {
 		this.id = m.getId();
 		this.importe = m.getImporte();
 		this.tipo = m.getTipo();
-		this.fechahora = m.getFechahora();
+		this.fechahora = new Date();
 		this.descripcion = m.getDescripcion();
 		this.cuentaAsociada = m.getCuentaAsociada();
 		this.usuario = m.getUsuario();
