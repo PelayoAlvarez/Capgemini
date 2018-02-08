@@ -72,6 +72,7 @@ public class ClienteController {
 	@PostMapping("/clientes")
 	public ResponseEntity<ClienteDTO> createClient(@Valid @RequestBody ClienteDTO clienteDTO, @RequestParam Long sucursalId) {
 		try {
+			System.out.println(clienteDTO.toString());
 			validarCliente(clienteDTO);
 			Cliente cliente1 = clienteRepository.findByDni(clienteDTO.getDni());
 			if (cliente1 != null && cliente1.getmCAHabilitado()) {
@@ -98,10 +99,10 @@ public class ClienteController {
 			logger.error("CheckEmail: "+e.getMessage());
 		}
 		catch(TelefonoFormatException e) {
-			logger.error("CheckTelefonoFijo: "+e.getMessage());
+			logger.error("CheckTelefono: "+e.getMessage());
 		}
 		catch(TextoFormatException e) {
-			logger.error("CheckTelefonoMovil: "+e.getMessage());
+			logger.error("CheckText: "+e.getMessage());
 		} 
 		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -142,8 +143,7 @@ public class ClienteController {
 			// Cogemos como prueba el usuario de la entidad
 			clienteHRepository.save(new ClienteH(cliente, cliente.getEmpleado()));
 			Sucursal sucursal = sucursalRepository.findById(detailsClient.getSucursal());
-			cliente.setSucursal(sucursal);
-			cliente.setFecActu(new Date());
+			cliente = new Cliente(detailsClient,sucursal);
 
 			Cliente updateClient = clienteRepository.save(cliente);
 			
@@ -196,15 +196,16 @@ public class ClienteController {
 	//Validar los campos del cliente
 	private void validarCliente(ClienteDTO clienteDTO){
 			PersonValidator.validateDni(clienteDTO.getDni());
-			PersonValidator.validateEmail(clienteDTO.getEmail());
+			ComunValidator.validateTexto(clienteDTO.getDireccion(), "Direccion", 50);
 			ComunValidator.validateTexto(clienteDTO.getNombre(), "Nombre", 15);
 			ComunValidator.validateTexto(clienteDTO.getApellidos(), "Apellidos",30);
 			if(!clienteDTO.getFijo().equals(""))
 				PersonValidator.validateTelefonoFijo(clienteDTO.getFijo());
 			if(!clienteDTO.getMovil().equals(""))
 				PersonValidator.validateTelefonoMovil(clienteDTO.getMovil());
-			if(!clienteDTO.getDireccion().equals(""))
-				ComunValidator.validateTexto(clienteDTO.getDireccion(), "Direccion", 50);
+			if(!clienteDTO.getEmail().equals(""))
+				PersonValidator.validateEmail(clienteDTO.getEmail());
+				
 	}
 
 }
