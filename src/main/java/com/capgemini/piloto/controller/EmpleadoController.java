@@ -209,8 +209,8 @@ public class EmpleadoController {
 		ComunValidator.validateTexto(empleado.getNombre(), "nombre", 15);
 		ComunValidator.validateTexto(empleado.getApellidos(), "apellidos", 30);
 		ComunValidator.validateTexto(empleado.getDireccion(), "dirección", 50);
-		if (empleado.getFijo() != null) PersonValidator.validateTelefonoFijo(empleado.getFijo());
-		if (empleado.getMovil() != null) PersonValidator.validateTelefonoMovil(empleado.getMovil());
-		if (empleado.getEmail() != null) PersonValidator.validateEmail(empleado.getEmail());
+		if (empleado.getFijo() != null && !empleado.getFijo().equals("")) PersonValidator.validateTelefonoFijo(empleado.getFijo());
+		if (empleado.getMovil() != null && !empleado.getMovil().equals("")) PersonValidator.validateTelefonoMovil(empleado.getMovil());
+		if (empleado.getEmail() != null && !empleado.getEmail().equals("")) PersonValidator.validateEmail(empleado.getEmail());
 	}
 }
