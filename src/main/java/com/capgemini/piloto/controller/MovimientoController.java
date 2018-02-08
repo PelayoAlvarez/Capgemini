@@ -188,9 +188,7 @@ public class MovimientoController {
 	@GetMapping("/mismovimientos/{cuenta}")
 	public ResponseEntity<List<MisMovimientosDTO>> getMisMovimientos(
 			@PathVariable(value = "cuenta") String numeroCuenta) {
-		
 		try {
-
 			CuentaValidator.validateCuenta(numeroCuenta);
 		}
 		catch(NumeroCuentaFormatException e) {
