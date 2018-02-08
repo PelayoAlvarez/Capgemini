@@ -103,8 +103,9 @@ public class MovimientoController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Movimiento> removeMovimiento(@PathVariable(value = "id") Long id) {
-		Movimiento movimiento = movimientoRepository.findOne(id);
+	public ResponseEntity<Movimiento> removeMovimiento(@PathVariable(value = "id") String id) {
+		System.out.println(id);
+		Movimiento movimiento = movimientoRepository.findOne(Long.parseLong(id));
 		if (movimiento == null) {
 			logger.info(NOT_FOUND);
 			return ResponseEntity.notFound().build();
@@ -189,6 +190,7 @@ public class MovimientoController {
 			@PathVariable(value = "cuenta") String numeroCuenta) {
 		
 		try {
+
 			CuentaValidator.validateCuenta(numeroCuenta);
 		}
 		catch(NumeroCuentaFormatException e) {
@@ -196,11 +198,9 @@ public class MovimientoController {
 			return new ResponseEntity<>(null, new HttpHeaders(),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta != null) {
 			List<Movimiento> listaMovs = movimientoRepository.findByCuentaAsociada(cuenta);
-
 			List<MisMovimientosDTO> movimientos = new ArrayList<>();
 			for (Movimiento m : listaMovs) {
 				movimientos.add(new MisMovimientosDTO(m));
