@@ -61,8 +61,8 @@ public class TransferenciaController {
 		}
 		
 		//Validacion de los datos de la transferencia
-		CuentaValidator.validateCuenta(transferencia.getCuenta());
-		CuentaValidator.validateCuenta(transferencia.getIdDestino());
+		//CuentaValidator.validateCuenta(transferencia.getCuenta());
+		//CuentaValidator.validateCuenta(transferencia.getIdDestino());
 		ImporteValidator.validateImporte(String.valueOf(transferencia.getImporte()));
 		
 		Cuenta cOrigen = cuentaRepository.findOne(transferencia.getCuenta());
@@ -104,7 +104,7 @@ public class TransferenciaController {
 		}
 		
 		//Validacion cuenta
-		CuentaValidator.validateCuenta(numeroCuenta);
+		//CuentaValidator.validateCuenta(numeroCuenta);
 		
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta == null) {
