@@ -1,8 +1,6 @@
 package com.capgemini.piloto.model.dto;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.capgemini.piloto.model.Sucursal;
 
@@ -14,9 +12,6 @@ public class SucursalDTO implements Serializable {
 	private String nombre;
 	private String direccion;
 	private String usuario;
-	private Long idSucursal;
-	private Set<String> dniClientes = new HashSet<>();
-	private Set<String> dniEmpleados = new HashSet<>();
 
 	public SucursalDTO() {
 
@@ -28,8 +23,6 @@ public class SucursalDTO implements Serializable {
 		this.nombre = sucursal.getNombre();
 		this.direccion = sucursal.getDireccion();
 		this.usuario = sucursal.getUsuario();
-		sucursal.getClientes().forEach(cliente -> this.dniClientes.add(cliente.getDni()));
-		sucursal.getEmpleados().forEach(empleado -> this.dniClientes.add(empleado.getDni()));
 	}
 
 	public Long getId() {
@@ -54,30 +47,6 @@ public class SucursalDTO implements Serializable {
 
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
-	}
-
-	public Long getIdSucursal() {
-		return idSucursal;
-	}
-
-	public void setIdSucursal(Long idSucursal) {
-		this.idSucursal = idSucursal;
-	}
-
-	public Set<String> getDniClientes() {
-		return dniClientes;
-	}
-
-	public void setDniClientes(Set<String> dniClientes) {
-		this.dniClientes = dniClientes;
-	}
-
-	public Set<String> getDniEmpleados() {
-		return dniEmpleados;
-	}
-
-	public void setDniEmpleados(Set<String> dniEmpleados) {
-		this.dniEmpleados = dniEmpleados;
 	}
 
 	public String getUsuario() {
