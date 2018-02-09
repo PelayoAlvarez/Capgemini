@@ -15,5 +15,8 @@ public interface ClienteCuentaRepository extends JpaRepository<ClienteCuenta, Cl
 
 	@Query("SELECT c FROM ClienteCuenta c WHERE c.cuenta.numeroCuenta=?1 AND c.mcaHabilitado=true")
 	List<ClienteCuenta> findByNumeroCuenta(String numeroCuenta);
+	
+	@Query("SELECT c FROM ClienteCuenta c WHERE c.cuenta.numeroCuenta=?1 AND c.cliente.dni=?2")
+	ClienteCuenta findByNumeroCuentaAndDni(String numeroCuenta, String dni);
 
 }

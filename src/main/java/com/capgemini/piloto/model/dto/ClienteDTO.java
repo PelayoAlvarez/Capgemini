@@ -140,4 +140,13 @@ public class ClienteDTO implements Serializable {
 		return dni;
 	}
 
+	@Override
+	public String toString() {
+		return "ClienteDTO [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
+				+ ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", cuentas=" + cuentas + ", sucursal="
+				+ sucursal + "]";
+	}
+	
+	
+
 }

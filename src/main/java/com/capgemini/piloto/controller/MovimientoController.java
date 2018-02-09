@@ -63,6 +63,9 @@ public class MovimientoController {
 	@PostMapping("/")
 	public ResponseEntity<Movimiento> addMovimiento(@RequestBody MovimientoDTO movimientoDto,
 			@RequestParam String cuenta) {
+		if(movimientoDto==null) {
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+		}
 		
 		try {
 			CuentaValidator.validateCuenta(cuenta);
