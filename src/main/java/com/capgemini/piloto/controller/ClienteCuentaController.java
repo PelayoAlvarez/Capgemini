@@ -8,6 +8,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -131,8 +132,8 @@ public class ClienteCuentaController {
 	@GetMapping("/asociar")
 	public ResponseEntity<GestionTitularesCuentaDTO> getNoteById(@RequestParam(value = "dni") String dni,
 			@RequestParam(value = "numero_cuenta") String numCuenta) {
-		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
-		ClienteCuenta cc = clienteCuentaRepository.findOne(ccK);
+//		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
+		ClienteCuenta cc = clienteCuentaRepository.findByNumeroCuentaAndDni(numCuenta, dni);
 		if (cc == null) {
 			log.error("GET: No existe relación entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
 					dni, numCuenta);
@@ -144,22 +145,31 @@ public class ClienteCuentaController {
 	}
 
 	// Eliminar asociacion entre cliente y cuenta
-	@DeleteMapping("/notes/{id}")
-	public ResponseEntity<GestionTitularesCuentaDTO> deleteNote(@RequestParam(value = "dni") String dni,
-			@RequestParam(value = "numero_cuenta") String numCuenta) {
-		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
-		ClienteCuenta cc = clienteCuentaRepository.findOne(ccK);
+	@PutMapping("/delete/{cuenta}")
+	public ResponseEntity<TitularDTO> deleteTitular(@PathVariable(name = "cuenta") String numCuenta,
+			@RequestBody TitularDTO datos) {
+		String dni = datos.getDniTitular();
+//		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
+		ClienteCuenta cc = clienteCuentaRepository.findByNumeroCuentaAndDni(numCuenta, dni);
 
 		if (cc == null) {
+			log.error("DELETE: No existe relación entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
+					dni, numCuenta);
 			return ResponseEntity.notFound().build();
 		}
+		
+		if (clienteCuentaRepository.findByNumeroCuenta(numCuenta).size() <= 1) {
+			log.error("DELETE: La cuenta con nº de cuenta [{}] no puede quedarse sin titulares", numCuenta);
+			return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
+		}
+		
 		clienteCuentaHRepository.save(new ClienteCuentaH(cc, cc.getUsuario()));
 		cc.setMcaHabilitado(false);
 		cc.setFecActu(new Date());
 		clienteCuentaRepository.save(cc);
-		log.error("DELETE: Se elimina relación de titularidad entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
+		log.info("DELETE: Se elimina relación de titularidad entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
 				dni, numCuenta);
-		return ResponseEntity.ok(new GestionTitularesCuentaDTO(cc));
+		return ResponseEntity.ok(new TitularDTO(cc.getCliente().getDni(), cc.getCliente().getNombre(), cc.getCliente().getApellidos()));
 	}
 
 	// Obtencion de una asociciacion entre una cuenta y un cliente
