@@ -151,18 +151,19 @@ public class EmpleadoController {
 			logger.error("UPDATE: El empleado con DNI [{}] no existe", empleadoDto.getDni());
 			return ResponseEntity.notFound().build();
 		}
-		EmpleadoH empleadoH = new EmpleadoH(empleado, empleadoDto, empleado.getUsuario());
+		empleado = new Empleado(empleadoDto);
 		Sucursal sucursal = sucursalRep.findById(empleadoDto.getSucursal());
 		if (sucursal == null || !sucursal.getMcaHabilitado()) {
 			logger.error("UPDATE: La sucursal de ID [{}] no existe", empleadoDto.getSucursal());
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
 		}
+		empleado.setSucursal(sucursal);
+		EmpleadoH empleadoH = new EmpleadoH(empleado, empleadoDto, empleado.getUsuario());
 		empleadoH = empleadoHRep.save(empleadoH);
 		if (empleadoH == null) {
 			logger.error("UPDATE: No se ha podido guardar la operación en la tabla histórica");
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		empleado.setSucursal(sucursal);
 		empleado.setFecActu(new Date());
 		empleado = empleadoRep.save(empleado);
 		if (empleado == null) {
@@ -209,8 +210,8 @@ public class EmpleadoController {
 		ComunValidator.validateTexto(empleado.getNombre(), "nombre", 15);
 		ComunValidator.validateTexto(empleado.getApellidos(), "apellidos", 30);
 		ComunValidator.validateTexto(empleado.getDireccion(), "dirección", 50);
-		if (empleado.getFijo() != null) PersonValidator.validateTelefonoFijo(empleado.getFijo());
-		if (empleado.getMovil() != null) PersonValidator.validateTelefonoMovil(empleado.getMovil());
-		if (empleado.getEmail() != null) PersonValidator.validateEmail(empleado.getEmail());
+		if (empleado.getFijo() != null && !empleado.getFijo().equals("")) PersonValidator.validateTelefonoFijo(empleado.getFijo());
+		if (empleado.getMovil() != null && !empleado.getMovil().equals("")) PersonValidator.validateTelefonoMovil(empleado.getMovil());
+		if (empleado.getEmail() != null && !empleado.getEmail().equals("")) PersonValidator.validateEmail(empleado.getEmail());
 	}
 }

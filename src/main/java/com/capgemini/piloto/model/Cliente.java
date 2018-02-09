@@ -94,10 +94,6 @@ public class Cliente implements Serializable {
 		this.sucursal = sucursal;
 	}
 
-	public Cliente(ClienteDTO clienteDTO) {
-		
-	}
-
 	public String getNombre() {
 		return nombre;
 	}
