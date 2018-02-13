@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import com.capgemini.piloto.errors.impl.DniFormatException;
 import com.capgemini.piloto.errors.impl.EmailFormatException;
+import com.capgemini.piloto.errors.impl.PasswordFormatException;
 import com.capgemini.piloto.errors.impl.TelefonoFormatException;
 
 public class PersonValidator {
@@ -64,5 +65,16 @@ public class PersonValidator {
 		
 		if (!matcher.find())
 			throw new TelefonoFormatException("movil");
+	}
+	
+	public static void validatePassword(String password) {
+		Pattern passwordRegex = 
+			    Pattern.compile("^[a-zA-Z0-9]{8,32}*$", 
+			    		Pattern.CASE_INSENSITIVE);
+		
+		Matcher matcher = passwordRegex.matcher(password);
+		if(!matcher.find()) {
+			throw new PasswordFormatException();
+		}
 	}
 }

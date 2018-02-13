@@ -25,6 +25,9 @@ public class ClienteBDTO implements Serializable {
 
 	@NotBlank
 	private String direccion;
+	
+	@NotBlank
+	private String password;
 
 	private String movil;
 
@@ -33,7 +36,7 @@ public class ClienteBDTO implements Serializable {
 	private String email;
 
 	public ClienteBDTO(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
-			String email) {
+			String email, String password) {
 		super();
 		this.dni = dni;
 		this.nombre = nombre;
@@ -42,6 +45,7 @@ public class ClienteBDTO implements Serializable {
 		this.movil = movil;
 		this.fijo = fijo;
 		this.email = email;
+		this.password = password;
 	}
 
 	public ClienteBDTO(Cliente c) {
@@ -52,6 +56,7 @@ public class ClienteBDTO implements Serializable {
 		this.movil = c.getMovil();
 		this.fijo = c.getFijo();
 		this.email = c.getEmail();
+		this.password = c.getPassword();
 	}
 
 	public String getNombre() {
@@ -106,4 +111,11 @@ public class ClienteBDTO implements Serializable {
 		return dni;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

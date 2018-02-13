@@ -35,6 +35,8 @@ public class Cliente implements Serializable {
 	private String apellidos;
 	@Column(name = "Direccion", nullable = false)
 	private String direccion;
+	@Column(name = "Password", nullable = false)
+	private String password;
 	@Column(name = "Movil")
 	private String movil;
 	@Column(name = "Fijo")
@@ -91,6 +93,7 @@ public class Cliente implements Serializable {
 		this.fecCreacion = new Date();
 		this.empleado = "Pepe";
 		this.mCAHabilitado = true;
+		this.password = cliente.getPassword();
 		this.sucursal = sucursal;
 	}
 
@@ -189,6 +192,14 @@ public class Cliente implements Serializable {
 
 	public String getDni() {
 		return dni;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override

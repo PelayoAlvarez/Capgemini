@@ -30,6 +30,9 @@ public class ClienteDTO implements Serializable {
 
 	@NotBlank
 	private String direccion;
+	
+	@NotBlank
+	private String password;
 
 	private String movil;
 
@@ -47,7 +50,7 @@ public class ClienteDTO implements Serializable {
 	}
 	
 	public ClienteDTO(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
-			String email) {
+			String email, String password) {
 		super();
 		this.dni = dni;
 		this.nombre = nombre;
@@ -56,6 +59,7 @@ public class ClienteDTO implements Serializable {
 		this.movil = movil;
 		this.fijo = fijo;
 		this.email = email;
+		this.password = password;
 		this.sucursal=1L;
 	}
 
@@ -138,6 +142,14 @@ public class ClienteDTO implements Serializable {
 
 	public String getDni() {
 		return dni;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override
