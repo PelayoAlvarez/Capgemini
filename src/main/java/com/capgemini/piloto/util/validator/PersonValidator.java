@@ -69,7 +69,7 @@ public class PersonValidator {
 	
 	public static void validatePassword(String password) {
 		Pattern passwordRegex = 
-			    Pattern.compile("^[a-zA-Z0-9]{8,32}*$", 
+			    Pattern.compile("^[a-zA-Z0-9]{8,32}$", 
 			    		Pattern.CASE_INSENSITIVE);
 		
 		Matcher matcher = passwordRegex.matcher(password);

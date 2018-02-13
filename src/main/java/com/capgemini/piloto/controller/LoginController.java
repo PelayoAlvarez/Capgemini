@@ -7,8 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +16,7 @@ import com.capgemini.piloto.errors.impl.DniFormatException;
 import com.capgemini.piloto.errors.impl.PasswordFormatException;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.dto.ClienteDTO;
+import com.capgemini.piloto.model.dto.LoginDTO;
 import com.capgemini.piloto.repository.LoginRepository;
 import com.capgemini.piloto.util.validator.PersonValidator;
 
@@ -29,16 +30,16 @@ public class LoginController {
 	@Autowired
 	private LoginRepository lRepository;
 	
-	@PutMapping("/{dni}{password}")
-	public ResponseEntity<ClienteDTO> login(@PathVariable(value="dni") String dni, 
-			@PathVariable(value="password") String password){
-		if(dni != null && password != null) {
+	@PutMapping("/")
+	public ResponseEntity<ClienteDTO> login(@RequestBody LoginDTO user){
+		if(user.getDni() != null && user.getPassword() != null) {
 			try {
-				PersonValidator.validateDni(dni);
-				PersonValidator.validatePassword(password);
+				PersonValidator.validateDni(user.getDni());
+				PersonValidator.validatePassword(user.getPassword());
 				
-				Cliente cliente = lRepository.findUserWithPassword(dni, password);
+				Cliente cliente = lRepository.findUserWithPassword(user.getDni(), user.getPassword());
 				if(cliente!=null) {
+					logger.info("El cliente con dni: " + cliente.getDni() + " ha iniciado sesión");
 					return new ResponseEntity<>(new ClienteDTO(cliente), new HttpHeaders(), HttpStatus.OK);
 				}
 				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.BAD_REQUEST);
