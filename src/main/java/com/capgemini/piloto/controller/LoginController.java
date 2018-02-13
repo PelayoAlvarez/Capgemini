@@ -7,7 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +30,7 @@ public class LoginController {
 	@Autowired
 	private LoginRepository lRepository;
 	
-	@PutMapping("/")
+	@PostMapping("/")
 	public ResponseEntity<ClienteDTO> login(@RequestBody LoginDTO user){
 		if(user.getDni() != null && user.getPassword() != null) {
 			try {
@@ -55,4 +55,6 @@ public class LoginController {
 		}
 		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	
 }
