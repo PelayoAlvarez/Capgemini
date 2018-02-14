@@ -12,9 +12,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.capgemini.piloto.model.Sucursal;
+import com.capgemini.piloto.model.Empleado;
 
-public class ExportSucursales {
+public class ExportEmpleados {
 	
 	private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -22,20 +22,24 @@ public class ExportSucursales {
 	private Workbook workbook;
 	private Sheet sheet;
 
-	public ExportSucursales(String fileName) {
+	public ExportEmpleados(String fileName) {
 		this.fileName = "C:\\Windows\\Temp\\"+fileName+".xlsx";
 		this.workbook = new XSSFWorkbook();
 		sheet = workbook.createSheet();
 	}
 
-	public boolean export(List<Sucursal> sucursales) {
+	public boolean export(List<Empleado> empleados) {
 		boolean exportado = false;
 		createHeader();
-		for (int i = 1; i <= sucursales.size(); i++) {
+		for (int i = 1; i <= empleados.size(); i++) {
 			Row row = sheet.createRow(i);
-			row.createCell(0).setCellValue(sucursales.get(i - 1).getId());
-			row.createCell(1).setCellValue(sucursales.get(i - 1).getNombre());
-			row.createCell(2).setCellValue(sucursales.get(i - 1).getDireccion());
+			row.createCell(0).setCellValue(empleados.get(i - 1).getDni());
+			row.createCell(1).setCellValue(empleados.get(i - 1).getNombre());
+			row.createCell(2).setCellValue(empleados.get(i - 1).getApellidos());
+			row.createCell(3).setCellValue(empleados.get(i - 1).getDireccion());
+			row.createCell(4).setCellValue(empleados.get(i - 1).getFijo());
+			row.createCell(5).setCellValue(empleados.get(i - 1).getMovil());
+			row.createCell(6).setCellValue(empleados.get(i - 1).getEmail());
 		}
 
 		try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
@@ -57,9 +61,13 @@ public class ExportSucursales {
 
 	private void createHeader() {
 		Row row = sheet.createRow(0);
-		row.createCell(0).setCellValue("Id");
+		row.createCell(0).setCellValue("NIF/NIE");
 		row.createCell(1).setCellValue("Nombre");
-		row.createCell(2).setCellValue("Direccion");
+		row.createCell(2).setCellValue("Apellidos");
+		row.createCell(3).setCellValue("Dirección");
+		row.createCell(4).setCellValue("Teléfono fijo");
+		row.createCell(5).setCellValue("Teléfono móvil");
+		row.createCell(6).setCellValue("Correo electrónico");
 	}
 
 }

@@ -96,9 +96,9 @@ public class SucursalController {
 		ExportSucursales export = new ExportSucursales("prueba");
 		log.info("Se exportan los datos de las sucursales");
 		if(export.export(getAllSucursales())) {
-			return new ResponseEntity(null, HttpStatus.OK);
+			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
-		return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
