@@ -17,11 +17,15 @@ public class LoginDTO implements Serializable{
 	@NotBlank
 	private String password;
 	
+	@NotBlank
+	private String token;
+	
 	LoginDTO() {}
 	
-	public LoginDTO(String dni, String password) {
+	public LoginDTO(String dni, String password, String token) {
 		this.dni = dni;
 		this.password = password;
+		this.token = token;
 	}
 
 	public String getDni() {
@@ -38,5 +42,13 @@ public class LoginDTO implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }

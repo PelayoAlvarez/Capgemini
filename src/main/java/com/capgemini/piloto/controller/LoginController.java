@@ -1,5 +1,7 @@
 package com.capgemini.piloto.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,8 @@ public class LoginController {
 	private LoginRepository lRepository;
 	
 	@PostMapping("/")
-	public ResponseEntity<ClienteDTO> login(@RequestBody LoginDTO user){
-		if(user.getDni() != null && user.getPassword() != null) {
+	public ResponseEntity<ClienteDTO> login(HttpSession session, @RequestBody LoginDTO user){
+		if(user.getDni() != null && user.getPassword() != null && user.getToken() != null) {
 			try {
 				PersonValidator.validateDni(user.getDni());
 				PersonValidator.validatePassword(user.getPassword());
@@ -40,6 +42,7 @@ public class LoginController {
 				Cliente cliente = lRepository.findUserWithPassword(user.getDni(), user.getPassword());
 				if(cliente!=null) {
 					logger.info("El cliente con dni: " + cliente.getDni() + " ha iniciado sesión");
+					session.getServletContext().setAttribute("USER", user);
 					return new ResponseEntity<>(new ClienteDTO(cliente), new HttpHeaders(), HttpStatus.OK);
 				}
 				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.BAD_REQUEST);
@@ -56,5 +59,10 @@ public class LoginController {
 		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	
+	@PostMapping("/out")
+	public void logOut(HttpSession session) {
+		LoginDTO user = (LoginDTO)session.getServletContext().getAttribute("USER");
+		System.out.println("El usuario con dni: " + user.getDni() + " ha finalizado su sesión");
+		session.getServletContext().setAttribute("USER", null);
+	}
 }
