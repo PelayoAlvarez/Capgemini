@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,6 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.capgemini.piloto.model.dto.ClienteDTO;
+import com.capgemini.piloto.model.types.TipoRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -37,6 +40,9 @@ public class Cliente implements Serializable {
 	private String direccion;
 	@Column(name = "Password", nullable = false)
 	private String password;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "Role")
+	private TipoRole role;
 	@Column(name = "Movil")
 	private String movil;
 	@Column(name = "Fijo")
@@ -94,6 +100,7 @@ public class Cliente implements Serializable {
 		this.empleado = "Pepe";
 		this.mCAHabilitado = true;
 		this.password = cliente.getPassword();
+		this.role = TipoRole.USER;
 		this.sucursal = sucursal;
 	}
 
@@ -202,6 +209,10 @@ public class Cliente implements Serializable {
 		this.password = password;
 	}
 
+	public TipoRole getRole() {
+		return role;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -230,9 +241,10 @@ public class Cliente implements Serializable {
 	@Override
 	public String toString() {
 		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
-				+ ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
-				+ fecCreacion + ", empleado=" + empleado + ", mCAHabilitado=" + mCAHabilitado + ", sucursal=" + sucursal
-				+ "]";
+				+ ", password=" + password + ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecActu="
+				+ fecActu + ", fecCreacion=" + fecCreacion + ", empleado=" + empleado + ", mCAHabilitado="
+				+ mCAHabilitado + ", clienteCuenta=" + clienteCuenta + ", sucursal=" + sucursal + "]";
 	}
+
 
 }
