@@ -241,9 +241,10 @@ public class Cliente implements Serializable {
 	@Override
 	public String toString() {
 		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion
-				+ ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecActu=" + fecActu + ", fecCreacion="
-				+ fecCreacion + ", empleado=" + empleado + ", mCAHabilitado=" + mCAHabilitado + ", sucursal=" + sucursal
-				+ "]";
+				+ ", password=" + password + ", movil=" + movil + ", fijo=" + fijo + ", email=" + email + ", fecActu="
+				+ fecActu + ", fecCreacion=" + fecCreacion + ", empleado=" + empleado + ", mCAHabilitado="
+				+ mCAHabilitado + ", clienteCuenta=" + clienteCuenta + ", sucursal=" + sucursal + "]";
 	}
+
 
 }

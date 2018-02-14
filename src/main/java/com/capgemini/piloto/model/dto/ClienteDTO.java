@@ -71,6 +71,7 @@ public class ClienteDTO implements Serializable {
 		this.movil = c.getMovil();
 		this.fijo = c.getFijo();
 		this.email = c.getEmail();
+		this.password= c.getPassword();
 		for (ClienteCuenta cl : c.getClienteCuentas())
 			this.getCuentas().add(new ListarClientesCuentaDTO(cl.getCuenta()));
 		this.sucursal=c.getSucursal().getId();

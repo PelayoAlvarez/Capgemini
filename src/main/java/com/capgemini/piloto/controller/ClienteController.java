@@ -118,6 +118,7 @@ public class ClienteController {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		Cliente cliente = clienteRepository.findByDni(dni);
+		System.out.println(cliente);
 		if (cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
@@ -132,6 +133,7 @@ public class ClienteController {
 	public ResponseEntity<ClienteDTO> updateCliente(@PathVariable(value = "dni") String dni,
 			@Valid @RequestBody ClienteDTO detailsClient) {
 		try {
+			
 			validarCliente(detailsClient);
 			Cliente cliente = clienteRepository.findByDni(dni);
 			if (cliente == null || !cliente.getmCAHabilitado()) {
@@ -145,7 +147,6 @@ public class ClienteController {
 			cliente = new Cliente(detailsClient,sucursal);
 
 			Cliente updateClient = clienteRepository.save(cliente);
-			
 			logger.info("The client was successfully updated");
 			return ResponseEntity.ok(new ClienteDTO(updateClient));
 		}catch(DniFormatException e) {
