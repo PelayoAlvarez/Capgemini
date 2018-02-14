@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.capgemini.piloto.model.types.TipoRole;
+
 public class LoginDTO implements Serializable{
 	
 	/**
@@ -19,6 +21,8 @@ public class LoginDTO implements Serializable{
 	
 	@NotBlank
 	private String token;
+	
+	private TipoRole role;
 	
 	LoginDTO() {}
 	
@@ -50,5 +54,13 @@ public class LoginDTO implements Serializable{
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public TipoRole getRole() {
+		return role;
+	}
+
+	public void setRole(TipoRole role) {
+		this.role = role;
 	}
 }

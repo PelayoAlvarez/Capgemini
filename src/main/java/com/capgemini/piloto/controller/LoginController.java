@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.piloto.errors.impl.DniFormatException;
 import com.capgemini.piloto.errors.impl.PasswordFormatException;
 import com.capgemini.piloto.model.Cliente;
-import com.capgemini.piloto.model.dto.ClienteDTO;
+import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.dto.LoginDTO;
 import com.capgemini.piloto.repository.LoginRepository;
 import com.capgemini.piloto.util.validator.PersonValidator;
@@ -33,7 +33,7 @@ public class LoginController {
 	private LoginRepository lRepository;
 	
 	@PostMapping("/")
-	public ResponseEntity<ClienteDTO> login(HttpSession session, @RequestBody LoginDTO user){
+	public ResponseEntity<LoginDTO> login(HttpSession session, @RequestBody LoginDTO user){
 		if(user.getDni() != null && user.getPassword() != null) {
 			try {
 				PersonValidator.validateDni(user.getDni());
@@ -41,10 +41,19 @@ public class LoginController {
 				
 				Cliente cliente = lRepository.findUserWithPassword(user.getDni(), user.getPassword());
 				if(cliente!=null) {
-					user.setToken(generarToken(user.getDni(), user.getPassword()));
+					user.setToken(generarToken(user));
+					user.setRole(cliente.getRole());
 					logger.info("El cliente con dni: " + cliente.getDni() + " ha iniciado sesión");
 					session.getServletContext().setAttribute("USER", user);
-					return new ResponseEntity<>(new ClienteDTO(cliente), new HttpHeaders(), HttpStatus.OK);
+					return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.OK);
+				}
+				Empleado empleado = lRepository.findEmpleadoWithPassword(user.getDni(), user.getPassword());
+				if(empleado!=null) {
+					user.setToken(generarToken(user));
+					user.setRole(empleado.getRole());
+					logger.info("El empleado con dni: " + empleado.getDni() + " ha iniciado sesión");
+					session.getServletContext().setAttribute("USER", user);
+					return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.OK);
 				}
 				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 			}
@@ -69,7 +78,7 @@ public class LoginController {
 	
 	//--------------------------------------------------------
 	
-	private String generarToken(String dni, String password) {
-		return dni.concat(password);
+	private String generarToken(LoginDTO user) {
+		return user.getDni().concat(user.getPassword());
 	}
 }
