@@ -32,7 +32,7 @@ public class ExportSucursales {
 	public boolean export(List<Sucursal> sucursales) {
 		boolean exportado = false;
 		createHeader();
-		for (int i = 1; i < sucursales.size(); i++) {
+		for (int i = 1; i <= sucursales.size(); i++) {
 			Row row = sheet.createRow(i);
 			row.createCell(0).setCellValue(sucursales.get(i - 1).getId());
 			row.createCell(1).setCellValue(sucursales.get(i - 1).getNombre());
