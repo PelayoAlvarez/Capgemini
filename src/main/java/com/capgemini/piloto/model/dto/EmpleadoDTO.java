@@ -33,6 +33,9 @@ public class EmpleadoDTO implements Serializable {
 	private String movil;
 
 	private String email;
+	
+	@NotBlank
+	private String password;
 
 	@NotBlank
 	private String usuario;
@@ -55,6 +58,7 @@ public class EmpleadoDTO implements Serializable {
 		this.movil = empleado.getMovil();
 		this.email = empleado.getEmail();
 		this.usuario = empleado.getUsuario();
+		this.password = empleado.getPassword();
 		this.transferencias = empleado.getTransferencias().stream().map(Transferencia::getId)
 				.collect(Collectors.toSet());
 		this.sucursal = empleado.getSucursal().getId();
@@ -138,5 +142,13 @@ public class EmpleadoDTO implements Serializable {
 
 	public void setSucursal(Long sucursal) {
 		this.sucursal = sucursal;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

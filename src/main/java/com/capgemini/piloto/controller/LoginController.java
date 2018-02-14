@@ -34,13 +34,14 @@ public class LoginController {
 	
 	@PostMapping("/")
 	public ResponseEntity<ClienteDTO> login(HttpSession session, @RequestBody LoginDTO user){
-		if(user.getDni() != null && user.getPassword() != null && user.getToken() != null) {
+		if(user.getDni() != null && user.getPassword() != null) {
 			try {
 				PersonValidator.validateDni(user.getDni());
 				PersonValidator.validatePassword(user.getPassword());
 				
 				Cliente cliente = lRepository.findUserWithPassword(user.getDni(), user.getPassword());
 				if(cliente!=null) {
+					user.setToken(generarToken(user.getDni(), user.getPassword()));
 					logger.info("El cliente con dni: " + cliente.getDni() + " ha iniciado sesión");
 					session.getServletContext().setAttribute("USER", user);
 					return new ResponseEntity<>(new ClienteDTO(cliente), new HttpHeaders(), HttpStatus.OK);
@@ -64,5 +65,11 @@ public class LoginController {
 		LoginDTO user = (LoginDTO)session.getServletContext().getAttribute("USER");
 		System.out.println("El usuario con dni: " + user.getDni() + " ha finalizado su sesión");
 		session.getServletContext().setAttribute("USER", null);
+	}
+	
+	//--------------------------------------------------------
+	
+	private String generarToken(String dni, String password) {
+		return dni.concat(password);
 	}
 }

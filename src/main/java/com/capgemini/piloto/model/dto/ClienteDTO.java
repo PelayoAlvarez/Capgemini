@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
+import com.capgemini.piloto.model.types.TipoRole;
 
 public class ClienteDTO implements Serializable {
 
@@ -33,6 +34,8 @@ public class ClienteDTO implements Serializable {
 	
 	@NotBlank
 	private String password;
+	
+	private TipoRole role;
 
 	private String movil;
 
@@ -72,6 +75,7 @@ public class ClienteDTO implements Serializable {
 		this.fijo = c.getFijo();
 		this.email = c.getEmail();
 		this.password= c.getPassword();
+		this.role = c.getRole();
 		for (ClienteCuenta cl : c.getClienteCuentas())
 			this.getCuentas().add(new ListarClientesCuentaDTO(cl.getCuenta()));
 		this.sucursal=c.getSucursal().getId();
@@ -151,6 +155,10 @@ public class ClienteDTO implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public TipoRole getRole() {
+		return role;
 	}
 
 	@Override

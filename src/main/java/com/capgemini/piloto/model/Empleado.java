@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +19,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.capgemini.piloto.model.dto.EmpleadoDTO;
+import com.capgemini.piloto.model.types.TipoRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -64,6 +67,13 @@ public class Empleado implements Serializable {
 
 	@Column(name = "Mca_habilitado", nullable = false)
 	private boolean mcaHabilitado;
+	
+	@Column(name = "Password", nullable = false)
+	private String password;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "Role")
+	private TipoRole role;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "empleado")
@@ -84,6 +94,8 @@ public class Empleado implements Serializable {
 		this.fijo = empleado.getFijo();
 		this.movil = empleado.getMovil();
 		this.email = empleado.getEmail();
+		this.password = empleado.getPassword();
+		this.role = TipoRole.EMPLEADO;
 		this.fecActu = this.fecCreacion = new Date();
 		this.usuario = empleado.getUsuario();
 		setMcaHabilitado(true);
@@ -196,6 +208,18 @@ public class Empleado implements Serializable {
 
 	public void setSucursal(Sucursal sucursal) {
 		this.sucursal = sucursal;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public TipoRole getRole() {
+		return role;
 	}
 
 	@Override
