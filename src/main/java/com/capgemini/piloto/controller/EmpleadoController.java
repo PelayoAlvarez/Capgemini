@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.data.export.ExportEmpleados;
 import com.capgemini.piloto.errors.impl.DniFormatException;
 import com.capgemini.piloto.errors.impl.EmailFormatException;
 import com.capgemini.piloto.errors.impl.TelefonoFormatException;
@@ -64,7 +64,7 @@ public class EmpleadoController {
 		}
 		catch (DniFormatException e) {
 			logger.error("DNI incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("FIND: El DNI [{}] es válido", dni);
 		Empleado empleado = empleadoRep.findByDni(dni);
@@ -83,26 +83,26 @@ public class EmpleadoController {
 		}
 		catch (DniFormatException e) {
 			logger.error("DNI incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null,  HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TextoFormatException e) {
 			logger.error("Texto incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null,  HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TelefonoFormatException e) {
 			logger.error("Teléfono incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (EmailFormatException e) {
 			logger.error("Email incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		logger.info("CREATE: Los datos del empleado son válidos");
 		Empleado empleado = empleadoRep.findByDni(empleadoDto.getDni());
 		if (empleado != null && empleado.getMcaHabilitado()) {
 			logger.error("CREATE: No se ha podido crear al empleado con DNI [{}] porque ya existe", empleado.getDni());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
+			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 		} else if (empleado != null && !empleado.getMcaHabilitado()) { 
 			empleado.setMcaHabilitado(true);
 			logger.info("CREATE: El empleado con DNI [{}] ha sido habilitado porque ya existía pero estaba deshabilitado", empleado.getDni());
@@ -110,14 +110,14 @@ public class EmpleadoController {
 		Sucursal sucursal = sucursalRep.findById(empleadoDto.getSucursal());
 		if (sucursal == null || !sucursal.getMcaHabilitado()) {
 			logger.error("CREATE: La sucursal de ID [{}] no existe", empleadoDto.getSucursal());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
+			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 		}
 		empleado = new Empleado(empleadoDto);
 		empleado.setSucursal(sucursal);
 		empleado = empleadoRep.save(empleado);
 		if (empleado == null) {
 			logger.error("CREATE: No se ha podido crear al empleado con DNI [{}]", empleadoDto.getDni());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("CREATE: Se ha creado el empleado con DNI [{}]", empleado.getDni());
 		return ResponseEntity.ok(empleado);
@@ -130,19 +130,19 @@ public class EmpleadoController {
 		}
 		catch (DniFormatException e) {
 			logger.error("DNI incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TextoFormatException e) {
 			logger.error("Texto incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TelefonoFormatException e) {
 			logger.error("Teléfono incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (EmailFormatException e) {
 			logger.error("Email incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		logger.info("UPDATE: Los datos del empleado son válidos");
@@ -155,20 +155,20 @@ public class EmpleadoController {
 		Sucursal sucursal = sucursalRep.findById(empleadoDto.getSucursal());
 		if (sucursal == null || !sucursal.getMcaHabilitado()) {
 			logger.error("UPDATE: La sucursal de ID [{}] no existe", empleadoDto.getSucursal());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
+			return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 		}
 		empleado.setSucursal(sucursal);
 		EmpleadoH empleadoH = new EmpleadoH(empleado, empleadoDto, empleado.getUsuario());
 		empleadoH = empleadoHRep.save(empleadoH);
 		if (empleadoH == null) {
 			logger.error("UPDATE: No se ha podido guardar la operación en la tabla histórica");
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		empleado.setFecActu(new Date());
 		empleado = empleadoRep.save(empleado);
 		if (empleado == null) {
 			logger.error("UPDATE: No se ha podido actualizar al empleado con DNI [{}]", empleadoDto.getDni());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("UPDATE: Se ha actualizado el empleado con DNI [{}]", empleado.getDni());
 		return ResponseEntity.ok(empleado);
@@ -181,7 +181,7 @@ public class EmpleadoController {
 		}
 		catch (DniFormatException e) {
 			logger.error("DNI incorrecto: " + e.getMessage());
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("FIND: El DNI [{}] es válido", dni);
 		Empleado empleado = empleadoRep.findByDni(dni);
@@ -193,16 +193,26 @@ public class EmpleadoController {
 		empleadoH = empleadoHRep.save(empleadoH);
 		if (empleadoH == null) {
 			logger.error("UPDATE: No se ha podido guardar la operación en la tabla histórica");
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		empleado.setMcaHabilitado(false);
 		empleado = empleadoRep.save(empleado);
 		if (empleado == null) {
 			logger.error("DELETE: No se ha podido eliminar al empleado con DNI [{}]", dni);
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("DELETE: Se ha eliminado el empleado con DNI [{}]", empleado.getDni());
 		return ResponseEntity.ok(empleado);
+	}
+	
+	@GetMapping("/export")
+	public ResponseEntity<Empleado> exportEmpleados() {
+		ExportEmpleados export = new ExportEmpleados("prueba");
+		logger.info("EXPORT: Se exportan los datos de los empleados");
+		if(export.export(getAllEmpleados())) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	private void validarEmpleado(EmpleadoDTO empleado) {
