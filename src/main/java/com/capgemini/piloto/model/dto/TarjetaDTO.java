@@ -10,6 +10,7 @@ public class TarjetaDTO implements Serializable {
 	private String numeroTarjeta;
 	private String numeroCuenta;
 	private Double importe;
+	private String dniTitular;
 
 	public TarjetaDTO() {
 
@@ -19,6 +20,7 @@ public class TarjetaDTO implements Serializable {
 		this.numeroTarjeta = tarjeta.getNumeroTarjeta();
 		this.numeroCuenta = tarjeta.getClienteCuenta().getCuenta().getNumeroCuenta();
 		this.importe = tarjeta.getClienteCuenta().getCuenta().getImporte();
+		this.dniTitular = tarjeta.getClienteCuenta().getCliente().getDni();
 	}
 
 	public String getNumeroTarjeta() {
@@ -43,6 +45,14 @@ public class TarjetaDTO implements Serializable {
 
 	public void setImporte(Double importe) {
 		this.importe = importe;
+	}
+
+	public String getDniTitular() {
+		return dniTitular;
+	}
+
+	public void setDniTitular(String dniTitular) {
+		this.dniTitular = dniTitular;
 	}
 
 }
