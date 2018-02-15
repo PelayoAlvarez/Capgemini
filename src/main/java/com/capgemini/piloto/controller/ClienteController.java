@@ -71,7 +71,6 @@ public class ClienteController {
 	@PostMapping("/clientes")
 	public ResponseEntity<ClienteDTO> createClient(@Valid @RequestBody ClienteDTO clienteDTO, @RequestParam Long sucursalId) {
 		try {
-			System.out.println(clienteDTO.toString());
 			validarCliente(clienteDTO);
 			Cliente cliente1 = clienteRepository.findByDni(clienteDTO.getDni());
 			if (cliente1 != null && cliente1.getmCAHabilitado()) {

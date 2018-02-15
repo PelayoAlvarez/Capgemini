@@ -18,7 +18,6 @@ import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.dto.GestionTitularesCuentaDTO;
 import com.capgemini.piloto.model.dto.TitularDTO;
 import com.capgemini.piloto.model.historico.ClienteCuentaH;
-import com.capgemini.piloto.model.types.ClienteCuentaKey;
 import com.capgemini.piloto.repository.ClienteCuentaRepository;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.CuentaRepository;
@@ -61,7 +60,7 @@ public class ClienteCuentaController {
         }
         
         ClienteCuenta cc = new ClienteCuenta(cliente, cuenta);
-        cc = clienteCuentaRepository.save(cc);
+        clienteCuentaRepository.save(cc);
         return ResponseEntity.ok(new TitularDTO(cliente.getDni(), cliente.getNombre(), cliente.getApellidos()));    
     }
 
@@ -132,7 +131,6 @@ public class ClienteCuentaController {
 	@GetMapping("/asociar")
 	public ResponseEntity<GestionTitularesCuentaDTO> getNoteById(@RequestParam(value = "dni") String dni,
 			@RequestParam(value = "numero_cuenta") String numCuenta) {
-//		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
 		ClienteCuenta cc = clienteCuentaRepository.findByNumeroCuentaAndDni(numCuenta, dni);
 		if (cc == null) {
 			log.error("GET: No existe relación entre el cliente con DNI [{}] y la cuenta con nº de cuenta [{}]",
@@ -149,7 +147,6 @@ public class ClienteCuentaController {
 	public ResponseEntity<TitularDTO> deleteTitular(@PathVariable(name = "cuenta") String numCuenta,
 			@RequestBody TitularDTO datos) {
 		String dni = datos.getDniTitular();
-//		ClienteCuentaKey ccK = new ClienteCuentaKey(dni, numCuenta);
 		ClienteCuenta cc = clienteCuentaRepository.findByNumeroCuentaAndDni(numCuenta, dni);
 
 		if (cc == null) {
