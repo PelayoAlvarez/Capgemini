@@ -69,7 +69,7 @@ public class TransferenciaController {
 		Cuenta cDestino = cuentaRepository.findOne(transferencia.getIdDestino());
 		
 
-		if (cOrigen == null || cDestino == null) {
+		if (cOrigen == null || cDestino == null || cDestino.getNumeroCuenta().equals(cOrigen.getNumeroCuenta()) || (cOrigen.getImporte() - transferencia.getImporte()<0)) {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -98,18 +98,16 @@ public class TransferenciaController {
 	@GetMapping("/listarTransferenciaId/{cuenta}")
 	public ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>> listarTransfer(
 			@PathVariable(value = "cuenta") String numeroCuenta) {
-		if (numeroCuenta == null ) {
-			return new ResponseEntity<>(null, new HttpHeaders(),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+		if (numeroCuenta == null) {
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		//Validacion cuenta
+
+		// Validacion cuenta
 		CuentaValidator.validateCuenta(numeroCuenta);
-		
+
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta == null) {
-			return new ResponseEntity<>(null, new HttpHeaders(),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		List<Transferencia> listaTrasnfer = transferenciaRepository.findByCuenta(cuenta);
 
@@ -117,8 +115,7 @@ public class TransferenciaController {
 		for (Transferencia transferencia : listaTrasnfer) {
 			transfers.add(new ListarTransferenciasNumeroCuentaDTO(transferencia));
 		}
-		return new ResponseEntity<>(transfers, new HttpHeaders(),
-				HttpStatus.OK);
+		return new ResponseEntity<>(transfers, new HttpHeaders(), HttpStatus.OK);
 	}
 
 }
