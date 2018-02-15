@@ -50,6 +50,8 @@ public class EmpleadoController {
 
 	@Autowired
 	private SucursalRepository sucursalRep;
+	
+	private static final String DNI = "DNI incorrecto";
 
 	@GetMapping("/")
 	public List<Empleado> getAllEmpleados() {
@@ -63,7 +65,7 @@ public class EmpleadoController {
 			PersonValidator.validateDni(dni);
 		}
 		catch (DniFormatException e) {
-			logger.error("DNI incorrecto: " + e.getMessage());
+			logger.error(DNI + e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("FIND: El DNI [{}] es válido", dni);
@@ -82,7 +84,7 @@ public class EmpleadoController {
 			validarEmpleado(empleadoDto);
 		}
 		catch (DniFormatException e) {
-			logger.error("DNI incorrecto: " + e.getMessage());
+			logger.error( DNI + e.getMessage());
 			return new ResponseEntity<>(null,  HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TextoFormatException e) {
@@ -129,7 +131,7 @@ public class EmpleadoController {
 			validarEmpleado(empleadoDto);
 		}
 		catch (DniFormatException e) {
-			logger.error("DNI incorrecto: " + e.getMessage());
+			logger.error(DNI+ e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TextoFormatException e) {
@@ -180,7 +182,7 @@ public class EmpleadoController {
 			PersonValidator.validateDni(dni);
 		}
 		catch (DniFormatException e) {
-			logger.error("DNI incorrecto: " + e.getMessage());
+			logger.error(DNI + e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info("FIND: El DNI [{}] es válido", dni);

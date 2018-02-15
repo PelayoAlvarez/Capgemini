@@ -1,5 +1,6 @@
 package com.capgemini.piloto.controller;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,15 +75,15 @@ public class MovimientoController {
 			ComunValidator.validateTexto(movimientoDto.getUsuario(), "usuario", 20);
 		}
 		catch(NumeroCuentaFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("NumeroCuentaFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch(ImporteFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("ImporteFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TextoFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("TextoFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -107,7 +108,6 @@ public class MovimientoController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Movimiento> removeMovimiento(@PathVariable(value = "id") String id) {
-		System.out.println(id);
 		Movimiento movimiento = movimientoRepository.findOne(Long.parseLong(id));
 		if (movimiento == null) {
 			logger.info(NOT_FOUND);
@@ -136,15 +136,17 @@ public class MovimientoController {
 			ComunValidator.validateTexto(movimientoDetails.getUsuario(), "usuario", 20);
 		}
 		catch(ImporteFormatException e) {
-			logger.error(e.getMessage());
+		
+			logger.warn("ImporteFormatException", e);
+		
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch(TextoFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("TextoFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch(NumeroCuentaFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("NumeroCuentaFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		

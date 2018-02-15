@@ -72,7 +72,7 @@ public class LoginController {
 	@PostMapping("/out")
 	public void logOut(HttpSession session) {
 		LoginDTO user = (LoginDTO)session.getServletContext().getAttribute("USER");
-		System.out.println("El usuario con dni: " + user.getDni() + " ha finalizado su sesión");
+		logger.info("El usuario con dni: " + user.getDni() + " ha finalizado su sesión");
 		session.getServletContext().setAttribute("USER", null);
 	}
 	

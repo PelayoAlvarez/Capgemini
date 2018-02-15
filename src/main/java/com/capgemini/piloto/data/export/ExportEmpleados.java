@@ -51,9 +51,9 @@ public class ExportEmpleados {
 			exportado = true;
 			
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			log.warn("FileNotFoundException", e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.warn("IOException", e);
 		}
 		return exportado;
 
