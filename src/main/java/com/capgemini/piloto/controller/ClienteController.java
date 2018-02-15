@@ -118,7 +118,6 @@ public class ClienteController {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		Cliente cliente = clienteRepository.findByDni(dni);
-		System.out.println(cliente);
 		if (cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
