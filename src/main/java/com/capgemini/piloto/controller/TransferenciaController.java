@@ -47,10 +47,11 @@ public class TransferenciaController {
 	private CuentaHRepository cuentaHRepository;
 
 	// Get All Transfers
-	@GetMapping("/listarTransferenciasHabilitados")
-	public List<ListarTransferenciasNumeroCuentaDTO> getAllTransferencias() {
+	@GetMapping("/listarTransferenciasHabilitados/{cuenta}")
+	public List<ListarTransferenciasNumeroCuentaDTO> getAllTransferencias(@PathVariable(value = "cuenta") String numeroCuenta) {
 		logger.info("Listado de todas las transferencias");
-		List<Transferencia> trans = transferenciaRepository.findMCA();
+		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
+		List<Transferencia> trans = transferenciaRepository.findByCuenta(cuenta);
 		List<ListarTransferenciasNumeroCuentaDTO> transferDTO = new ArrayList<>();
 		for (Transferencia transfer : trans) {
 			transferDTO.add(new ListarTransferenciasNumeroCuentaDTO(transfer));
@@ -125,11 +126,11 @@ public class TransferenciaController {
 	}
 	
 	//Exportar transferencias
-	@GetMapping("/export")
-	public ResponseEntity<Transferencia> exportTransferencias() {
+	@GetMapping("/export/{cuenta}")
+	public ResponseEntity<Transferencia> exportTransferencias(@PathVariable(value = "cuenta") String numeroCuenta) {
 		ExportTransferencias  export = new ExportTransferencias("PruebaTransferencias");
 		logger.info("EXPORT: Se exportan los datos de las transferencias");
-		if(export.export(getAllTransferencias())) {
+		if(export.export(getAllTransferencias(numeroCuenta))) {
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
