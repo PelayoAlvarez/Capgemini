@@ -59,17 +59,17 @@ public class TransferenciaController {
 		if (transferencia == null) {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		//Validacion de los datos de la transferencia
+
+		// Validacion de los datos de la transferencia
 		CuentaValidator.validateCuenta(transferencia.getCuenta());
 		CuentaValidator.validateCuenta(transferencia.getIdDestino());
 		ImporteValidator.validateImporte(String.valueOf(transferencia.getImporte()));
-		
+
 		Cuenta cOrigen = cuentaRepository.findOne(transferencia.getCuenta());
 		Cuenta cDestino = cuentaRepository.findOne(transferencia.getIdDestino());
-		
 
-		if (cOrigen == null || cDestino == null || cDestino.getNumeroCuenta().equals(cOrigen.getNumeroCuenta()) || (cOrigen.getImporte() - transferencia.getImporte()<0)) {
+		if (cOrigen == null || cDestino == null || cDestino.getNumeroCuenta().equals(cOrigen.getNumeroCuenta())
+				|| (cOrigen.getImporte() - transferencia.getImporte() < 0)) {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
