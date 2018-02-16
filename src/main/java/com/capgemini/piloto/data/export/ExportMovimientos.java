@@ -30,7 +30,7 @@ public class ExportMovimientos {
 	
 	public boolean export(List<Movimiento> movimientos) {
 		boolean exportado = false;
-		if(movimientos==null) {
+		if(movimientos.isEmpty()) {
 			return exportado;
 		}
 		createHeader();
