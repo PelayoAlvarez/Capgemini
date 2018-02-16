@@ -35,6 +35,7 @@ import com.capgemini.piloto.model.historico.ClienteH;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.SucursalRepository;
 import com.capgemini.piloto.repository.historico.ClienteHRepository;
+import com.capgemini.piloto.util.encrypter.Encrypter;
 import com.capgemini.piloto.util.validator.ComunValidator;
 import com.capgemini.piloto.util.validator.PersonValidator;
 
@@ -84,6 +85,7 @@ public class ClienteController {
 				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
 		}
 			clienteDTO.setSucursal(sucursalId);
+			clienteDTO.setPassword(Encrypter.getInstance().encriptar(clienteDTO.getPassword()));
 			Cliente c2 = clienteRepository.save(new Cliente(clienteDTO, sucursal));
 			if (c2 == null) {
 				logger.error("The client was not created");

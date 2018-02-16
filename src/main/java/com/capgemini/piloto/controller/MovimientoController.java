@@ -37,6 +37,7 @@ import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.MovimientoRepository;
 import com.capgemini.piloto.repository.historico.CuentaHRepository;
 import com.capgemini.piloto.repository.historico.MovimientoHRepository;
+import com.capgemini.piloto.util.importe.CalcularImporte;
 import com.capgemini.piloto.util.validator.ComunValidator;
 import com.capgemini.piloto.util.validator.CuentaValidator;
 import com.capgemini.piloto.util.validator.ImporteValidator;
@@ -163,7 +164,7 @@ public class MovimientoController {
 			return ResponseEntity.notFound().build();
 		}
 
-		calcularImporte(cuenta, movimiento, movimientoDetails);
+		CalcularImporte.calcular(cuenta, movimiento, movimientoDetails);
 
 		movimientoRepositoryH.save(new MovimientoH(movimiento, movimiento.getUsuario()));
 		movimiento.setDescripcion(movimientoDetails.getDescripcion());
@@ -229,72 +230,7 @@ public class MovimientoController {
 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	// ---------------------------------------------------------------------------------------------------------------
-
-	private boolean calcularImporte(Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
-		boolean estado = true;
-		double saldo = cuenta.getImporte();
-		if (movimiento.getTipo().equals(movimientoDetails.getTipo())) {
-			if (movimiento.getImporte() != movimientoDetails.getImporte()) {
-				double valor = Math.abs(movimiento.getImporte() - movimientoDetails.getImporte());
-				if (movimientoDetails.getTipo() == TipoMovimiento.CARGO) {
-					if(cuenta.getImporte() > 0) {
-						cuenta.setImporte(cuenta.getImporte() - valor);
-					}
-					else {
-						estado = false;
-					}
-				} else {
-					cuenta.setImporte(cuenta.getImporte() + valor);
-				}
-			}
-		} else {
-			estado = calculoAlternativoImporte(saldo,cuenta, movimiento, movimientoDetails);
-		}
-		return estado;		
-	}
-
-	private boolean calculoAlternativoImporte(double saldo, Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
-		boolean estado=true;
-		double valor = 0;
-		if (movimiento.getImporte() != movimientoDetails.getImporte()) {
-			valor = movimiento.getImporte() + movimientoDetails.getImporte();
-			if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
-				cuenta.setImporte(cuenta.getImporte() + valor);
-			} else {
-				if(cuenta.getImporte() > 0) {
-					cuenta.setImporte(cuenta.getImporte() - valor);
-				}
-				else {
-					estado=false;
-				}
-			}
-		} else {
-			if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
-				cuenta.setImporte(cuenta.getImporte() + 2 * movimientoDetails.getImporte());
-			} else {
-				if(cuenta.getImporte() > 0) {
-					cuenta.setImporte(cuenta.getImporte() - 2 * movimientoDetails.getImporte());
-				}
-				else {
-					estado = false;
-				}
-			}
-		}
-		if(estado = true) {
-			actualizarCuenta(saldo, cuenta);
-		}
-		return estado;
-	}
-	private void actualizarCuenta(double saldo, Cuenta cuenta) {
-		if (saldo != cuenta.getImporte()) {
-			CuentaH ch = new CuentaH(cuenta, cuenta.getUsuario());
-			ch.setImporte(saldo);
-			cuentaRepositoryH.save(ch);
-			cuentaRepository.save(cuenta);
-		}
-	}
-	
+	// ---------------------------------------------------------------------------------------------------------------	
 	private List<Movimiento> getMovimientosByCuenta(String numCuenta){
 		return movimientoRepository.findByNumeroCuenta(numCuenta);
 	}
