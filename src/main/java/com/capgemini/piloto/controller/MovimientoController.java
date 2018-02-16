@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.data.export.ExportMovimientos;
 import com.capgemini.piloto.errors.impl.ImporteFormatException;
 import com.capgemini.piloto.errors.impl.NumeroCuentaFormatException;
 import com.capgemini.piloto.errors.impl.TextoFormatException;
@@ -89,12 +90,17 @@ public class MovimientoController {
 		
 		Cuenta cu = cuentaRepository.findByNumeroCuenta(cuenta);
 		Movimiento movimiento = new Movimiento(movimientoDto, cu);
-		movimiento = movimientoRepository.save(movimiento);
-		if (movimiento == null) {
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		if(cu.getImporte() >= movimiento.getImporte()) {
+			movimiento = movimientoRepository.save(movimiento);
+			if (movimiento == null) {
+				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			cuentaRepositoryH.save(new CuentaH(cu, cu.getUsuario()));
 		}
-
-		cuentaRepositoryH.save(new CuentaH(cu, cu.getUsuario()));
+		else {
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.I_AM_A_TEAPOT);
+		}
 
 		if (movimiento.getTipo() == TipoMovimiento.ABONO) {
 			cu.setImporte(cu.getImporte() + movimiento.getImporte());
@@ -212,44 +218,73 @@ public class MovimientoController {
 		}
 		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@GetMapping("/export/{cuenta}")
+	public ResponseEntity<Movimiento> exportTransferencias(@PathVariable(value = "cuenta") String numeroCuenta) {
+		ExportMovimientos export = new ExportMovimientos("Movimientos");
+		logger.info("EXPORT: Se exportan los datos de los movimientos");
+		if(export.export(getMovimientosByCuenta(numeroCuenta))) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 	// ---------------------------------------------------------------------------------------------------------------
 
-	private void calcularImporte(Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
+	private boolean calcularImporte(Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
+		boolean estado = true;
 		double saldo = cuenta.getImporte();
 		if (movimiento.getTipo().equals(movimientoDetails.getTipo())) {
 			if (movimiento.getImporte() != movimientoDetails.getImporte()) {
 				double valor = Math.abs(movimiento.getImporte() - movimientoDetails.getImporte());
 				if (movimientoDetails.getTipo() == TipoMovimiento.CARGO) {
-					cuenta.setImporte(cuenta.getImporte() - valor);
+					if(cuenta.getImporte() > 0) {
+						cuenta.setImporte(cuenta.getImporte() - valor);
+					}
+					else {
+						estado = false;
+					}
 				} else {
 					cuenta.setImporte(cuenta.getImporte() + valor);
 				}
 			}
 		} else {
-			calculoAlternativoImporte(saldo,cuenta, movimiento, movimientoDetails);
+			estado = calculoAlternativoImporte(saldo,cuenta, movimiento, movimientoDetails);
 		}
-
-		
+		return estado;		
 	}
 
-	private void calculoAlternativoImporte(double saldo, Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
+	private boolean calculoAlternativoImporte(double saldo, Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
+		boolean estado=true;
 		double valor = 0;
 		if (movimiento.getImporte() != movimientoDetails.getImporte()) {
 			valor = movimiento.getImporte() + movimientoDetails.getImporte();
 			if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
 				cuenta.setImporte(cuenta.getImporte() + valor);
 			} else {
-				cuenta.setImporte(cuenta.getImporte() - valor);
+				if(cuenta.getImporte() > 0) {
+					cuenta.setImporte(cuenta.getImporte() - valor);
+				}
+				else {
+					estado=false;
+				}
 			}
 		} else {
 			if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
 				cuenta.setImporte(cuenta.getImporte() + 2 * movimientoDetails.getImporte());
 			} else {
-				cuenta.setImporte(cuenta.getImporte() - 2 * movimientoDetails.getImporte());
+				if(cuenta.getImporte() > 0) {
+					cuenta.setImporte(cuenta.getImporte() - 2 * movimientoDetails.getImporte());
+				}
+				else {
+					estado = false;
+				}
 			}
 		}
-		actualizarCuenta(saldo, cuenta);
+		if(estado = true) {
+			actualizarCuenta(saldo, cuenta);
+		}
+		return estado;
 	}
 	private void actualizarCuenta(double saldo, Cuenta cuenta) {
 		if (saldo != cuenta.getImporte()) {
@@ -258,5 +293,9 @@ public class MovimientoController {
 			cuentaRepositoryH.save(ch);
 			cuentaRepository.save(cuenta);
 		}
+	}
+	
+	private List<Movimiento> getMovimientosByCuenta(String numCuenta){
+		return movimientoRepository.findByNumeroCuenta(numCuenta);
 	}
 }

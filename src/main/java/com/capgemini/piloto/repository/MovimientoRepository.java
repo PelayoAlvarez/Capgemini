@@ -15,4 +15,8 @@ public interface MovimientoRepository extends JpaRepository<Movimiento, Long> {
 	@Query("SELECT m FROM Movimiento m WHERE m.cuentaAsociada=?1 "
 			+ "AND m.mCAHabilitado=true ORDER BY m.fechahora DESC")
 	List<Movimiento> findByCuentaAsociada(Cuenta cuenta);
+	
+	@Query("SELECT m FROM Movimiento m WHERE m.cuentaAsociada.numeroCuenta=?1 "
+			+ "AND m.mCAHabilitado=true ORDER BY m.fechahora DESC")
+	List<Movimiento> findByNumeroCuenta(String cuenta);
 }
