@@ -29,7 +29,6 @@ import com.capgemini.piloto.errors.impl.TelefonoFormatException;
 import com.capgemini.piloto.errors.impl.TextoFormatException;
 import com.capgemini.piloto.model.Cliente;
 import com.capgemini.piloto.model.ClienteCuenta;
-import com.capgemini.piloto.model.Empleado;
 import com.capgemini.piloto.model.Sucursal;
 import com.capgemini.piloto.model.dto.ClienteDTO;
 import com.capgemini.piloto.model.historico.ClienteH;
@@ -194,7 +193,7 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/export")
-	public ResponseEntity<Empleado> exportEmpleados() {
+	public ResponseEntity<Cliente> exportClientes() {
 		ExportClientes  export = new ExportClientes("prueba");
 		logger.info("EXPORT: Se exportan los datos de los empleados");
 		if(export.export(getAllClientes())) {
