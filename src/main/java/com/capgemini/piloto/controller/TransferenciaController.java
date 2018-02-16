@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.data.export.ExportTransferencias;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.dto.GenerarTransferenciaCuentaDTO;
@@ -47,9 +48,14 @@ public class TransferenciaController {
 
 	// Get All Transfers
 	@GetMapping("/listarTransferenciasHabilitados")
-	public List<Transferencia> getAllTransferencias() {
-		logger.info("Request every active transfers");
-		return transferenciaRepository.findMCA();
+	public List<ListarTransferenciasNumeroCuentaDTO> getAllTransferencias() {
+		logger.info("Listado de todas las transferencias");
+		List<Transferencia> trans = transferenciaRepository.findMCA();
+		List<ListarTransferenciasNumeroCuentaDTO> transferDTO = new ArrayList<>();
+		for (Transferencia transfer : trans) {
+			transferDTO.add(new ListarTransferenciasNumeroCuentaDTO(transfer));
+		}
+		return transferDTO;
 	}
 
 	// Create a new Transfer
@@ -116,6 +122,17 @@ public class TransferenciaController {
 			transfers.add(new ListarTransferenciasNumeroCuentaDTO(transferencia));
 		}
 		return new ResponseEntity<>(transfers, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	//Exportar transferencias
+	@GetMapping("/export")
+	public ResponseEntity<Transferencia> exportTransferencias() {
+		ExportTransferencias  export = new ExportTransferencias("PruebaTransferencias");
+		logger.info("EXPORT: Se exportan los datos de las transferencias");
+		if(export.export(getAllTransferencias())) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
