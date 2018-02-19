@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.piloto.model.ClienteCuenta;
 import com.capgemini.piloto.model.Tarjeta;
 import com.capgemini.piloto.model.dto.CrearTarjetaDTO;
+import com.capgemini.piloto.model.dto.DeleteTarjetaDTO;
 import com.capgemini.piloto.model.dto.TarjetaDTO;
 import com.capgemini.piloto.model.historico.TarjetaH;
 import com.capgemini.piloto.model.types.ClienteCuentaKey;
@@ -46,7 +48,7 @@ public class TarjetaController {
 
 	@GetMapping
 	public List<TarjetaDTO> getAllTarjetas() {
-		List<Tarjeta> tarjetas = tarjetaRep.findAll();
+		List<Tarjeta> tarjetas = tarjetaRep.findByMcaHabilitado();
 		List<TarjetaDTO> tarjetasDto = new ArrayList<>();
 		tarjetas.forEach(tarjeta -> tarjetasDto.add(new TarjetaDTO(tarjeta)));
 		log.info("GET: Se obtienen todas las tarjetas");
@@ -100,6 +102,16 @@ public class TarjetaController {
 		log.info("DELETE: Se ha eliminado la tarjeta con nº [{}] del cliente con DNI [{}]",
 				tarjeta.getNumeroTarjeta(), tarjeta.getClienteCuenta().getCliente().getDni());
 		return ResponseEntity.ok(tarjeta);
+	}
+	
+	@PutMapping("/delete")
+	public ResponseEntity<String> deleteTarjetas(@RequestBody DeleteTarjetaDTO tarjetas) {
+		
+		
+		for (String tarjeta : tarjetas.getNumeroTarjetas()) {
+			deleteTarjeta(tarjeta);
+		}
+		return ResponseEntity.ok().build();
 	}
 
 }
