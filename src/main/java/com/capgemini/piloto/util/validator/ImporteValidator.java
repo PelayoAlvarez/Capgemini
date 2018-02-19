@@ -19,7 +19,8 @@ public class ImporteValidator {
 		
 		Matcher matcher = importeRegex.matcher(importe);
 		
-		if (!matcher.find())
+		if (!matcher.find()) {
 			throw new ImporteFormatException();
+		}
 	}
 }

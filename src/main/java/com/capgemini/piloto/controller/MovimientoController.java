@@ -72,7 +72,7 @@ public class MovimientoController {
 		
 		try {
 			CuentaValidator.validateCuenta(cuenta);
-			ImporteValidator.validateImporte(String.valueOf(movimientoDto.getImporte()));
+			ImporteValidator.validateImporte(String.valueOf(movimientoDto.getImporte().longValue()));
 			ComunValidator.validateTexto(movimientoDto.getDescripcion(), "descripción", 60);
 			ComunValidator.validateTexto(movimientoDto.getUsuario(), "usuario", 20);
 		}
@@ -215,6 +215,7 @@ public class MovimientoController {
 			for (Movimiento m : listaMovs) {
 				movimientos.add(new MisMovimientosDTO(m));
 			}
+			logger.info("Se obtienen los movimientos de la cuenta [" + numeroCuenta + "]");
 			return new ResponseEntity<>(movimientos, new HttpHeaders(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
