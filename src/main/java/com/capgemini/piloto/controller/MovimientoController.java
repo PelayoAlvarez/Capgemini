@@ -1,5 +1,6 @@
 package com.capgemini.piloto.controller;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.data.export.ExportMovimientos;
 import com.capgemini.piloto.errors.impl.ImporteFormatException;
 import com.capgemini.piloto.errors.impl.NumeroCuentaFormatException;
 import com.capgemini.piloto.errors.impl.TextoFormatException;
@@ -35,6 +37,7 @@ import com.capgemini.piloto.repository.CuentaRepository;
 import com.capgemini.piloto.repository.MovimientoRepository;
 import com.capgemini.piloto.repository.historico.CuentaHRepository;
 import com.capgemini.piloto.repository.historico.MovimientoHRepository;
+import com.capgemini.piloto.util.importe.CalcularImporte;
 import com.capgemini.piloto.util.validator.ComunValidator;
 import com.capgemini.piloto.util.validator.CuentaValidator;
 import com.capgemini.piloto.util.validator.ImporteValidator;
@@ -74,26 +77,31 @@ public class MovimientoController {
 			ComunValidator.validateTexto(movimientoDto.getUsuario(), "usuario", 20);
 		}
 		catch(NumeroCuentaFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("NumeroCuentaFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch(ImporteFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("ImporteFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TextoFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("TextoFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		Cuenta cu = cuentaRepository.findByNumeroCuenta(cuenta);
 		Movimiento movimiento = new Movimiento(movimientoDto, cu);
-		movimiento = movimientoRepository.save(movimiento);
-		if (movimiento == null) {
-			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+		
+		if(cu.getImporte() >= movimiento.getImporte()) {
+			movimiento = movimientoRepository.save(movimiento);
+			if (movimiento == null) {
+				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			cuentaRepositoryH.save(new CuentaH(cu, cu.getUsuario()));
 		}
-
-		cuentaRepositoryH.save(new CuentaH(cu, cu.getUsuario()));
+		else {
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.I_AM_A_TEAPOT);
+		}
 
 		if (movimiento.getTipo() == TipoMovimiento.ABONO) {
 			cu.setImporte(cu.getImporte() + movimiento.getImporte());
@@ -107,7 +115,6 @@ public class MovimientoController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Movimiento> removeMovimiento(@PathVariable(value = "id") String id) {
-		System.out.println(id);
 		Movimiento movimiento = movimientoRepository.findOne(Long.parseLong(id));
 		if (movimiento == null) {
 			logger.info(NOT_FOUND);
@@ -136,15 +143,17 @@ public class MovimientoController {
 			ComunValidator.validateTexto(movimientoDetails.getUsuario(), "usuario", 20);
 		}
 		catch(ImporteFormatException e) {
-			logger.error(e.getMessage());
+		
+			logger.warn("ImporteFormatException", e);
+		
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch(TextoFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("TextoFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch(NumeroCuentaFormatException e) {
-			logger.error(e.getMessage());
+			logger.warn("NumeroCuentaFormatException", e);
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -155,7 +164,7 @@ public class MovimientoController {
 			return ResponseEntity.notFound().build();
 		}
 
-		calcularImporte(cuenta, movimiento, movimientoDetails);
+		CalcularImporte.calcular(cuenta, movimiento, movimientoDetails);
 
 		movimientoRepositoryH.save(new MovimientoH(movimiento, movimiento.getUsuario()));
 		movimiento.setDescripcion(movimientoDetails.getDescripcion());
@@ -210,51 +219,19 @@ public class MovimientoController {
 		}
 		return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------
-
-	private void calcularImporte(Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
-		double saldo = cuenta.getImporte();
-		if (movimiento.getTipo().equals(movimientoDetails.getTipo())) {
-			if (movimiento.getImporte() != movimientoDetails.getImporte()) {
-				double valor = Math.abs(movimiento.getImporte() - movimientoDetails.getImporte());
-				if (movimientoDetails.getTipo() == TipoMovimiento.CARGO) {
-					cuenta.setImporte(cuenta.getImporte() - valor);
-				} else {
-					cuenta.setImporte(cuenta.getImporte() + valor);
-				}
-			}
-		} else {
-			calculoAlternativoImporte(saldo,cuenta, movimiento, movimientoDetails);
+	
+	@GetMapping("/export/{cuenta}")
+	public ResponseEntity<Movimiento> exportTransferencias(@PathVariable(value = "cuenta") String numeroCuenta) {
+		ExportMovimientos export = new ExportMovimientos("Movimientos");
+		logger.info("EXPORT: Se exportan los datos de los movimientos");
+		if(export.export(getMovimientosByCuenta(numeroCuenta))) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
-
-		
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	private void calculoAlternativoImporte(double saldo, Cuenta cuenta, Movimiento movimiento, MovimientoDTO movimientoDetails) {
-		double valor = 0;
-		if (movimiento.getImporte() != movimientoDetails.getImporte()) {
-			valor = movimiento.getImporte() + movimientoDetails.getImporte();
-			if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
-				cuenta.setImporte(cuenta.getImporte() + valor);
-			} else {
-				cuenta.setImporte(cuenta.getImporte() - valor);
-			}
-		} else {
-			if (movimientoDetails.getTipo() == TipoMovimiento.ABONO) {
-				cuenta.setImporte(cuenta.getImporte() + 2 * movimientoDetails.getImporte());
-			} else {
-				cuenta.setImporte(cuenta.getImporte() - 2 * movimientoDetails.getImporte());
-			}
-		}
-		actualizarCuenta(saldo, cuenta);
-	}
-	private void actualizarCuenta(double saldo, Cuenta cuenta) {
-		if (saldo != cuenta.getImporte()) {
-			CuentaH ch = new CuentaH(cuenta, cuenta.getUsuario());
-			ch.setImporte(saldo);
-			cuentaRepositoryH.save(ch);
-			cuentaRepository.save(cuenta);
-		}
+	// ---------------------------------------------------------------------------------------------------------------	
+	private List<Movimiento> getMovimientosByCuenta(String numCuenta){
+		return movimientoRepository.findByNumeroCuenta(numCuenta);
 	}
 }

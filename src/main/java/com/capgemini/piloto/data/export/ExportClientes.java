@@ -12,34 +12,33 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.capgemini.piloto.model.Empleado;
+import com.capgemini.piloto.model.dto.ClienteDTO;
 
-public class ExportEmpleados {
-	
+public class ExportClientes {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private String fileName;
 	private Workbook workbook;
 	private Sheet sheet;
 
-	public ExportEmpleados(String fileName) {
+	public ExportClientes(String fileName) {
 		this.fileName = "C:\\Windows\\Temp\\"+fileName+".xlsx";
 		this.workbook = new XSSFWorkbook();
 		sheet = workbook.createSheet();
 	}
 
-	public boolean export(List<Empleado> empleados) {
+	public boolean export(List<ClienteDTO> list) {
 		boolean exportado = false;
 		createHeader();
-		for (int i = 1; i <= empleados.size(); i++) {
+		for (int i = 1; i <= list.size(); i++) {
 			Row row = sheet.createRow(i);
-			row.createCell(0).setCellValue(empleados.get(i - 1).getDni());
-			row.createCell(1).setCellValue(empleados.get(i - 1).getNombre());
-			row.createCell(2).setCellValue(empleados.get(i - 1).getApellidos());
-			row.createCell(3).setCellValue(empleados.get(i - 1).getDireccion());
-			row.createCell(4).setCellValue(empleados.get(i - 1).getFijo());
-			row.createCell(5).setCellValue(empleados.get(i - 1).getMovil());
-			row.createCell(6).setCellValue(empleados.get(i - 1).getEmail());
+			row.createCell(0).setCellValue(list.get(i - 1).getDni());
+			row.createCell(1).setCellValue(list.get(i - 1).getNombre());
+			row.createCell(2).setCellValue(list.get(i - 1).getApellidos());
+			row.createCell(3).setCellValue(list.get(i - 1).getDireccion());
+			row.createCell(4).setCellValue(list.get(i - 1).getFijo());
+			row.createCell(5).setCellValue(list.get(i - 1).getMovil());
+			row.createCell(6).setCellValue(list.get(i - 1).getEmail());
 		}
 
 		try (FileOutputStream outputStream = new FileOutputStream(fileName)) {

@@ -12,34 +12,31 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.capgemini.piloto.model.Empleado;
+import com.capgemini.piloto.model.dto.ListarTransferenciasNumeroCuentaDTO;
 
-public class ExportEmpleados {
-	
+public class ExportTransferencias {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private String fileName;
 	private Workbook workbook;
 	private Sheet sheet;
 
-	public ExportEmpleados(String fileName) {
+	public ExportTransferencias(String fileName) {
 		this.fileName = "C:\\Windows\\Temp\\"+fileName+".xlsx";
 		this.workbook = new XSSFWorkbook();
 		sheet = workbook.createSheet();
 	}
 
-	public boolean export(List<Empleado> empleados) {
+	@SuppressWarnings("deprecation")
+	public boolean export(List<ListarTransferenciasNumeroCuentaDTO> list) {
 		boolean exportado = false;
 		createHeader();
-		for (int i = 1; i <= empleados.size(); i++) {
+		for (int i = 1; i <= list.size(); i++) {
 			Row row = sheet.createRow(i);
-			row.createCell(0).setCellValue(empleados.get(i - 1).getDni());
-			row.createCell(1).setCellValue(empleados.get(i - 1).getNombre());
-			row.createCell(2).setCellValue(empleados.get(i - 1).getApellidos());
-			row.createCell(3).setCellValue(empleados.get(i - 1).getDireccion());
-			row.createCell(4).setCellValue(empleados.get(i - 1).getFijo());
-			row.createCell(5).setCellValue(empleados.get(i - 1).getMovil());
-			row.createCell(6).setCellValue(empleados.get(i - 1).getEmail());
+			row.createCell(0).setCellValue(list.get(i - 1).getIdDestino());
+			row.createCell(1).setCellValue(list.get(i - 1).getCuenta());
+			row.createCell(2).setCellValue(list.get(i - 1).getImporte());
+			row.createCell(3).setCellValue(list.get(i - 1).getFechaRealizacion().toLocaleString());
 		}
 
 		try (FileOutputStream outputStream = new FileOutputStream(fileName)) {
@@ -61,13 +58,10 @@ public class ExportEmpleados {
 
 	private void createHeader() {
 		Row row = sheet.createRow(0);
-		row.createCell(0).setCellValue("NIF/NIE");
-		row.createCell(1).setCellValue("Nombre");
-		row.createCell(2).setCellValue("Apellidos");
-		row.createCell(3).setCellValue("Dirección");
-		row.createCell(4).setCellValue("Teléfono fijo");
-		row.createCell(5).setCellValue("Teléfono móvil");
-		row.createCell(6).setCellValue("Correo electrónico");
+		row.createCell(0).setCellValue("Cuenta de destino");
+		row.createCell(1).setCellValue("Cuenta Origen");
+		row.createCell(2).setCellValue("Importe");
+		row.createCell(3).setCellValue("Fecha de realizacion");
 	}
 
 }

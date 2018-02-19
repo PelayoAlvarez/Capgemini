@@ -8,7 +8,7 @@ public class TelefonoFormatException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String tipo;
+	private final String tipo;
 	
 	public TelefonoFormatException(String tipo) {
 		this.tipo = tipo;

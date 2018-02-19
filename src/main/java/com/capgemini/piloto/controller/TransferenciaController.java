@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.data.export.ExportTransferencias;
 import com.capgemini.piloto.model.Cuenta;
 import com.capgemini.piloto.model.Transferencia;
 import com.capgemini.piloto.model.dto.GenerarTransferenciaCuentaDTO;
@@ -46,10 +47,16 @@ public class TransferenciaController {
 	private CuentaHRepository cuentaHRepository;
 
 	// Get All Transfers
-	@GetMapping("/listarTransferenciasHabilitados")
-	public List<Transferencia> getAllTransferencias() {
-		logger.info("Request every active transfers");
-		return transferenciaRepository.findMCA();
+	@GetMapping("/listarTransferenciasHabilitados/{cuenta}")
+	public List<ListarTransferenciasNumeroCuentaDTO> getAllTransferencias(@PathVariable(value = "cuenta") String numeroCuenta) {
+		logger.info("Listado de todas las transferencias");
+		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
+		List<Transferencia> trans = transferenciaRepository.findByCuenta(cuenta);
+		List<ListarTransferenciasNumeroCuentaDTO> transferDTO = new ArrayList<>();
+		for (Transferencia transfer : trans) {
+			transferDTO.add(new ListarTransferenciasNumeroCuentaDTO(transfer));
+		}
+		return transferDTO;
 	}
 
 	// Create a new Transfer
@@ -59,17 +66,17 @@ public class TransferenciaController {
 		if (transferencia == null) {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		//Validacion de los datos de la transferencia
+
+		// Validacion de los datos de la transferencia
 		CuentaValidator.validateCuenta(transferencia.getCuenta());
 		CuentaValidator.validateCuenta(transferencia.getIdDestino());
 		ImporteValidator.validateImporte(String.valueOf(transferencia.getImporte()));
-		
+
 		Cuenta cOrigen = cuentaRepository.findOne(transferencia.getCuenta());
 		Cuenta cDestino = cuentaRepository.findOne(transferencia.getIdDestino());
-		
 
-		if (cOrigen == null || cDestino == null) {
+		if (cOrigen == null || cDestino == null || cDestino.getNumeroCuenta().equals(cOrigen.getNumeroCuenta())
+				|| (cOrigen.getImporte() - transferencia.getImporte() < 0)) {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -98,18 +105,16 @@ public class TransferenciaController {
 	@GetMapping("/listarTransferenciaId/{cuenta}")
 	public ResponseEntity<List<ListarTransferenciasNumeroCuentaDTO>> listarTransfer(
 			@PathVariable(value = "cuenta") String numeroCuenta) {
-		if (numeroCuenta == null ) {
-			return new ResponseEntity<>(null, new HttpHeaders(),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+		if (numeroCuenta == null) {
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		//Validacion cuenta
+
+		// Validacion cuenta
 		CuentaValidator.validateCuenta(numeroCuenta);
-		
+
 		Cuenta cuenta = cuentaRepository.findOne(numeroCuenta);
 		if (cuenta == null) {
-			return new ResponseEntity<>(null, new HttpHeaders(),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		List<Transferencia> listaTrasnfer = transferenciaRepository.findByCuenta(cuenta);
 
@@ -117,8 +122,18 @@ public class TransferenciaController {
 		for (Transferencia transferencia : listaTrasnfer) {
 			transfers.add(new ListarTransferenciasNumeroCuentaDTO(transferencia));
 		}
-		return new ResponseEntity<>(transfers, new HttpHeaders(),
-				HttpStatus.OK);
+		return new ResponseEntity<>(transfers, new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	//Exportar transferencias
+	@GetMapping("/export/{cuenta}")
+	public ResponseEntity<Transferencia> exportTransferencias(@PathVariable(value = "cuenta") String numeroCuenta) {
+		ExportTransferencias  export = new ExportTransferencias("PruebaTransferencias");
+		logger.info("EXPORT: Se exportan los datos de las transferencias");
+		if(export.export(getAllTransferencias(numeroCuenta))) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

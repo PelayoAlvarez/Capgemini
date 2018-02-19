@@ -52,20 +52,6 @@ public class ClienteDTO implements Serializable {
 		this.sucursal=1L;
 	}
 	
-	public ClienteDTO(String dni, String nombre, String apellidos, String direccion, String movil, String fijo,
-			String email, String password) {
-		super();
-		this.dni = dni;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.direccion = direccion;
-		this.movil = movil;
-		this.fijo = fijo;
-		this.email = email;
-		this.password = password;
-		this.sucursal=1L;
-	}
-
 	public ClienteDTO(Cliente c) {
 		this.dni = c.getDni();
 		this.nombre = c.getNombre();

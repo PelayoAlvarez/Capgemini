@@ -13,6 +13,7 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia, Lo
 	@Query("SELECT t FROM Transferencia t WHERE t.mCAHabilitado=true")
 	List<Transferencia> findMCA();
 
+
 	List<Transferencia> findByCuenta(Cuenta cuenta);
 
 }

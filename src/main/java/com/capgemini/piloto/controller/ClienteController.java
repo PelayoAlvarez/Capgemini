@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.piloto.data.export.ExportClientes;
 import com.capgemini.piloto.errors.impl.DniFormatException;
 import com.capgemini.piloto.errors.impl.EmailFormatException;
 import com.capgemini.piloto.errors.impl.TelefonoFormatException;
@@ -34,6 +35,7 @@ import com.capgemini.piloto.model.historico.ClienteH;
 import com.capgemini.piloto.repository.ClienteRepository;
 import com.capgemini.piloto.repository.SucursalRepository;
 import com.capgemini.piloto.repository.historico.ClienteHRepository;
+import com.capgemini.piloto.util.encrypter.Encrypter;
 import com.capgemini.piloto.util.validator.ComunValidator;
 import com.capgemini.piloto.util.validator.PersonValidator;
 
@@ -71,7 +73,6 @@ public class ClienteController {
 	@PostMapping("/clientes")
 	public ResponseEntity<ClienteDTO> createClient(@Valid @RequestBody ClienteDTO clienteDTO, @RequestParam Long sucursalId) {
 		try {
-			System.out.println(clienteDTO.toString());
 			validarCliente(clienteDTO);
 			Cliente cliente1 = clienteRepository.findByDni(clienteDTO.getDni());
 			if (cliente1 != null && cliente1.getmCAHabilitado()) {
@@ -84,6 +85,7 @@ public class ClienteController {
 				return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.CONFLICT);
 		}
 			clienteDTO.setSucursal(sucursalId);
+			clienteDTO.setPassword(Encrypter.getInstance().encriptar(clienteDTO.getPassword()));
 			Cliente c2 = clienteRepository.save(new Cliente(clienteDTO, sucursal));
 			if (c2 == null) {
 				logger.error("The client was not created");
@@ -118,7 +120,6 @@ public class ClienteController {
 			return new ResponseEntity<>(null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		Cliente cliente = clienteRepository.findByDni(dni);
-		System.out.println(cliente);
 		if (cliente == null || !cliente.getmCAHabilitado()) {
 			logger.error(NOT_FOUND);
 			return ResponseEntity.notFound().build();
@@ -191,6 +192,16 @@ public class ClienteController {
 		ClienteDTO clienteDTO = new ClienteDTO(cliente);
 
 		return ResponseEntity.ok().body(clienteDTO);
+	}
+	
+	@GetMapping("/export")
+	public ResponseEntity<Cliente> exportClientes() {
+		ExportClientes  export = new ExportClientes("prueba");
+		logger.info("EXPORT: Se exportan los datos de los empleados");
+		if(export.export(getAllClientes())) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 //---------------------------------------------------------------------------------------------------
 	//Validar los campos del cliente
