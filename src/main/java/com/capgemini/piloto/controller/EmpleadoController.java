@@ -32,7 +32,6 @@ import com.capgemini.piloto.model.historico.EmpleadoH;
 import com.capgemini.piloto.repository.EmpleadoRepository;
 import com.capgemini.piloto.repository.SucursalRepository;
 import com.capgemini.piloto.repository.historico.EmpleadoHRepository;
-import com.capgemini.piloto.util.validator.ComunValidator;
 import com.capgemini.piloto.util.validator.PersonValidator;
 
 @RestController
@@ -125,13 +124,13 @@ public class EmpleadoController {
 		return ResponseEntity.ok(empleado);
 	}
 
-	@PutMapping("/{dni}")
+	@PutMapping("/")
 	public ResponseEntity<Empleado> updateEmpleado(@Valid @RequestBody EmpleadoDTO empleadoDto) {
 		try {
 			validarEmpleado(empleadoDto);
 		}
 		catch (DniFormatException e) {
-			logger.error(DNI+ e.getMessage());
+			logger.error(DNI + e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (TextoFormatException e) {
@@ -209,7 +208,7 @@ public class EmpleadoController {
 	
 	@GetMapping("/export")
 	public ResponseEntity<Empleado> exportEmpleados() {
-		ExportEmpleados export = new ExportEmpleados("prueba");
+		ExportEmpleados export = new ExportEmpleados("empleados");
 		logger.info("EXPORT: Se exportan los datos de los empleados");
 		if(export.export(getAllEmpleados())) {
 			return new ResponseEntity<>(null, HttpStatus.OK);
@@ -219,11 +218,12 @@ public class EmpleadoController {
 	
 	private void validarEmpleado(EmpleadoDTO empleado) {
 		PersonValidator.validateDni(empleado.getDni());
-		ComunValidator.validateTexto(empleado.getNombre(), "nombre", 15);
-		ComunValidator.validateTexto(empleado.getApellidos(), "apellidos", 30);
-		ComunValidator.validateTexto(empleado.getDireccion(), "dirección", 50);
+		PersonValidator.validateNombre(empleado.getNombre());
+		PersonValidator.validateApellidos(empleado.getApellidos());
+		PersonValidator.validateDireccion(empleado.getDireccion());
 		if (empleado.getFijo() != null && !empleado.getFijo().equals("")) PersonValidator.validateTelefonoFijo(empleado.getFijo());
 		if (empleado.getMovil() != null && !empleado.getMovil().equals("")) PersonValidator.validateTelefonoMovil(empleado.getMovil());
 		if (empleado.getEmail() != null && !empleado.getEmail().equals("")) PersonValidator.validateEmail(empleado.getEmail());
+		PersonValidator.validatePassword(empleado.getPassword());
 	}
 }

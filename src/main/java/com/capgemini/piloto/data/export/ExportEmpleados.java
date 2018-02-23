@@ -23,7 +23,7 @@ public class ExportEmpleados {
 	private Sheet sheet;
 
 	public ExportEmpleados(String fileName) {
-		this.fileName = "C:\\Windows\\Temp\\"+fileName+".xlsx";
+		this.fileName = "C:\\Windows\\Temp\\" + fileName + ".xlsx";
 		this.workbook = new XSSFWorkbook();
 		sheet = workbook.createSheet();
 	}

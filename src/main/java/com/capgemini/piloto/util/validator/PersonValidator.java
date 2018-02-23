@@ -7,8 +7,11 @@ import com.capgemini.piloto.errors.impl.DniFormatException;
 import com.capgemini.piloto.errors.impl.EmailFormatException;
 import com.capgemini.piloto.errors.impl.PasswordFormatException;
 import com.capgemini.piloto.errors.impl.TelefonoFormatException;
+import com.capgemini.piloto.errors.impl.TextoFormatException;
 
 public class PersonValidator {
+	
+	static Pattern vacioRegex = Pattern.compile("^[ ]*$");
 	
 	private PersonValidator() { }
 	 
@@ -47,7 +50,7 @@ public class PersonValidator {
 	
 	public static void validateTelefonoFijo(String fijo) {
 		Pattern fijoRegex = 
-			    Pattern.compile("^(\\+34|0034|34)?[8|9][0-9]{8}$", 
+			    Pattern.compile("^(\\+34|0034)?[8|9][0-9]{8}$", 
 			    		Pattern.CASE_INSENSITIVE);
 		
 		Matcher matcher = fijoRegex.matcher(fijo);
@@ -58,13 +61,52 @@ public class PersonValidator {
 	
 	public static void validateTelefonoMovil(String movil) {
 		Pattern movilRegex = 
-			    Pattern.compile("^(\\+34|0034|34)?[6|7][0-9]{8}$", 
+			    Pattern.compile("^(\\+34|0034)?[6|7][0-9]{8}$", 
 			    		Pattern.CASE_INSENSITIVE);
 		
 		Matcher matcher = movilRegex.matcher(movil);
 		
 		if (!matcher.find())
-			throw new TelefonoFormatException("movil");
+			throw new TelefonoFormatException("móvil");
+	}
+	
+	public static void validateNombre(String nombre) {	
+		Matcher matcherVacio = vacioRegex.matcher(nombre);
+		
+		Pattern nombreRegex = 
+			    Pattern.compile("^[a-zñÑA-Z ]{1,15}$", 
+			    		Pattern.CASE_INSENSITIVE);
+
+		Matcher matcher = nombreRegex.matcher(nombre);
+		
+		if (!matcher.find() || matcherVacio.find())
+			throw new TextoFormatException("nombre");
+	}
+	
+	public static void validateApellidos(String apellidos) {
+		Matcher matcherVacio = vacioRegex.matcher(apellidos);
+		
+		Pattern apellidosRegex = 
+			    Pattern.compile("^[a-zñÑA-Z ]{1,30}$", 
+			    		Pattern.CASE_INSENSITIVE);
+
+		Matcher matcher = apellidosRegex.matcher(apellidos);
+		
+		if (!matcher.find() || matcherVacio.find())
+			throw new TextoFormatException("apellidos");
+	}
+	
+	public static void validateDireccion(String direccion) {
+		Matcher matcherVacio = vacioRegex.matcher(direccion);
+		
+		Pattern direccionRegex = 
+			    Pattern.compile("^[/º0-9a-zñÑA-Z ]{1,50}$", 
+			    		Pattern.CASE_INSENSITIVE);
+
+		Matcher matcher = direccionRegex.matcher(direccion);
+		
+		if (!matcher.find() || matcherVacio.find())
+			throw new TextoFormatException("dirección");
 	}
 	
 	public static void validatePassword(String password) {

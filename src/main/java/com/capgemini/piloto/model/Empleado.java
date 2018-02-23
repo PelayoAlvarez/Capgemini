@@ -86,6 +86,22 @@ public class Empleado implements Serializable {
 	public Empleado() {
 	}
 
+	public Empleado(String dni, String nombre, String apellidos, String direccion, String usuario, String password, Sucursal sucursal) {
+		super();
+		this.dni = dni;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.direccion = direccion;
+		this.fecActu = this.fecCreacion = new Date();
+		this.usuario = usuario;
+		this.mcaHabilitado = true;
+		this.password = password;
+		this.role = TipoRole.EMPLEADO;
+		this.sucursal = sucursal;
+	}
+
+
+
 	public Empleado(EmpleadoDTO empleado) {
 		this.dni = empleado.getDni();
 		this.nombre = empleado.getNombre();

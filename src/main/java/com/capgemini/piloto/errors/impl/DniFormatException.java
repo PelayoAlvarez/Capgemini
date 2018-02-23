@@ -10,7 +10,7 @@ public class DniFormatException extends RuntimeException {
 
 	@Override
 	public String getMessage() {
-		return "Formato de Dni incorrecto";
+		return "Formato de NIF/NIE incorrecto";
 	}
 
 }

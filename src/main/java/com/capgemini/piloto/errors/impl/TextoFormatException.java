@@ -15,7 +15,7 @@ public class TextoFormatException extends RuntimeException {
 
 	@Override
 	public String getMessage() {
-		return "Formato de texto " + tipo + " es incorrecto";
+		return "Formato de texto de " + tipo + " es incorrecto";
 	}
 
 }

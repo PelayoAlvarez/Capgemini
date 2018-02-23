@@ -9,6 +9,6 @@ public class PasswordFormatException extends RuntimeException {
 
 	@Override
 	public String getMessage() {
-		return "Formato de password incorrecto";
+		return "Formato de contraseña incorrecto";
 	}
 }
